@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="23px" height="28px" viewBox="0 0 23 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>ICON Projet Interne</title>
+    <g id="ICON-Projet-Interne" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g stroke="#024579">
+            <line x1="3.744" y1="8.6895" x2="15.405" y2="8.6895" id="Stroke-1"></line>
+            <line x1="3.744" y1="13.565175" x2="15.405" y2="13.565175" id="Stroke-2"></line>
+            <line x1="3.744" y1="18.4413" x2="12.5745" y2="18.4413" id="Stroke-3"></line>
+            <line x1="3.744" y1="11.1273" x2="15.405" y2="11.1273" id="Stroke-4"></line>
+            <line x1="3.744" y1="16.003425" x2="15.405" y2="16.003425" id="Stroke-5"></line>
+            <line x1="3.744" y1="6.25125" x2="15.405" y2="6.25125" id="Stroke-6"></line>
+            <path d="M22.74195,22.702875 C22.74195,25.396125 20.5587,27.579375 17.86545,27.579375 C15.1722,27.579375 12.98895,25.396125 12.98895,22.702875 C12.98895,20.009625 15.1722,17.826375 17.86545,17.826375 C20.5587,17.826375 22.74195,20.009625 22.74195,22.702875 Z" id="Stroke-7"></path>
+            <polyline id="Stroke-9" points="15.255075 22.660425 17.191575 24.596925 20.475825 21.311925"></polyline>
+            <polyline id="Stroke-11" points="18.455775 16.293075 18.455775 0.375075 4.373775 0.375075 0.374775 4.373325 0.374775 24.271575 11.514525 24.271575"></polyline>
+            <polyline id="Stroke-13" points="0.37485 4.3737 4.37385 4.3737 4.37385 0.3747"></polyline>
+        </g>
+    </g>
+</svg>

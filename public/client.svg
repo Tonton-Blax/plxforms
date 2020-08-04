@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="22px" height="25px" viewBox="0 0 22 25" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <desc>Created with Lunacy</desc>
+  <g id="Icon-Client" transform="translate(0.5 0.5)">
+    <path d="M8.8766 0C8.8766 0 8.98658 2.76758 7.06919 3.82202L7.06919 4.3296C7.06919 4.96725 6.72759 5.55674 6.17381 5.87556L4.43916 6.87521L2.70395 5.87556C2.15018 5.55674 1.80858 4.96725 1.80858 4.3296L1.80858 3.82202C-0.108813 2.76758 0.00116473 0 0.00116473 0" transform="translate(6.061226 9.63916)" id="Stroke-1" fill="none" stroke="#0E427A" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M1.30029 0C1.30029 0 0.418805 1.16238 0 2.65577L1.89573 4.58919L3.93032 2.82237L5.96491 4.58919L7.8612 2.65577C7.44239 1.16238 6.56035 0 6.56035 0" transform="translate(6.569733 13.96893)" id="Stroke-3" fill="none" stroke="#0E427A" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M6.87362 0L1.72188 1.73693C0.693194 2.08398 0 3.04599 0 4.12867L0 8.24295" transform="translate(0 15.75708)" id="Stroke-5" fill="none" stroke="#0E427A" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M0 0L5.15119 1.73693C6.18042 2.08398 6.87306 3.04599 6.87306 4.12867L6.87306 8.24295" transform="translate(14.12694 15.75708)" id="Stroke-7" fill="none" stroke="#0E427A" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M0.335488 0L1.16865 1.67992L0 5.89162" transform="translate(8.774017 17.99866)" id="Stroke-9" fill="none" stroke="#0E427A" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M0.833166 0L0 1.67992L1.16865 5.89162" transform="translate(11.05789 17.99866)" id="Stroke-11" fill="none" stroke="#0E427A" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M10.3844 10.364C10.3844 10.364 11.7508 10.2539 11.8835 8.67247C12.0157 7.09053 10.7693 7.65622 10.7693 7.65622C11.147 6.75897 11.0998 6.20158 11.1387 5.17426C11.1387 2.31646 8.81416 0 5.94695 0C3.0792 0 0.754664 2.31646 0.754664 5.17426C0.727448 6.2193 0.746333 6.75897 1.12459 7.65622C1.12459 7.65622 -0.122381 7.09053 0.00981429 8.67247C0.142565 10.2539 1.50896 10.364 1.50896 10.364" transform="translate(4.553436 5.768344E-15)" id="Stroke-13" fill="none" stroke="#0E427A" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M0 0C0 0 1.36695 3.4877 5.90604 3.4877" transform="translate(7.854034 4.242676)" id="Stroke-15" fill="none" stroke="#0E427A" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+</svg>

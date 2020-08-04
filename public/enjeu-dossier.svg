@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="30px" height="25px" viewBox="0 0 30 25" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <desc>Created with Lunacy</desc>
+  <g id="Icon-Enjeu-dossier" transform="translate(0.5 0.5)">
+    <path d="M0.284407 6.14587L0.559007 6.42238C0.938217 6.80422 1.55349 6.80422 1.9327 6.42238L6.60778 1.71483C6.68073 1.64137 6.68073 1.52217 6.60778 1.44872L5.22377 0.0550935C5.15082 -0.0183645 5.03244 -0.0183645 4.95949 0.0550935L0.284407 4.76264C-0.0948024 5.14518 -0.0948024 5.76403 0.284407 6.14587Z" transform="translate(0.258186 17.27302)" id="Stroke-1" fill="none" stroke="#0E427A" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M1.00824 0L0 1.01455L1.04197 2.06445L2.05021 1.0492" transform="translate(5.652769 16.4855)" id="Stroke-3" fill="none" stroke="#0E427A" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M1.60889 1.62006C-0.536296 3.78014 -0.536296 7.28187 1.60889 9.44264C3.75407 11.602 7.23165 11.602 9.37752 9.44264C11.5227 7.28187 11.5227 3.78014 9.37752 1.62006C7.23165 -0.54002 3.75407 -0.54002 1.60889 1.62006Z" transform="translate(5.534017 7.607234)" id="Stroke-5" fill="none" stroke="#0E427A" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M22.5413 5.48302L22.5413 2.18156C22.5413 0.976437 21.5709 0 20.3748 0L0 0" transform="translate(4.301929 4.457237)" id="Stroke-7" fill="none" stroke="#0E427A" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M0 4.70478L19.7065 4.70478C20.9033 4.70478 21.873 3.72834 21.873 2.52321L21.873 0" transform="translate(4.969985 17.92195)" id="Stroke-9" fill="none" stroke="#0E427A" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M0.34411 0L0.34411 16.3111" transform="translate(1.872993 2.358487)" id="Stroke-11" fill="none" stroke="#0E427A" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M24.7904 2.31947C24.7904 1.03811 23.7594 0 22.4869 0L2.08393 0C0.933227 0 0 0.939708 0 2.0984C0 3.25779 0.933227 4.19681 2.08393 4.19681L22.8159 4.19681" transform="translate(2.217103 0.2600136)" id="Stroke-13" fill="none" stroke="#0E427A" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M4.37571 5.2467L2.16996 5.2467C0.971767 5.2467 0 4.26819 0 3.06098L0 2.18572C0 0.978516 0.971767 0 2.16996 0L4.37571 0C5.57459 0 6.54635 0.978516 6.54635 2.18572L6.54635 3.06098C6.54635 4.26819 5.57459 5.2467 4.37571 5.2467Z" transform="translate(22.23531 11.30512)" id="Stroke-15" fill="none" stroke="#0E427A" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M0 0.3465L20.732 0.3465" transform="translate(4.081837 2.011987)" id="Stroke-17" fill="none" stroke="#0E427A" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+</svg>

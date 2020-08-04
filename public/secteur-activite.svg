@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="25px" height="20px" viewBox="0 0 25 20" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <desc>Created with Lunacy</desc>
+  <g id="Icon-Secteur-d’activité" transform="translate(0.5 0.5)">
+    <path d="M18.2166 8.51382L23.4465 8.51382L23.4465 1.46118C23.4465 0.654261 22.7968 0 21.9954 0L1.45107 0C0.649733 0 0 0.654261 0 1.46118L0 8.51382L5.17375 8.51382" transform="translate(0.1847802 3.148283)" id="Stroke-1" fill="none" stroke="#0E427A" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M0 0L0 5.76642C0 6.42464 0.560149 6.95846 1.25074 6.95846L21.1591 6.95846C21.8497 6.95846 22.4094 6.42464 22.4094 5.76642L22.4094 0" transform="translate(0.70309 11.6621)" id="Stroke-3" fill="none" stroke="#0E427A" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M1.86798 2.75236L1.86798 0.783626C1.86798 0.350922 1.51949 0 1.08978 0L0.778203 0C0.348493 0 0 0.350922 0 0.783626L0 2.75236C0 3.18506 0.348493 3.53598 0.778203 3.53598L1.08978 3.53598C1.51949 3.53598 1.86798 3.18506 1.86798 2.75236Z" transform="translate(15.59276 9.894307)" id="Stroke-5" fill="none" stroke="#0E427A" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M1.86798 2.75236L1.86798 0.783626C1.86798 0.350922 1.51949 0 1.08978 0L0.778203 0C0.348493 0 0 0.350922 0 0.783626L0 2.75236C0 3.18506 0.348493 3.53598 0.778203 3.53598L1.08978 3.53598C1.51949 3.53598 1.86798 3.18506 1.86798 2.75236Z" transform="translate(6.440036 9.894307)" id="Stroke-7" fill="none" stroke="#0E427A" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M8.46474 2.23043L8.46474 0.991304C8.46474 0.444104 8.02371 0 7.4803 0L0.984444 0C0.440539 0 0 0.444104 0 0.991304L0 2.30677" transform="translate(7.675562 0.1856217)" id="Stroke-9" fill="none" stroke="#0E427A" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M4.94191 0.247826L0 0.247826" transform="translate(9.43693 11.41427)" id="Stroke-11" fill="none" stroke="#0E427A" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+</svg>
