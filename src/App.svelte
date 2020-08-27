@@ -3,7 +3,7 @@
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
 </svelte:head>
 <script>
-	import { onMount, afterUpdate } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import SparkMD5 from 'spark-md5';
 	import { Button, Field, Icon, Input, Notification } from 'svelma-pro';
 	import SavoirFaire from './subcomp/SavoirFaire.svelte';
@@ -25,6 +25,8 @@
 	let isMobile = window.matchMedia("(max-width: 768px)");
 	let results = [];
 	let instance = {};
+	let lightOn = false;
+	let currentRange = {start:0, end:25};
 
 	let sheetAPI = API + 'sheet/'
 
@@ -79,7 +81,7 @@
 
 	onMount(async () => {	
 		localStorage.clear();
-		 
+		lightOn = false;
 
 		currentPage.slug = window.location.hash.split('#');
 		if ((currentPage.slug && currentPage.slug[1] == 'forward') || currentPage.slug.length <= 1) {
@@ -99,6 +101,13 @@
 		
 		domReady = true;
 	});
+
+	onDestroy(() => {
+
+		for (const k in instance)
+			instance[k].unmark();
+	});
+
 
 	function mailExists (mail) {
 		axios.get(sheetAPI+plxForms[currentForm].url)
@@ -231,8 +240,26 @@
 		//console.log(entriesObject.length);
 	}
 
-	function Markit() {
-
+	function changeRange(dir) {
+		console.log("debut f : ", currentRange);
+		if ((currentRange.end + dir) > entriesObject.length) {
+			currentRange.end = entriesObject.length -1;
+			currentRange.start = entriesObject.length - 25;
+		}
+		else if ((currentRange.end + dir) < 0) {
+			currentRange.end = 25;
+			currentRange.start = 0;
+		} else {
+			currentRange.start -= dir;
+			currentRange.end += dir;
+		}
+		console.log("fin f : ", currentRange)
+	}
+	
+	function Markit(light) {
+		if (!ready) return;
+		
+		lightOn = !lightOn;
 		let secteurs = [];
 		let highlights;
 
@@ -261,17 +288,27 @@
 
 		if (laTotale) {
 		
-		
-			highlights = Object.keys(results);
-			console.log(highlights);
-			
+			if (lightOn === true)
+			{	
+				highlights = Object.keys(results);		
 
-			if (highlights.length) {
-				highlights.forEach(h => {
-					instance = new Mark(document.querySelectorAll(`${elMap[h]}`));
-					console.log(document.querySelectorAll(`${elMap[h]}`));
-					instance.mark(Object.keys(results[h]), {separateWordSearch : false});
-				});
+				if (highlights.length) {
+					highlights.forEach(h => {
+						if (!instance[h])
+							instance[h] = new Mark(document.querySelectorAll(`${elMap[h]}`));
+						if ((Object.prototype.toString.call(results[h]).indexOf("Object")>-1))
+							results[h] = Object.values(results[h]);
+						console.log(results[h]);
+						console.log("h :", h, "\n", "res :", results[h], "\n")
+						
+						instance[h].mark(results[h], {separateWordSearch : false, className : `mark-${h}`});
+					});
+				}
+			}
+			else {
+				for (const k in instance) {
+					instance[k].unmark();
+				}
 			}
     	} 
 
@@ -391,6 +428,9 @@
 
 
 		{:else if (currentForm=="retex" || currentForm=='interne') && laTotale}
+			<div class="bouton-highlight">
+				<button on:click={Markit} class="button is-small" style="border-radius:50%!important;" class:ampoule={lightOn}><span class="icon is-small"><i class="fas fa-lightbulb"></i></span></button>
+			</div>
 			<div class="latotale">
 			{#each entriesObject as entry,index}
 				<Retourexp entriesObject={entry} {index} {laTotale} isInterne={currentForm == 'interne'} 
@@ -404,9 +444,12 @@
 			on:captureOK={handleCaptureOK} /> 
 
 		{:else if (currentForm == "detailsexpert" || currentForm == "experts") && laTotale}
+			<div class="bouton-highlight">
+				<button on:click={Markit} class="button is-small" style="border-radius:50%!important;" class:ampoule={lightOn} ><span class="icon is-small"><i class="fas fa-lightbulb"></i></span></button>
+			</div>
 			<div class="latotale">
 			{#each entriesObject as entry,index}
-				<Detailsexpert entriesObject={entry} {index} {laTotale} }
+				<Detailsexpert entriesObject={entry} {index} {laTotale}
 				on:requestForceCapture={(e)=>handleRequestForceCapture(e.detail.index)}/>
 				<hr>
 			{/each}
@@ -430,7 +473,7 @@
 		{:else if currentForm ==  "savoirfaire" && laTotale}
 			<div class="latotale">
 			<div class="bouton-highlight">
-				<button on:click={Markit} class="button is-small"><span class="icon is-small"><i class="fas fa-lightbulb"></i></span></button>
+				<button on:click={Markit} class="button is-small" style="border-radius:50%!important;" class:ampoule={lightOn} ><span class="icon is-small"><i class="fas fa-lightbulb"></i></span></button>
 			</div>
 			{#each entriesObject as entry,index}
 				<SavoirFaire {laTotale} entriesObject={entry} {index}  
@@ -556,6 +599,13 @@
 		position: absolute;
 		top: -20px;
 	}
+	
+	.ampoule {
+		color: var(--main-color)!important;
+    	background: floralwhite!important;
+		border-color: var(--main-color)!important;
+		box-shadow: 0 -0px 18px 2px #0bf!important;
+	}
 
 	:global(body) {
 		background: white;
@@ -583,6 +633,57 @@
 	:global(.media) {
 		align-items: center;
 	}
+
+	:global(.mark-infospersos) {
+		background: lightcyan;
+		color:black;
+	}
+
+	:global(.mark-domaines) {
+		background:lightgoldenrodyellow;
+		color:black;
+	}
+
+	:global(.mark-secteur-activite) {
+		background: lightseagreen;
+		color:black;
+	}
+
+	:global(.mark-enjeu) {
+		background: palegreen;
+		color:black;
+	}
+
+	:global(.mark-resultat-obtenu) {
+		background: lightpink;
+		color:black;
+	}
+
+	:global(.mark-certifications) {
+		background: yellow;
+		color:black;
+	}
+
+	:global(.mark-vosdomaines) {
+		background: lightgreen;
+		color:black;
+	}
+
+	:global(.mark-specialites) {
+		background: lightcyan;
+		color:black;
+	}
+
+	:global(.mark-timeline) {
+		background: yellow;
+		color:black;
+	}
+
+	:global(.mark-formation) {
+		background: lightseagreen;
+		color:black;
+	}
+
 	
 	@media only screen and (min-width: 1024px) {
 		.downspacer {
