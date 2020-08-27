@@ -3,29 +3,34 @@
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
 </svelte:head>
 <script>
-	import { onMount } from 'svelte';
-	import Tabletop from 'tabletop';
+	import { onMount, afterUpdate } from 'svelte';
 	import SparkMD5 from 'spark-md5';
 	import { Button, Field, Icon, Input, Notification } from 'svelma-pro';
 	import SavoirFaire from './subcomp/SavoirFaire.svelte';
 	import Retourexp from './subcomp/Retourexp.svelte';
 	import Switch from './subcomp/Switch.svelte';
 	import Detailsexpert from './subcomp/Detailsexpert.svelte';
+	import Geco from './subcomp/Geco.svelte';
 	import {thebigdata} from './bigdata.js'
 	import Loading from './subcomp/Loading.svelte';
+	import Modal from './subcomp/Modal.svelte'
+	import Recherche from './subcomp/Recherche.svelte'
+	import { API } from './utils/consts.js'
 	import axios from 'axios';
-	
+	import Mark from './utils/mark.es6.js'
+		
 	let bigdata = thebigdata;
 	let domReady = false;
 	let loading = false;
-	const SAVOIRFAIRE = 'https://docs.google.com/spreadsheets/d/1Xy0atfORaoi58JMTzXtnOpgCm23SQxl9rMFu2a0xOO0/pub?output=csv';
-	const RETOURXP = `https://docs.google.com/spreadsheets/d/1P0VBaT35OntfnFyrZ5q1Ev_oqqdkueEXljhBAioW9qw/pub?output=csv`;
-	const DETAILSEXPERTS = 'https://docs.google.com/spreadsheets/d/1-GDV2O10Ds7dY-tiuVKgPnF7Mdufx7FQilWNw-Xy3kc/pub?output=csv';
+	let isMobile = window.matchMedia("(max-width: 768px)");
+	let results = [];
+	let instance = {};
+
+	let sheetAPI = API + 'sheet/'
+
 	const WPAPI = "https://www.polyexpert.fr/wp-json/contact-form-7/v1/contact-forms/3718/feedback"
-	const PWD = "16bd84b45460199de52067766741e763"
-	//const API = "AIzaSyBT_DkTu5GI5wsPGDvQ92yDmD0Euy16UaE";
-	//const GMAILAPI = "AIzaSyD7s3n9-3ugE6X1Xsnv7BbrW1U4ymYWgY8";
-	const PROXY = 'https://lower-poutine-21666.herokuapp.com/';
+	const PWD = "16bd84b45460199de52067766741e763";
+
 	let ready;
 	let pwdOK = false;
 
@@ -36,39 +41,30 @@
 		password: ''
 	};
 
-	/* 
-	let calmDown = {
-		count : 0,
-		_time,
-		get time() {
-			return this._time = _time instanceof Date && !isNaN(_time.valueOf()) ? this._time : this.init(true) ;
-		},
-		init : (ret) => { this.time = Date.now(); if (ret) return _time },
-		check : () => { 
-			if (_time instanceof Date && !isNaN(_time.valueOf()))
-				return Math.floor((Date.now - _time) / 1000)  <= 5 ? true : false;
-			else throw new Error ("la fonction time n'a pas été lancée")
-			},
-		get yes() {return this.count >= 5 ? true : false},
-	} 
-	*/
-
 	let destinataire = '';
 
 	let inputError = false;  
-	let isRetourXp = true;
+	let currentForm = "retex";
 	let laTotale = false;
 	let forceScreenGrab = false;
 	let formIndex; let indexes = [];
+	let advancedSearch = false;
 	
 	let currentPage = {slug: "", isUser : false, isAdmin : false }
 
-	
-	let currentForm = {
-		true: {name: "Retour d'Expérience", url: RETOURXP, id: "Adresse e-mail"},
-		"interne": {name: "Retour d'Expérience", url: RETOURXP, id: "Adresse e-mail"}, 
-		false: {name: "Savoir-Faire", url: SAVOIRFAIRE, id: "Adresse e-mail"},
-		"detailsexpert": {name: "Détails Expert", url:DETAILSEXPERTS, id: "Adresse e-mail"}
+	let plxForms = {
+		"retex": 
+		{ name: "Retour d'Expérience", url: "retex", id: "Adresse e-mail" },
+		"interne":
+		{ name: "Retour d'Expérience", url: "retex", id: "Adresse e-mail" }, 
+		"savoirfaire": 
+		{ name: "Savoir-Faire", url: "savoirfaire", id: "Adresse e-mail" },
+		"detailsexpert": 
+		{ name: "Détails Expert", url : "experts", id: "Adresse e-mail" },
+		"experts": 
+		{ name: "Détails Expert", url : "experts", id: "Adresse e-mail" },
+		"geco": 
+		{ name: "Geco", url: "geco", id: "Adresse e-mail" }
 	}
 
 	$: 	if (ready && window.history && window.history.pushState) {
@@ -76,12 +72,15 @@
 			window.history.pushState('forward', null, './#forward');
 
 			window.onpopstate = () => {
-				ready=false; formIndex = undefined; isRetourXp = true; laTotale = false;
+				ready=false; formIndex = undefined; currentForm = "retex"; laTotale = false;
 			}
 		}
 
+
 	onMount(async () => {	
-		//localStorage.clear();
+		localStorage.clear();
+		 
+
 		currentPage.slug = window.location.hash.split('#');
 		if ((currentPage.slug && currentPage.slug[1] == 'forward') || currentPage.slug.length <= 1) {
 				currentPage.isAdmin = false;
@@ -102,13 +101,11 @@
 	});
 
 	function mailExists (mail) {
-		Tabletop.init( {
-				key: currentForm[isRetourXp].url,
-				simpleSheet: true 
-			}).then(function(data, tabletop) { 
-				if (data[i][currentForm[isRetourXp].id].toLowerCase() == mail.toLowerCase()) {
-					return true;
-				}
+		axios.get(sheetAPI+plxForms[currentForm].url)
+		.then(function(data) { 
+			if (data.data.Message.data[i][plxForms[currentForm].id].toLowerCase() == mail.toLowerCase()) {
+				return true;
+			}
 		});
 	}
 
@@ -120,7 +117,6 @@
 		
 		axios.post (WPAPI, bodyFormData)
 		.then((e) => {
-			//console.log(e);
             e.data.status == 'mail_sent' ? 
 			showNotification( "e-mail envoyé", { type: 'is-success', position: 'is-bottom-right', icon: true })
 			: showNotification("Oups! Une erreur s'est produite", { type: 'is-danger', position: 'is-bottom-right', icon: true });
@@ -174,56 +170,36 @@
 		else {
 			loading = true;
 			entriesObject = []; indexes = [];
-			/*
-			if (isRetourXp == "detailsexpert") {
-				for (let i = 0; i < bigdata.length ; i ++)
-					if (bigdata[i][currentForm[isRetourXp].id].toLowerCase() == initForm.email.toLowerCase())
+		
+			axios.get(sheetAPI+plxForms[currentForm].url)
+			.then(function(data) {
+				//console.log(data.data.data)
+				let jason = data.data;
+				for (let i = 0; i < jason.length ; i ++) {
+		
+					if (jason[i][plxForms[currentForm].id] && jason[i][plxForms[currentForm].id].toLowerCase() == initForm.email.toLowerCase()) {
 						indexes.push(i);
-
-				if (!indexes.length) {				
-						showNotification( "Adresse e-mail introuvable pour ce " + currentForm[isRetourXp].name, { type: 'is-danger', position: 'is-bottom-right', icon: true, duration: 60000 });
-						laoding = false;
-						return;
+					}
 				}
 
+				if (!indexes.length) {
+					loading = false;
+					showNotification( "Adresse e-mail introuvable pour ce " + plxForms[currentForm].name, { type: 'is-danger', position: 'is-bottom-right', icon: true, duration: 60000 });
+					return;
+				}
 				else {
-						indexes.forEach(i => entriesObject.push(bigdata[i]));
-						formIndex = entriesObject.length - 1;
-						ready = true;
-						loading = false;
-					}
-			}
-			else { */
-				Tabletop.init( {
-					key: currentForm[isRetourXp].url,
-					simpleSheet: true 
-				}).then(function(data, tabletop) {
-					for (let i = 0; i < data.length ; i ++) {
+					indexes.forEach(i => entriesObject.push(jason[i]));
+					formIndex = entriesObject.length - 1;
+					ready = true;
+					loading = false;
+				}
+			})
 			
-						if (data[i][currentForm[isRetourXp].id].toLowerCase() == initForm.email.toLowerCase()) {
-							indexes.push(i);
-						}
-					}
-
-					if (!indexes.length) {
-						loading = false;
-						showNotification( "Adresse e-mail introuvable pour ce " + currentForm[isRetourXp].name, { type: 'is-danger', position: 'is-bottom-right', icon: true, duration: 60000 });
-						return;
-					}
-					else {
-						indexes.forEach(i => entriesObject.push(data[i]));
-						formIndex = entriesObject.length - 1;
-						ready = true;
-						loading = false;
-					}
-				})
-			
-		}
+		}	
 	}
 
 	let handleRequestForceCapture = (index) => {
 		formIndex = index;
-		//console.log(entriesObject[formIndex]);
 		laTotale = false;
 		forceScreenGrab = true;
 	}
@@ -233,9 +209,79 @@
 		laTotale = true;
 	}
 
+	let handleSearch = (form) => {
+		
+		if(!entriesObject.length) {
+			showNotification("Aucun résultat trouvé", { type: 'is-danger', position: 'is-bottom-right', icon: true });
+			return;
+		}
+		else if (entriesObject.length >= 1) {
+			
+			laTotale = true;
+			let message = entriesObject.length >= 2 ? "résultats trouvés" : "résultat trouvé";
+			//console.log(results);
+			showNotification(`${entriesObject.length} ${message}`, { type: 'is-success', position: 'is-bottom-right', icon: true });
+		}
+		else formIndex = 0;
+
+		advancedSearch = false;
+		loading = true; ready = false;
+		currentForm = form;
+		loading = false; ready = true; 
+		//console.log(entriesObject.length);
+	}
+
+	function Markit() {
+
+		let secteurs = [];
+		let highlights;
+
+		
+		let elMap = 
+		{
+			"région"        : ".infospersos",
+			"département"   : ".infospersos",
+			"darva"         : ".infospersos",
+			"gecor"         : ".infospersos",
+			"domaine"       : ".domaines",
+			"electricité"   : ".domaines",
+			"vol"           : ".domaines",
+			"autres"        : ".domaines",
+
+			"macro"     	: ".secteur-activite",
+			"enjeu"     	: ".enjeu",
+			"resultats" 	: ".resultat-obtenu",
+
+			"certifications"        : ".certifications",
+            "vos domaines"          : ".vosdomaines",
+            "specialites"           : ".specialites",
+            "marquant"              : ".timeline",
+            "diplome"               : ".formation"
+		}
+
+		if (laTotale) {
+		
+		
+			highlights = Object.keys(results);
+			console.log(highlights);
+			
+
+			if (highlights.length) {
+				highlights.forEach(h => {
+					instance = new Mark(document.querySelectorAll(`${elMap[h]}`));
+					console.log(document.querySelectorAll(`${elMap[h]}`));
+					instance.mark(Object.keys(results[h]), {separateWordSearch : false});
+				});
+			}
+    	} 
+
+	}
+
 </script>
 
-
+					<Modal closeText = "Annuler et revenir" title="Recherche Avancée" width="40vw" bind:active={advancedSearch}>
+						<Recherche bind:entriesObject bind:results on:searchReady={(e) => handleSearch(e.detail.form)}/>
+					</Modal>
 	{#if !ready}
 		
 		<!-- LOGO -->
@@ -246,10 +292,12 @@
 				</div>
 			
 				{#if !loading}
-
+				
+				<!-- MODAL RECHERCHE -->
+	
 					{#if !currentPage.isUser && !currentPage.isAdmin}
 					<!-- SASIE E-MAIL POUR RESET SI OUBLI -->
-						<div class="is-flex">
+						<div class="is-flex" class:downspacer={!currentPage.isAdmin}>
 						<p style="margin-bottom:1em;">Vous devez vous connecter à l'aide d'un lien personnalisé.<br>Si vous pensez l'avoir égaré, renseignez votre adresse e-mail ci-dessous</p>
 						{#if inputError}<div class="help is-danger help-max">Syntaxe du mail invalide</div>{/if}
 							<Field expanded size="is-large">
@@ -278,7 +326,7 @@
 							</Field>
 						</div>
 
-						<div class="is-flex" style="margin-bottom:3em;">
+						<div class="is-flex downspacer">
 							<Field expanded size="is-large">
 								<input on:keydown={(e)=>handleKeydown(e,'pwd')} type="password" style="width:100%;" 
 								bind:value={initForm.password} passwordReveal={true} placeholder = "mot de passe administrateur" />
@@ -290,35 +338,42 @@
 					{#if currentPage.isAdmin || currentPage.isUser}
 					<Field expanded size="is-large">
 							<div class="fieldwrapper">
-								<input class="is-checkradio" type="radio" name="retourxp" id="retourxp" bind:group={isRetourXp} value={true}>
+								<input class="is-checkradio" type="radio" name="retourxp" id="retourxp" bind:group={currentForm} value={"retex"}>
 								<label for="retourxp">Retex (usage externe)</label>	
-								<input class="is-checkradio" type="radio" name="retourxpinterne" id="retourxpinterne" bind:group={isRetourXp} value={"interne"}>
+								<input class="is-checkradio" type="radio" name="retourxpinterne" id="retourxpinterne" bind:group={currentForm} value={"interne"}>
 								<label for="retourxpinterne">Retex (affichage nom et e-mail)</label>			
-								<input class="is-checkradio" type="radio" name="savoirfaire" id="savoirfaire" bind:group={isRetourXp} value={false}>
+								<input class="is-checkradio" type="radio" name="savoirfaire" id="savoirfaire" bind:group={currentForm} value={"savoirfaire"}>
 								<label for="savoirfaire">Savoir-faire</label>
-								
-								<input class="is-checkradio" type="radio" name="detailsexpert" id="detailsexpert" bind:group={isRetourXp} value={"detailsexpert"}>
-								<label for="detailsexpert">Détails de l'expert</label>
+								<input class="is-checkradio" type="radio" name="detailsexpert" id="detailsexpert" bind:group={currentForm} value={"detailsexpert"}>
+								<label for="detailsexpert">Compétences</label>
+								<input class="is-checkradio" type="radio" name="geco" id="geco" bind:group={currentForm} value={"geco"}>
+								<label for="geco">Formulaire Geco</label>
 							</div>
 						</Field>
 					
 					<!-- SWITCH LA TOTALE + OUBLI -->
-					<div class:hide={isRetourXp == false || isRetourXp == "detailsexpert"}>
-						<Switch bind:checked={laTotale} type="is-success"><span style="display:block;font-size:16px;position:relative;bottom:-1px;">
-							{laTotale ? "Voir Tout" : "Afficher uniquement le dernier retour en date"}</span>
+					<div class:hide={currentForm !== "interne" && currentForm !== "retex"} class="switch">
+						<Switch bind:checked={laTotale} type="is-success"><div class="switch-interne">
+							{laTotale ? "Voir Tout" : "Afficher uniquement le dernier retour en date"}</div>
 						</Switch>
 					</div>
 					{/if}
 
-										<!-- BOUTON VALIDER -->
-					<div class="is-flex" style="margin-bottom:3em;margin-top:3em;">
+					<!-- BOUTON VALIDER -->
+					<div class="is-flex downspacer">
 						<p class="control" style="text-align:center;">
-							<Button class="is-primary" style="padding-left:2em;padding-right:2em;" type="submit" 
-							on:click={!currentPage.isUser && !currentPage.isAdmin ? sendMail('https://www.polyexpert.fr/#' + SparkMD5.hash(destinataire.toLowerCase()), destinataire.toLowerCase()) : handleSubmitEmail}>Valider</Button>
+							<button id="boutonvalider" class="button is-primary" class:is-fullwidth={isMobile.matches} style="padding-left:2em;padding-right:2em;" type="submit" 
+							on:click={!currentPage.isUser && !currentPage.isAdmin ? sendMail('https://www.polyexpert.fr/#' + SparkMD5.hash(destinataire.toLowerCase()), destinataire.toLowerCase()) : handleSubmitEmail}>Valider
+							</button>
+				
+					<!-- BOUTON RECHERCHE AVANCEE -->
+						{#if currentPage.isAdmin}
+							<button class="button is-warning" class:is-fullwidth={isMobile.matches} style="padding-left:2em;padding-right:2em;" type="submit" 
+							on:click={() => advancedSearch = true}>Recherche avancée
+							</button>
+						{/if}
 						</p>
 					</div>
-
-
 				
 				<!-- SPINNER LOADING -->
 				{:else}
@@ -327,27 +382,62 @@
 			</div>
 		</div>
 
-	{:else}	
-		{#if isRetourXp==true && !laTotale}
-			<Retourexp entriesObject={entriesObject[formIndex]} isInterne={typeof isRetourXp !== "boolean"} {forceScreenGrab} 
-			on:captureOK={handleCaptureOK} />
+	{:else}
+		
+		{#if (currentForm=="retex" || currentForm=='interne') && !laTotale}
+		
+			<Retourexp entriesObject={entriesObject[formIndex]} isInterne={currentForm == 'interne'} {forceScreenGrab} 
+			on:captureOK={handleCaptureOK}  />
 
 
-		{:else if isRetourXp==true && laTotale}
+		{:else if (currentForm=="retex" || currentForm=='interne') && laTotale}
 			<div class="latotale">
 			{#each entriesObject as entry,index}
-					<Retourexp entriesObject={entry} {index} {laTotale} isInterne={typeof isRetourXp !== "boolean"} 
-					on:requestForceCapture={(e)=>handleRequestForceCapture(e.detail.index)}/>
-					<hr>
+				<Retourexp entriesObject={entry} {index} {laTotale} isInterne={currentForm == 'interne'} 
+				on:requestForceCapture={(e)=>handleRequestForceCapture(e.detail.index)}/>
+				<hr>
 			{/each}
 			</div>
 
-		{:else if isRetourXp == "detailsexpert"}
+		{:else if (currentForm == "detailsexpert" || currentForm == "experts") && !laTotale}
 			<Detailsexpert entriesObject={entriesObject[formIndex]} {forceScreenGrab} 
 			on:captureOK={handleCaptureOK} /> 
 
-		{:else if !isRetourXp}
+		{:else if (currentForm == "detailsexpert" || currentForm == "experts") && laTotale}
+			<div class="latotale">
+			{#each entriesObject as entry,index}
+				<Detailsexpert entriesObject={entry} {index} {laTotale} }
+				on:requestForceCapture={(e)=>handleRequestForceCapture(e.detail.index)}/>
+				<hr>
+			{/each}
+			</div>
+
+		{:else if currentForm === "geco" && !laTotale}
+			<Geco entriesObject={entriesObject[formIndex]} />
+
+		{:else if currentForm === "geco" && laTotale}
+			<div class="latotale">
+			{#each entriesObject as entry,index}
+				<Geco entriesObject={entry} {index} {laTotale} 
+				on:requestForceCapture={(e)=>handleRequestForceCapture(e.detail.index)}/>
+				<hr>
+			{/each}
+			</div>
+
+		{:else if currentForm ==  "savoirfaire" && !laTotale}
 			<SavoirFaire entriesObject={entriesObject[formIndex]} />
+
+		{:else if currentForm ==  "savoirfaire" && laTotale}
+			<div class="latotale">
+			<div class="bouton-highlight">
+				<button on:click={Markit} class="button is-small"><span class="icon is-small"><i class="fas fa-lightbulb"></i></span></button>
+			</div>
+			{#each entriesObject as entry,index}
+				<SavoirFaire {laTotale} entriesObject={entry} {index}  
+				on:requestForceCapture={(e)=>handleRequestForceCapture(e.detail.index)}/>
+				<hr>
+			{/each}
+			</div>
 		{/if}
 	{/if}
 
@@ -402,10 +492,9 @@
 		flex-direction: column;
 		display: flex;
 		justify-content: unset;
-		max-height:100vh;
 		overflow:visible;
 		background-color: unset;		
-		height:100vh;
+		min-height:100vh;
 		background:white;
 	}
 
@@ -417,6 +506,13 @@
 	}
 	:global(.invisible) {
 		display:none!important;
+	}
+
+	.bouton-highlight {
+		position:fixed;
+		top:2em;
+		right:2em;
+		z-index:300;
 	}
 
 	.help.is-danger {
@@ -435,6 +531,7 @@
 		display: block;
 		flex: none;
 		overflow: visible;
+		width:100vw;
 	}
 	:global(.global-center) {
 		position: absolute;
@@ -460,12 +557,8 @@
 		top: -20px;
 	}
 
-	body {
-		background: linear-gradient(133deg, white,var(--bleu-hyperclair), #eef);
-    	background-size: 600% 600%;
-	    -webkit-animation: fond-degrade 10s ease infinite;
-	    -moz-animation: fond-degrade 10s ease infinite;
-	    animation: fond-degrade 10s ease infinite;
+	:global(body) {
+		background: white;
 	}
 
 	label {
@@ -483,38 +576,48 @@
 		outline : 1px solid lightyellow;
 	}
 
+	.switch {
+		margin-bottom:1em;
+	}
+
 	:global(.media) {
 		align-items: center;
 	}
-
-	@-webkit-keyframes fond-degrade {
-		0%{background-position:0% 7%}
-		50%{background-position:100% 94%}
-		100%{background-position:0% 7%}
+	
+	@media only screen and (min-width: 1024px) {
+		.downspacer {
+			 text-align:center; margin-bottom:3em;
+		}
+		.switch-interne {
+			display:block;font-size:16px;position:relative;bottom:-1px;
+		}
 	}
-	@-moz-keyframes fond-degrade {
-		0%{background-position:0% 7%}
-		50%{background-position:100% 94%}
-		100%{background-position:0% 7%}
-	}
-	@keyframes fond-degrade {
-		0%{background-position:0% 7%}
-		50%{background-position:100% 94%}
-		100%{background-position:0% 7%}
-	}
-
+	
 	@media only screen and (max-width: 768px) {
-		 .global-center {
-			 min-width:90%!important;
-		 }
+		.switch-interne {
+			display:block;font-size:14px;position:relative;bottom:-1px;
+		}
+		.switch {
+			margin-top:-0.5em;
+			margin-bottom:0em;
+		}
+		.downspacer {
+			 text-align:center; margin-top:1em; margin-bottom:1em;
+		}
+		
 	 }
 
-
-/*
-	@media only screen and (max-width: 768px) {
-
-	}
-*/
+	 @media only screen and (max-width: 1024px) {
+		.global-center {
+				min-width:90%!important;
+			}
+		body {
+			overflow: scroll;
+		}
+		#boutonvalider {
+			margin-bottom:1em;
+		}
+	 }
 
 
 </style>

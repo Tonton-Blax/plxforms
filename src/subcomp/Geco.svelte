@@ -8,16 +8,10 @@ export let forceScreenGrab = false;
 import domtoimage from 'dom-to-image-more';
 import { API } from '../utils/consts.js'
 
-export let laTotale;
-
-let IMG = API + 'assets/savoirfaire/'
-
+let laTotale;
 let ready = false;
 let buttonGrab;
 let photoVisible;
-
-let secteurs = [];
-       
 
 const dispatch = createEventDispatcher();
 
@@ -26,12 +20,18 @@ $: if (forceScreenGrab) screenGrab();
 let photos = [];
 
 let QCM = {
-	secteurs : [],
-    certifs : {odd : [], even : []},
-    levelsSecteurs : {"Peu intervenu" : 1, "Intervention fréquente" : 2, "Expert du secteur" : 3 },
+    //Quel est votre niveau de maîtrise sur les conventions ?
+    levelsLangues : {"Notion" : 1, "Capacité professionnelle" : 2},
+    levelsAutresSecteurs : {"Notion" : 1, "En capacité d'exercer" : 2},
+    levelsConventions : {"Notions" : 1, "Intervention fréquente" : 2, "Expert" : 3 },
+    levelsMandants : {"Faible" : 1, "Moyen" : 2, "Forte volumétrie" : 3 },
     levelsSpecialites : {"Notion" : 1, "Spécialiste" : 2, "Maîtrise" : 3 },
-    levelsMandants : {"Faible" : 1, "Moyen" : 2, "Forte volumétrie" : 3 }
 }
+
+let currentTable2 = 1;
+
+//let PROXY = 'https://doublepromax.herokuapp.com/';*
+let IMG = API + 'assets/geco/'
 
 function capitalizer(str, separators) {
   separators = separators || [ ' ' ];
@@ -117,10 +117,6 @@ function saveAs(uri, filename) {
 }
 
 onMount(async () => {	
-    QCM.secteurs = searchObj(entriesObject, /vos\sdomaines/);
-    Object.keys(entriesObject[QCM.secteurs]).forEach(a => secteurs.push({ name : a, val : entriesObject[QCM.secteurs][a]}));
-    QCM.mandants = searchObj(entriesObject, /mandants/);
-    entriesObject[searchObj(entriesObject,/certifications/)].forEach((e,i) => {i%2 == 0 ? QCM.certifs.even.push(e) : QCM.certifs.odd.push(e)});
     ready = true;
 });
 
@@ -148,81 +144,70 @@ let searchObj = (obj, term) => {
                     <Loading extraStyle={"left:1.5em;top:1.5em;width:100px;height:100px;filter:invert(1);"} text={''}/>
                 {/if}
 
-                <img on:load={()=>photoVisible = true} class="is-rounded" crossorigin="anonymous" src={IMG+entriesObject["Insérer votre photo"].split('?id=')[1]} alt="Portrait du renseignant">
+                <img on:load={()=>photoVisible = true} src={IMG + entriesObject["Insérer votre photo"].split('?id=')[1]} alt="Portrait du renseignant">
                 <div class="figure-p">
                     <p><strong>{capitalizer(entriesObject[searchObj(entriesObject,/prénom/)[0]],['-'])}{capitalizer(entriesObject[searchObj(entriesObject,/otre\snom/)[0]],['-'])}</strong></p>
-                    <p style="font-size:16px; font-weight:300;padding-top: 7px;">✉ : <a     href=mailto:{entriesObject["Adresse e-mail"]}>{entriesObject["Adresse e-mail"]}</a></p>                    
-                    <p style="font-size:16px; font-weight:300;padding-top: 7px;">☎ : {entriesObject["Téléphone"]}</p>
-                    <p style="font-size:16px; font-weight:300;padding-top: 7px;">Chez&nbsp;{entriesObject["Entité"]}&nbsp; depuis &nbsp;{entriesObject[searchObj(entriesObject,/au\ssein/)[0]]}</p>
+                    <p style="font-size:16px; font-weight:300;padding-top: 7px;"><a href=mailto:{entriesObject["Adresse e-mail"]}>{entriesObject["Adresse e-mail"]}</a></p>                    
+              <!--  <p style="font-size:16px; font-weight:300;padding-top: 7px;">{entriesObject["Téléphone"]}</p> -->
+                    <p style="font-size:16px; font-weight:300;padding-top: 7px;">{entriesObject[searchObj(entriesObject,/expérience dans l'assurance/)[0]]} an(s) dans l'assurance</p>
+                    <p style="font-size:16px; font-weight:300;padding-top: 7px;">Chez Geco depuis {entriesObject[searchObj(entriesObject,/au\ssein/)[0]]}</p>
                 </div>
 
             </div>
             
-            <table id="tabletrans" class="table is-narrow specialites">
-            <tr><td colspan="2" style="border:none;"><h3><img src="./img/cv_specialites.svg" alt="client">Compétences transverses</h3></td></tr>
-            
-            {#each Object.entries(entriesObject["Specialites"]) as [spec,val]}
-                {#if val.length && val!="Néant"}
-                 <tr>
-                    <td width="80%">
-                        {spec}
-                    </td> 
-                    <td width="20%" style="text-align: right;">
-                            <Dots score={QCM.levelsSpecialites[val]} />
-                    </td>
-                </tr>
+            <table id="tabletrans" class="table is-narrow">
+            <tr><td colspan="2" style="border:none;"><h3><img src="./img/client.svg" alt="client">Type de client</h3></td></tr>
+            <tr><td style="border:none;">
+            {#if entriesObject["Type de client gérés"].split(',').length}
+            {#each entriesObject["Type de client gérés"].split(',') as client, index}
+                {#if client != "Néant"}
+                    {client.trim()}{#if index != entriesObject["Type de client gérés"].split(',').length -1},&nbsp{/if}
                 {/if}
             {/each}
+            {/if}
+            </td></tr>
             </table>
-            <table id="tablesecteur" class="table is-narrow vosdomaines">
+
+            <table id="tablesecteur" class="table is-narrow">
             <tr>
                 <td colspan="2" style="border:none;padding-top: 3.5vh!important;">
-                    <h3><img src="./img/cv_secteurs.svg" alt="client">Compétences sectorielles</h3>
+                    <h3><img src="./img/cv_secteurs.svg" alt="client">Spécialités</h3>
                 </td>
             </tr>
 
-            {#each secteurs as secteur}
-                {#if secteur.val != "Jamais intervenu"}
+            {#each Object.entries(entriesObject["Specialites"]) as [spec,val]}
+                {#if val.length && val != "Jamais intervenu"}
                  <tr>
                     <td width="80%">
-                        { secteur.name.includes("Energie, Environnement, Pollution et Ressources naturelles") ? "Energie et environnement" : secteur.name }
+                        { spec }
                     </td> 
                     <td width="20%" style="text-align: right;">
-                        <Dots score={QCM.levelsSecteurs[secteur.val]} />
+                        <Dots score={QCM.levelsSpecialites[val]} />
                     </td>
                 </tr>
                 {/if}
             {/each}
 
             </table>
-             <table id="tablecertif" class="table is-narrow certifications" style="margin-top:1.5em;">
+             <table id="tablecertif" class="table is-narrow" style="margin-top:1.5em;">
             <tr>
                 <td colspan="2" style="border:none;padding-top: 0.3vh!important;">
-                    <h3><img src="./img/cv_certifications.svg" alt="client">Certifications</h3>
+                    <h3><img src="./img/cv_certifications.svg" alt="client">Compétence assurantielle</h3>
                 </td>
             </tr>
 
-            
-            {#if QCM.certifs.even.length == 1 && QCM.certifs.odd.length == 1}
-                <tr>
-                    <td width="100%">{QCM.certifs.even[0]}</td>
+            {#each Object.entries(entriesObject[searchObj(entriesObject,/autres\ssecteurs/)]) as [sect,val]}
+                {#if val.length && val != "Jamais intervenu"}
+                 <tr>
+                    <td width="80%">
+                        { sect }
+                    </td> 
+                    <td width="20%" style="text-align: right;">
+                        <Dots length={2} score={QCM.levelsAutresSecteurs[val]} />
+                    </td>
                 </tr>
-                <tr>
-                    <td width="100%">{QCM.certifs.odd[0]}</td>
-                </tr>
-            
-            {:else}
-
-                {#each QCM.certifs.even as certif, index}                                                
-                    <tr>
-                        <td width="50%">●&nbsp;{certif}</td>
-                        {#if QCM.certifs.odd[index] != undefined }
-                            <td width="50%">●&nbsp;{QCM.certifs.odd[index]}</td>
-                        {/if}
-                    </tr>
-                {/each}
-
-            {/if}
+                {/if}
+            {/each}
 
             </table>
         </div>
@@ -231,7 +216,7 @@ let searchObj = (obj, term) => {
 
         <div id="coldroite" class="column" style="align-self:center;">
             <div class="entete">
-                <div id="logo-entete"><img src={'./img/' + entriesObject["Entité"].toLowerCase().replace(/\s/,'-') + ".png"} alt="Logo de l'entité"></div>                                            
+                <div id="logo-entete"><img src={'./img/geco.png'} alt="Logo de l'entité"></div>                                            
                 <div id="superh1">{entriesObject["Intitulé de poste"]}</div>
             </div>
             <div class="bigbox">
@@ -239,12 +224,12 @@ let searchObj = (obj, term) => {
                     
                      <!-- BLOCS XP + FORMATION -->
 
-                    <div class="column is-two-fifths">
+                    <div class="column is-half">
                     <h3 class="h3droite"><img src="./img/cv_formation.svg" alt="Formation">Formation</h3>
-                        <div class="box-interne formation">
-                            <p>
+                        <div class="box-interne">
+                           <p>
                             {#each entriesObject.diplome as diplome}
-                                {(diplome["Diplôme"] + ' - ') || ""}{(diplome["Année d'obtention Diplôme"]  + ' - ') || ""}{diplome["Spécialités Diplôme"]||""} <br>
+                                {diplome[searchObj(diplome,/obtention/)]} <br>
                             {/each}                
                             
                             </p>
@@ -252,27 +237,75 @@ let searchObj = (obj, term) => {
                     </div>
                 
 
-                    <div class="column">
+                    <div class="column is-half">
                     <h3 class="h3droite"><img src="./img/cv_xp.svg" alt="client">Expérience professionnelle</h3>
                         <div class="box-interne">
                         
                             <ul>
-                            {#each entriesObject.entreprise as xp}
+                           {#each entriesObject.entreprise as xp}
                                 <p>{xp[searchObj(xp,/Fonction/)]}</p>
                             {/each}
                             </ul>
                         </div>
                     </div>
 
-                  <!-- BLOC PROJETS INTERNES -->
+                    <!-- BLOCS LANGUES + (CONVENTION  && CYCLE DE GESTION) -->
 
-                    <div class="column is-full">
-                    <h3 class="h3droite"><img src="./img/cv_projet.svg" alt="client">Projets Internes</h3>
-                        <div class="box-interne premax">
-                            {@html entriesObject[searchObj(entriesObject,/projets\sinterne/)[0]].replace(/\n/g,"<br>")}
+                    <div class="column is-one-third">
+                    <h3 class="h3droite"><img src="./img/cv_formation.svg" alt="Formation">Langues maîtrisées</h3>
+                        <div class="box-interne">
+                            <table>
+                                {#each Object.entries(entriesObject[searchObj(entriesObject, /univers/)]) as [langue, niveau]}
+                                    {#if niveau.length && niveau != "Néant"}
+                                    <tr>
+                                        <td width="75%">
+                                            {langue}
+                                        </td> 
+                                        <td width="25%" style="text-align: left;">
+                                            <Dots length={2} invert={true} score={QCM.levelsLangues[niveau]} />
+                                        </td>
+                                    </tr>
+                                    {/if}
+                                {/each}
+                            </table>
+                        </div>
+                    </div>
+                
+
+                    <div class="column is-one-third">
+                    <h3 class="h3droite"><img src="./img/cv_projet.svg" alt="Formation">Conventions</h3>
+                        <div class="box-interne">
+                            <table>
+                                {#each Object.entries(entriesObject[searchObj(entriesObject, /conventions/)]) as [convention, niveau]}
+                                    {#if niveau.length && niveau != "Jamais intervenu"}
+                                    <tr>
+                                        <td width="75%">
+                                            { convention }
+                                        </td> 
+                                        <td width="25%" style="text-align: left;">
+                                            <Dots invert={true} score={QCM.levelsConventions[niveau]} />
+                                        </td>
+                                    </tr>
+                                    {/if}
+                                {/each}
+                            </table>
                         </div>
                     </div>
 
+                    <div class="column is-one-third">
+                    <h3 class="h3droite paddplus"><img src="./img/cv_specialites.svg" alt="Formation">Intervention sur le cycle de gestion du dossier</h3>
+                        <div class="box-interne">
+                            <table>
+                                <tr>
+                                    <td>
+                                        {entriesObject[searchObj(entriesObject, /cycle\sde\sgestion/)]}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                                
                     <!-- BLOC FORMATION DOSSIERS MARQUANTS -->
                     <div class="column is-full">
                         <h3 class="h3rien"><img src="./img/cv_projet.svg" alt="client">Dossiers marquants</h3>
@@ -280,7 +313,7 @@ let searchObj = (obj, term) => {
                     <div class="column is-full pingouin gauche">
                         
                         <div class="timeline">
-                            {#each entriesObject["Dossier marquant"] as dossier, index}
+                            {#each entriesObject["Dossiers marquant"] as dossier, index}
                                 {#if dossier["Année"] && dossier[searchObj(dossier,/problématique/)]}
                                 <div class="timeline-item">
                                     <div class="timeline-marker is-primary"><span class="annees tagmax">{dossier["Année"]}</span></div>
@@ -314,12 +347,6 @@ let searchObj = (obj, term) => {
   		list-style: none;
 	}
 
-    .columns {
-        width: -moz-available;          /* WebKit-based browsers will ignore this. */
-        width: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
-        width: fill-available;
-    }
-
     h3 img {
         margin-right:10px;
         position:relative;
@@ -347,13 +374,13 @@ let searchObj = (obj, term) => {
     }
     #logo-entete img {
         width:auto ;
-        max-height:2.4vmax;
+        max-height:3.4vmax;
     }
     
     #logo-entete {
         position: absolute;
-        top: 3em;
-        right: 3vw;
+        top: 2em;
+        right: 1vw;
     }
 
     #superh1 {
@@ -435,7 +462,7 @@ let searchObj = (obj, term) => {
         padding-bottom: 2em;
     }
 
-    table tr td {
+    #colgauche table tr td {
         font-size: 1em;
         color: white;
         border-color:rgba(255,255,255,0.5)!important;
@@ -480,6 +507,10 @@ let searchObj = (obj, term) => {
         padding:1.5em 0em;
         /* height: 100%; */
     }
+
+    .paddplus {
+        margin-bottom: 1em;
+    }
     
     .timeline .timeline-item {
         padding-bottom: 0.5em;
@@ -504,6 +535,7 @@ let searchObj = (obj, term) => {
 
     .container {
         flex-direction: unset;
+        height:unset!important;
         max-height:unset!important;
     }
 
@@ -617,9 +649,6 @@ let searchObj = (obj, term) => {
         }
         #logo-entete {
             display:none;
-        }
-        .container {
-            height:auto;
         }
     }
 

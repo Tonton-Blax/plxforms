@@ -1,7 +1,9 @@
 <script>
-import { onMount, createEventDispatcher  } from 'svelte';
+import { onMount, afterUpdate, createEventDispatcher  } from 'svelte';
 import Loading from './Loading.svelte'
 import domtoimage from 'dom-to-image-more';
+import { API } from '../utils/consts.js'
+
 
 export let entriesObject;
 export let index = 0;
@@ -19,16 +21,24 @@ $: if (forceScreenGrab) screenGrab();
 
 let photos = []; let loadedPhotos = [];
 let bignode;
-let entite = "Polyexpert"
+let entite = "Polyexpert";
+let detailSecteur = []; let detailSecteurValues = [];
+let IMG = API + "assets/retex/";
 
-let detailSecteur = [];
-let PROXY = 'https://doublepromax.herokuapp.com/';
-//https://doublepromax.herokuapp.com/
+let secteurs = [];
 
-
-onMount(async () => {	
-    //console.log(entriesObject); 
+        
+onMount(async () => { 
     detailSecteur = searchObj(entriesObject, /du\ssecteur/);
+    detailSecteur.push(searchObj(entriesObject, /macro/));
+    detailSecteur = detailSecteur.flat()
+    
+    detailSecteur.forEach(d=> { 
+        Array.isArray(entriesObject[d]) ? detailSecteurValues.push(entriesObject[d]) : detailSecteurValues.push([entriesObject[d]] )
+    });
+
+    detailSecteurValues = detailSecteurValues.flat().filter(entry => entry != '');
+    
     let photokey=searchObj(entriesObject, /photo/)
     photos = (entriesObject[photokey]).split(',');
     ready = true;
@@ -124,12 +134,13 @@ let searchObj = (obj, term) => {
     
     <div class="grid-container">
         <div class="entete">
-        <div id="superh1">{entriesObject[searchObj(entriesObject,/du\sclient/)[0]]} : {entriesObject[searchObj(entriesObject,/type\sde\sretour/)[0]]}</div>
+        <div id="superh1">{entriesObject["Client"]} : {entriesObject[searchObj(entriesObject,/type\sde\sretour/)[0]]}</div>
             {#if isInterne}
                 <div id="nom-prenom">
                     {capitalizer(entriesObject[searchObj(entriesObject,/prénom/)[0]],['-'])} 
-                    {capitalizer(entriesObject[searchObj(entriesObject,/famille/)[0]],['-']).toUpperCase()} 
-                    {entriesObject[searchObj(entriesObject,/éférence /)[0]]}
+                    {capitalizer(entriesObject[searchObj(entriesObject,/famille/)[0]],['-']).toUpperCase()} <br>
+                    Référence : <strong>{entriesObject[searchObj(entriesObject,/éférence /)[0]]}</strong>,&nbsp;
+                    Client : <strong>{entriesObject[searchObj(entriesObject,/du\sclient/)[0]]}</strong>
                 </div>
             {/if}
         </div>
@@ -140,15 +151,17 @@ let searchObj = (obj, term) => {
             <h2><img src="./img/resultat-obtenu.svg" alt="client">Résultat obtenu</h2>
             <div>{entriesObject["Le résultat obtenu"]}</div>
         </div>
-        <div class="enjeu-dossier">
+        <div class="enjeu">
             <h2><img src="./img/enjeu-dossier.svg" alt="client">Enjeu dossier</h2>
             <div>{entriesObject[searchObj(entriesObject,/enjeu/)[0]]}</div>
         </div>
         <div class="secteur-activite">
             <h2><img src="./img/secteur-activite.svg" alt="loupe">Secteur d'activité</h2>
             <div>
-            {#each detailSecteur as key}
-                <p>{entriesObject[key]}</p>
+            {#each detailSecteurValues as subkey}
+                
+                <p>{subkey}<br></p>
+                
             {/each}
             </div>
         </div>
@@ -172,7 +185,7 @@ let searchObj = (obj, term) => {
                     {#if !photoVisible && index == 0}
                     <Loading extraStyle={"right:11em;"} text={''}/>
                     {/if}
-                    <img on:load={()=>photoVisible = true} crossorigin="anonymous" src={PROXY + photo.replace("/open","/uc").replace(/\s/g,'')} alt="Représentation du dossier">
+                    <img on:load={()=>photoVisible = true} crossorigin="anonymous" src={IMG+photo.split('?id=')[1]} alt="Représentation du dossier">
                 </figure>
             {/each}
             {/if}
@@ -214,9 +227,10 @@ let searchObj = (obj, term) => {
     #nom-prenom {
         font-size: 1vw;
         color: var(--main-color);
-        right: 5vw;
-        top: 5.5vh;
-        position:absolute!important;
+        margin-top: -2vh;
+    }
+    #nom-prenom strong {
+        color: var(--main-color);
     }
 
     .addon-container {
@@ -229,9 +243,9 @@ let searchObj = (obj, term) => {
         grid-template-rows: 0.5fr 1fr 1.5fr 1.5fr;
         gap: 1.5vh 1.5vw;
         /*grid-template-areas: "entete entete entete entete" "client secteur-activite enjeu-dossier photo" "contexte contexte resultat-obtenu photo" "demarche demarche resultat-obtenu photo";*/
-        grid-template-areas: "entete entete entete entete" "client secteur-activite enjeu-dossier photo" "contexte demarche demarche photo" "contexte resultat-obtenu resultat-obtenu photo";
-        max-height:95vh;
-        height: calc(95vh - 10px);
+        grid-template-areas: "entete entete entete entete" "client secteur-activite enjeu photo" "contexte demarche demarche photo" "contexte resultat-obtenu resultat-obtenu photo";
+        max-height:max-content;
+        min-height: calc(95vh - 10px);
     }
 
     .grid-container div:not(.entete) > div {
@@ -241,7 +255,7 @@ let searchObj = (obj, term) => {
         color: black;
         font-size: 0.8vw;
     }
-    .grid-container div:not(.entete):not(.enjeu-dossier):not(.demarche):not(.resultat-obtenu) > div {
+    .grid-container div:not(.entete):not(.enjeu):not(.demarche):not(.resultat-obtenu) > div {
         border-right: 2px solid var(--main-color);
     }
 
@@ -259,7 +273,7 @@ let searchObj = (obj, term) => {
 
     .resultat-obtenu { grid-area: resultat-obtenu; display: flex; flex-direction:column; }
 
-    .enjeu-dossier { grid-area: enjeu-dossier; display: flex; flex-direction:column; }
+    .enjeu { grid-area: enjeu; display: flex; flex-direction:column; }
 
     .secteur-activite { grid-area: secteur-activite; display: flex; flex-direction:column; }
 
@@ -329,7 +343,7 @@ let searchObj = (obj, term) => {
             grid-template-columns: 1fr;
             grid-template-rows: 1fr;
             gap: 1vmax;
-            grid-template-areas: "entete" "photo" "client" "secteur-activite" "enjeu-dossier" "contexte" "demarche" "resultat-obtenu";
+            grid-template-areas: "entete" "photo" "client" "secteur-activite" "enjeu" "contexte" "demarche" "resultat-obtenu";
         }
         .grid-container div:not(.entete) > div {
             font-size:0.9em;

@@ -7,8 +7,8 @@ export let index = 0;
 export let forceScreenGrab = false;
 import domtoimage from 'dom-to-image-more';
 
-let CV;
-let laTotale;
+export let laTotale;
+
 let ready = false;
 let buttonGrab;
 let photoVisible;
@@ -20,43 +20,27 @@ $: if (forceScreenGrab) screenGrab();
 let photos = []; let loadedPhotos = [];
 let bignode;
 
-/*
-let domaines = ["Bâtiment et aménagements", "Voierie et réseaux divers", "Mobilier", "Matériel", "Bris de machine", "Marchandises", "Marchandises transportées", "Perte d'exploitation", "Catastrophes naturelles", "Sécheresse", "Aéronautique", "Agricole"];
-let electricite = ["Dommages électriques", "Recours ERDF", "Recherche des causes"];
-let vol = ["Objets précieux", "Bijoux", "Marchandises", "Matériels", "Métaux", "Engins"];
-let autres = ["Recherche des causes d'incendies", "SNCF", "RCD / Dommages ouvrages", "Autres"]
-let risques = ["Risques du particulier", "Risques professionnels", "Risques industriels", "Risques agricoles"];
-let certifEAA = ["Généraliste","Bâtiment", "Matériels et installations", "Préjudices immatériels et marchandises", "Dommages agricoles", "Plaisance"]
-let dossiers = ["Dommages", "RC", "Protection juridique"];
-*/
-
-let currentTable2 = 1;
-
-let PROXY = 'https://doublepromax.herokuapp.com/';
+//let PROXY = 'https://doublepromax.herokuapp.com/';
 
 let infospersos = {}
 
 onMount(async () => {
-
     infospersos = {
-
-        "Ligne directe" : entriesObject["Ligne directe"] || "",
+        "Ligne directe" : entriesObject["Téléphone fixe"] || "",
         "Mobile" : entriesObject["Téléphone portable"] || "",
         "Année de naissance" : entriesObject["Année de naissance"] || "",
         "Diplôme(s)" : entriesObject["Diplôme(s)"] || "",
         "Début dans l'expertise" : entriesObject["Début dans l'expertise"] || "",
-        "Chez Polyexpert depuis" : entriesObject["Chez POLYEXPERT depuis"] || "",
-        "Région" : entriesObject["CABINET / AGENCE : Région"] || "",
-        "Bureau" : entriesObject["CABINET / AGENCE : Bureau"] || "",
-        "Code postal" : entriesObject["CABINET / AGENCE : Code Postal"] || "",
-        "Code EDI DARVA" : entriesObject["CABINET / AGENCE : CODE EDI DARVA"] || "",
-        "Code GECOR" : entriesObject["CABINET / AGENCE : CODE GECOR"] || ""
+        "Chez Polyexpert depuis" : entriesObject["Chez Polyexpert depuis"] || entriesObject["Chez POLYEXPERT depuis"] || "",
+        "Région" : entriesObject["Région"] || "",
+        "Bureau" : entriesObject["Bureau"] || "",
+        "Département d'intervention" : entriesObject["Département d'intervention"] || "",
+        "Code EDI DARVA" : entriesObject["Code EDI DARVA"] || entriesObject["CODE EDI DARVA"] || "",
+        "Code GECOR" : entriesObject["Code GECOR"] || entriesObject["CODE GECOR"] || ""
     }
+    
     ready = true;
-
 });
-
-
 
 function capitalizer(str, separators) {
   separators = separators || [ ' ' ];
@@ -128,14 +112,11 @@ function saveAs(uri, filename) {
     let link = document.createElement('a');
 
     if (typeof link.download === 'string') {
-
         link.href = uri;
         link.download = filename;
-
         document.body.appendChild(link);
         link.click();
         document.bsequiody.removeChild(link);
-
     } else {
         window.open(uri);
     }
@@ -148,7 +129,6 @@ let searchObj = (obj, term) => {
       keys.push(key)
   return keys.length ? keys : [""];
 }
-
 
 </script>
 
@@ -170,7 +150,7 @@ let searchObj = (obj, term) => {
                 </div>
             </div>
 
-        <table class="table is-narrow">
+        <table class="table is-narrow infospersos">
             <tr>
                 <td colspan="2" style="border:none;"><h3><img src="./img/cv_specialites.svg" alt="client">Agence & contact</h3></td>
             </tr>
@@ -201,11 +181,12 @@ let searchObj = (obj, term) => {
         <div class="column is-3 space4vh">
 
             <table class="table is-narrow centermobile">
+            {#if entriesObject["Champs d'expertises"]}
+
             <tr>
                 <td colspan="2" style="border:none;"><h3><img src="./img/cv_specialites.svg" alt="client">Champs d'expertise</h3></td>
             </tr>
-            {#if entriesObject["Champs d'expertises"]}
-            {#each entriesObject["Champs d'expertises"].replace(/\s*,\s*/g,',').split(",") as champ}
+            {#each entriesObject["Champs d'expertises"] as champ}
     
                 <tr>
                     <td>
@@ -214,29 +195,29 @@ let searchObj = (obj, term) => {
                 </tr>
             {/each}
             {/if}
-            
-            <tr>
-                <td colspan="2" style="border:none;"><h3><img src="./img/cv_specialites.svg" alt="client">Types de risques</h3></td>
-            </tr>
-            
             {#if entriesObject["Types de risques"]}
-            {#each entriesObject["Types de risques"].replace(/\s*,\s*/g,',').split(",") as risque}
-
+            
                 <tr>
-                    <td>
-                        {risque}
-                    </td> 
+                    <td colspan="2" style="border:none;"><h3><img src="./img/cv_specialites.svg" alt="client">Types de risques</h3></td>
                 </tr>
                 
-            {/each}
+                {#each entriesObject["Types de risques"] as risque}
+
+                    <tr>
+                        <td>
+                            {risque}
+                        </td> 
+                    </tr>
+                    
+                {/each}
             {/if}
+            {#if entriesObject["Branche"]}
             
                 <tr>
                     <td colspan="2" style="border:none;"><h3><img src="./img/cv_specialites.svg" alt="client">Dossiers</h3></td>
                 </tr>
 
-            {#if entriesObject["Dossiers"]}
-            {#each entriesObject["Dossiers"].replace(/\s*,\s*/g,',').split(",") as dossier}
+            {#each entriesObject["Branche"].replace(/\s*,\s*/g,',').split(",") as dossier}
 
                 <tr>
                     <td>
@@ -255,14 +236,14 @@ let searchObj = (obj, term) => {
 
         <div class="column is-3 space4vh">
             
-            <table class="table is-narrow centermobile">
+            <table class="table is-narrow centermobile domaines">
+            {#if entriesObject["Domaines d'intervention"]}
             
                 <tr>
                     <td colspan="2" style="border:none;"><h3><img src="./img/cv_specialites.svg" alt="client">Domaines d'intervention</h3></td>
                 </tr>
 
-            {#if entriesObject["Domaines d'intervention"]}
-            {#each entriesObject["Domaines d'intervention"].replace(/\s*,\s*/g,',').split(",") as domaine}
+            {#each entriesObject["Domaines d'intervention"] as domaine}
 
                 <tr>
                     <td>
@@ -271,13 +252,13 @@ let searchObj = (obj, term) => {
                 </tr>
             {/each}
             {/if}
+            {#if entriesObject["Electricité"]}
 
                 <tr>
                     <td colspan="2" style="border:none;"><h3><img src="./img/cv_specialites.svg" alt="client">Electricité</h3></td>
                 </tr>
 
-            {#if entriesObject["Electricité"]}
-            {#each entriesObject["Electricité"].replace(/\s*,\s*/g,',').split(",") as electricite}
+            {#each entriesObject["Electricité"] as electricite}
 
                 <tr>
                     <td>
@@ -286,13 +267,13 @@ let searchObj = (obj, term) => {
                 </tr>
             {/each}
             {/if}
+            {#if entriesObject["Vol"]}
 
                 <tr>
                     <td colspan="2" style="border:none;"><h3><img src="./img/cv_specialites.svg" alt="client">Vol</h3></td>
                 </tr>
 
-            {#if entriesObject["Vol"]}
-            {#each entriesObject["Vol"].replace(/\s*,\s*/g,',').split(",") as vol}
+            {#each entriesObject["Vol"] as vol}
 
                 <tr>
                     <td>
@@ -301,13 +282,13 @@ let searchObj = (obj, term) => {
                 </tr>
             {/each}
             {/if}
+            {#if entriesObject["Autres"]}
 
                 <tr>
                     <td colspan="2" style="border:none;"><h3><img src="./img/cv_specialites.svg" alt="client">Autres domaines</h3></td>
                 </tr>
 
-            {#if entriesObject["Autres"]}
-            {#each entriesObject["Autres"].replace(/\s*,\s*/g,',').split(",") as autre}
+            {#each entriesObject["Autres"] as autre}
 
                 <tr>
                     <td>
@@ -327,12 +308,12 @@ let searchObj = (obj, term) => {
         <div class="column is-3 space4vh">
             
             <table class="table is-narrow centermobile">
-            
+            {#if entriesObject["EEA"]}
                 <tr>
                     <td colspan="2" style="border:none;"><h3><img src="./img/cv_specialites.svg" alt="client">Certifications EAA</h3></td>
                 </tr>
 
-            {#if entriesObject["EEA"]}
+            
             {#each entriesObject["EEA"].replace(/\s*,\s*/g,',').split(",") as eaa}
 
                 <tr>
@@ -342,12 +323,12 @@ let searchObj = (obj, term) => {
                 </tr>
             {/each}
             {/if}
+            {#if entriesObject["CEA"]}
 
                 <tr>
                     <td colspan="2" style="border:none;"><h3><img src="./img/cv_specialites.svg" alt="client">Certifications CEA</h3></td>
                 </tr>
 
-            {#if entriesObject["CEA"]}
             {#each entriesObject["CEA"].replace(/\s*,\s*/g,',').split(",") as cea}
 
                 <tr>
@@ -357,12 +338,12 @@ let searchObj = (obj, term) => {
                 </tr>
             {/each}
             {/if}
+            {#if entriesObject["APSAD"]}
 
                 <tr>
                     <td colspan="2" style="border:none;"><h3><img src="./img/cv_specialites.svg" alt="client">Certifications APSAD</h3></td>
                 </tr>
 
-            {#if entriesObject["APSAD"]}
             {#each entriesObject["APSAD"].replace(/\s*,\s*/g,',').split(",") as apsad}
 
                 <tr>
@@ -372,12 +353,12 @@ let searchObj = (obj, term) => {
                 </tr>
             {/each}
             {/if}
+            {#if entriesObject["CSTB"]}
 
                 <tr>
                     <td colspan="2" style="border:none;"><h3><img src="./img/cv_specialites.svg" alt="client">Certifications CSTB</h3></td>
                 </tr>
 
-            {#if entriesObject["CSTB"]}
             {#each entriesObject["CSTB"].replace(/\s*,\s*/g,',').split(",") as cstb}
 
                 <tr>
@@ -387,12 +368,12 @@ let searchObj = (obj, term) => {
                 </tr>
             {/each}
             {/if}
+            {#if entriesObject["Autres certifications"]}
 
                 <tr>
                     <td colspan="2" style="border:none;"><h3><img src="./img/cv_specialites.svg" alt="client">Autres certifications</h3></td>
                 </tr>
 
-            {#if entriesObject["Autres certifications"]}
             {#each entriesObject["Autres certifications"].replace(/\s*,\s*/g,',').split(",") as autres}
 
                 <tr>
@@ -576,6 +557,10 @@ let searchObj = (obj, term) => {
         .table h3 {
             line-height:1.5em;
             padding-top:1em;
+        }
+        .container {
+            max-height:unset!important;
+            height:auto!important;
         }
     }
 
