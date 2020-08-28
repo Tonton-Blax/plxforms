@@ -10,12 +10,16 @@
 
   export let results;
   let gogoDisabled = false;
+  let searchHasBegun = false;
 
   const dispatch = createEventDispatcher();
 
   
+	onMount(async () => {	
+    searchHasBegun = false;
+  });
 
-let filtres = {
+  let filtres = {
 
   retex : {
     secteurs : {
@@ -270,8 +274,9 @@ let filtres = {
 }
 
 async function gogoFilter (form) {
+  
   let queryStr = [];
-
+  searchHasBegun = true;
   for (const k of Object.keys(filtres[form])) {
     if (filtres[form][k].selectedData && filtres[form][k].selectedData.length) {
       if (Array.isArray(filtres[form][k].selectedData))
@@ -284,11 +289,15 @@ async function gogoFilter (form) {
   //$theData = await (await fetch(API + 'sheet/'+ form +'?'+queryStr.join("&"))).json();
   $theData = await axios(API + 'sheet/'+ form +'?'+queryStr.join("&"))
   $theData = $theData.data;
+  
   if ($theData.filters) 
-  results = $theData.filters;  
+    results = $theData.filters;  
   entriesObject = $theData.filtered;
-  dispatch('searchReady', {form: form});
 
+  if (!entriesObject || !entriesObject.length)
+    searchHasBegun = false;
+
+  dispatch('searchReady', {form: form});
 }
 
 let groupBy = (item) => item.group;
@@ -345,9 +354,9 @@ function checkInput (obj) {
 
      <p class="control" style="text-align:center;">
       
-      <Button class="is-warning" style="padding-left:2em;padding-right:2em;" type="submit" disabled={gogoDisabled}
+      <button class="button is-warning" class:is-loading={searchHasBegun} style="padding-left:2em;padding-right:2em;" type="submit" disabled={gogoDisabled}
         on:click={() => gogoFilter('retex')}>Lancer la recherche
-      </Button>
+      </button>
     </p>
 
   </Tab>
@@ -394,9 +403,9 @@ function checkInput (obj) {
 
     <p class="control" style="text-align:center;">
       
-      <Button class="is-warning" style="padding-left:2em;padding-right:2em;" type="submit" disabled={gogoDisabled}
+      <button class="button is-warning" class:is-loading={searchHasBegun} style="padding-left:2em;padding-right:2em;" type="submit" disabled={gogoDisabled}
         on:click={() => gogoFilter('savoirfaire')}>Lancer la recherche
-      </Button>
+      </button>
     </p>
   </Tab>
   
@@ -491,9 +500,9 @@ function checkInput (obj) {
 
      <p class="control" style="text-align:center;margin-top:1em;">
       
-      <Button class="is-warning" style="padding-left:2em;padding-right:2em;" type="submit" disabled={gogoDisabled}
+      <button class="button is-warning" class:is-loading={searchHasBegun} style="padding-left:2em;padding-right:2em;" disabled={gogoDisabled}
         on:click={() => gogoFilter('experts')}>Lancer la recherche
-      </Button>
+      </button>
     </p>
 
   </Tab>
