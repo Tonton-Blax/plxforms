@@ -15,10 +15,10 @@
 	import Loading from './subcomp/Loading.svelte';
 	import Modal from './subcomp/Modal.svelte'
 	import Recherche from './subcomp/Recherche.svelte'
-	import { API } from './utils/consts.js'
+	import { API, theData } from './utils/consts.js'
 	import axios from 'axios';
 	import Mark from './utils/mark.es6.js'
-		
+	
 	let bigdata = thebigdata;
 	let domReady = false;
 	let loading = false;
@@ -78,10 +78,11 @@
 			}
 		}
 
-
+	
 	onMount(async () => {	
 		localStorage.clear();
 		lightOn = false;
+		
 
 		currentPage.slug = window.location.hash.split('#');
 		if ((currentPage.slug && currentPage.slug[1] == 'forward') || currentPage.slug.length <= 1) {
@@ -102,11 +103,7 @@
 		domReady = true;
 	});
 
-	onDestroy(() => {
-
-		for (const k in instance)
-			instance[k].unmark();
-	});
+	onDestroy(() => { lightOff() });
 
 
 	function mailExists (mail) {
@@ -256,8 +253,8 @@
 		console.log("fin f : ", currentRange)
 	}
 	
-	function Markit(light) {
-		if (!ready) return;
+	function Markit() {
+		if (!ready || !laTotale) return;
 		
 		lightOn = !lightOn;
 		let secteurs = [];
@@ -286,32 +283,33 @@
             "diplome"               : ".formation"
 		}
 
-		if (laTotale) {
-		
-			if (lightOn === true)
-			{	
-				highlights = Object.keys(results);		
+	
+		if (lightOn === true)
+		{	
+			highlights = Object.keys(results);		
 
-				if (highlights.length) {
-					highlights.forEach(h => {
-						if (!instance[h])
-							instance[h] = new Mark(document.querySelectorAll(`${elMap[h]}`));
-						if ((Object.prototype.toString.call(results[h]).indexOf("Object")>-1))
-							results[h] = Object.values(results[h]);
-						console.log(results[h]);
-						console.log("h :", h, "\n", "res :", results[h], "\n")
-						
-						instance[h].mark(results[h], {separateWordSearch : false, className : `mark-${h}`});
-					});
-				}
+			if (highlights.length) {
+				highlights.forEach(h => {
+					if (!instance[h])
+						instance[h] = new Mark(document.querySelectorAll(`${elMap[h]}`));
+					if ((Object.prototype.toString.call(results[h]).indexOf("Object")>-1))
+						results[h] = Object.values(results[h]);
+					console.log(results[h]);
+					console.log("h :", h, "\n", "res :", results[h], "\n")
+					
+					instance[h].mark(results[h], {separateWordSearch : false, className : `mark-${h}`});
+				});
 			}
-			else {
-				for (const k in instance) {
-					instance[k].unmark();
-				}
-			}
-    	} 
+		}
+		else lightOff ();
 
+	}
+
+	lightOff = () => {
+		lightOn = false;
+		for (const k in instance) {
+			instance[k].unmark();
+		}
 	}
 
 </script>
