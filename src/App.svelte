@@ -26,7 +26,8 @@
 	let results = [];
 	let instance = {};
 	let lightOn = false;
-	let currentRange = {start:0, end:25};
+	let currentRange = 0;
+	const RANGE = 50;
 
 	let sheetAPI = API + 'sheet/'
 
@@ -81,7 +82,7 @@
 	
 	onMount(async () => {	
 		localStorage.clear();
-		lightOn = false;
+		lightOff()
 		
 
 		currentPage.slug = window.location.hash.split('#');
@@ -216,13 +217,17 @@
 	}
 
 	let handleSearch = (form) => {
-		
+		console.log(entriesObject);
 		if(!entriesObject.length) {
 			showNotification("Aucun résultat trouvé", { type: 'is-danger', position: 'is-bottom-right', icon: true });
 			return;
 		}
 		else if (entriesObject.length >= 1) {
 			
+			console.log("start : ", entriesObject.length);
+			if (entriesObject.length > RANGE) {console.log("c'est trop long je filtre")
+				entriesObject = $theData.filtered.filter((data, i) => i >= currentRange && currentRange <= (currentRange + RANGE))}
+			console.log("end : ", entriesObject.length);
 			laTotale = true;
 			let message = entriesObject.length >= 2 ? "résultats trouvés" : "résultat trouvé";
 			//console.log(results);
@@ -233,24 +238,18 @@
 		advancedSearch = false;
 		loading = true; ready = false;
 		currentForm = form;
-		loading = false; ready = true; 
+		loading = false; ready = true;
 		//console.log(entriesObject.length);
 	}
 
 	function changeRange(dir) {
-		console.log("debut f : ", currentRange);
-		if ((currentRange.end + dir) > entriesObject.length) {
-			currentRange.end = entriesObject.length -1;
-			currentRange.start = entriesObject.length - 25;
-		}
-		else if ((currentRange.end + dir) < 0) {
-			currentRange.end = 25;
-			currentRange.start = 0;
-		} else {
-			currentRange.start -= dir;
-			currentRange.end += dir;
-		}
-		console.log("fin f : ", currentRange)
+		if ((currentRange + dir) > entriesObject.length) 
+			currentRange = entriesObject.length -1;
+		
+		else if ((currentRange + dir) < 0)
+			currentRange = 0;
+		else 
+			currentRange = currentRange + dir;
 	}
 	
 	function Markit() {
@@ -294,8 +293,8 @@
 						instance[h] = new Mark(document.querySelectorAll(`${elMap[h]}`));
 					if ((Object.prototype.toString.call(results[h]).indexOf("Object")>-1))
 						results[h] = Object.values(results[h]);
-					console.log(results[h]);
-					console.log("h :", h, "\n", "res :", results[h], "\n")
+					//console.log(results[h]);
+					//console.log("h :", h, "\n", "res :", results[h], "\n")
 					
 					instance[h].mark(results[h], {separateWordSearch : false, className : `mark-${h}`});
 				});
@@ -305,7 +304,7 @@
 
 	}
 
-	lightOff = () => {
+	let lightOff = () => {
 		lightOn = false;
 		for (const k in instance) {
 			instance[k].unmark();
@@ -427,7 +426,7 @@
 
 		{:else if (currentForm=="retex" || currentForm=='interne') && laTotale}
 			<div class="bouton-highlight">
-				<button on:click={Markit} class="button is-small" style="border-radius:50%!important;" class:ampoule={lightOn}><span class="icon is-small"><i class="fas fa-lightbulb"></i></span></button>
+				<button on:click={Markit} class="button is-small" style="border-radius:50%!important;" class:ampoule={lightOn === true}><span class="icon is-small"><i class="fas fa-lightbulb"></i></span></button>
 			</div>
 			<div class="latotale">
 			{#each entriesObject as entry,index}
@@ -443,7 +442,7 @@
 
 		{:else if (currentForm == "detailsexpert" || currentForm == "experts") && laTotale}
 			<div class="bouton-highlight">
-				<button on:click={Markit} class="button is-small" style="border-radius:50%!important;" class:ampoule={lightOn} ><span class="icon is-small"><i class="fas fa-lightbulb"></i></span></button>
+				<button on:click={Markit} class="button is-small" style="border-radius:50%!important;" class:ampoule={lightOn ===true} ><span class="icon is-small"><i class="fas fa-lightbulb"></i></span></button>
 			</div>
 			<div class="latotale">
 			{#each entriesObject as entry,index}

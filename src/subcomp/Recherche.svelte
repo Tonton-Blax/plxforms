@@ -3,7 +3,8 @@
 	import { Button, Field, Icon, Input, Notification } from 'svelma-pro';
   import { Tabs, Tab } from 'svelma-pro'
   import Select from 'svelte-select';
-  import { API } from '../utils/consts.js'
+  import { API, theData } from '../utils/consts.js'
+  import axios from 'axios'
 
   export let entriesObject = [];
 
@@ -280,13 +281,14 @@ async function gogoFilter (form) {
   }
   
   console.log(API + 'sheet/'+ form +'?'+queryStr.join("&"));
-  entriesObject = await (await fetch(API + 'sheet/'+ form +'?'+queryStr.join("&"))).json();
-  //console.log(entriesObject);
-  if (entriesObject.filters) 
-    results = entriesObject.filters;
-  
-  entriesObject = entriesObject.filtered;
+  //$theData = await (await fetch(API + 'sheet/'+ form +'?'+queryStr.join("&"))).json();
+  $theData = await axios(API + 'sheet/'+ form +'?'+queryStr.join("&"))
+  $theData = $theData.data;
+  if ($theData.filters) 
+  results = $theData.filters;  
+  entriesObject = $theData.filtered;
   dispatch('searchReady', {form: form});
+
 }
 
 let groupBy = (item) => item.group;
