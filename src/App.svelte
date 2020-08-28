@@ -316,7 +316,7 @@
 </script>
 	{#if entriesObject && entriesObject.length > RANGE}
 			<div class="above-all">
-				<Pagination current="1" total="{Math.floor($theData.length / RANGE)}" show="5" align="centered" />
+				<Pagination current="1" total="{Math.floor($theData.filtered.length / RANGE)}" show="5" align="centered" />
 			</div>
 		{/if}
 		<Modal closeText = "Annuler et revenir" title="Recherche Avancée" width="40vw" bind:active={states.advancedSearch}>
@@ -435,7 +435,7 @@
 			<div class="bouton-highlight">
 				<button on:click={Markit} class="button is-small" style="border-radius:50%!important;" class:ampoule={states.lightOn === true}><span class="icon is-small"><i class="fas fa-lightbulb"></i></span></button>
 			</div>
-			<div class="latotale">
+			<div class="latotale" class:totale-spacer={$theData.filtered.length > RANGE}>
 			{#each entriesObject as entry,index}
 				<Retourexp entriesObject={entry} {index} laTotale={states.laTotale} isInterne={states.currentForm == 'interne'} 
 				on:requestForceCapture={(e)=>handleRequestForceCapture(e.detail.index)}/>
@@ -451,7 +451,7 @@
 			<div class="bouton-highlight">
 				<button on:click={Markit} class="button is-small" style="border-radius:50%!important;" class:ampoule={states.lightOn ===true} ><span class="icon is-small"><i class="fas fa-lightbulb"></i></span></button>
 			</div>
-			<div class="latotale">
+			<div class="latotale" class:totale-spacer={$theData.filtered.length > RANGE}>
 			{#each entriesObject as entry,index}
 				<Detailsexpert entriesObject={entry} {index} laTotale={states.laTotale}
 				on:requestForceCapture={(e)=>handleRequestForceCapture(e.detail.index)}/>
@@ -463,7 +463,7 @@
 			<Geco entriesObject={entriesObject[formIndex]} />
 
 		{:else if states.currentForm === "geco" && states.laTotale}
-			<div class="latotale">
+			<div class="latotale" class:totale-spacer={$theData.filtered.length > RANGE}>
 			{#each entriesObject as entry,index}
 				<Geco entriesObject={entry} {index} laTotale={states.laTotale} 
 				on:requestForceCapture={(e)=>handleRequestForceCapture(e.detail.index)}/>
@@ -475,7 +475,7 @@
 			<SavoirFaire entriesObject={entriesObject[formIndex]} />
 
 		{:else if states.currentForm ==  "savoirfaire" && states.laTotale}
-			<div class="latotale">
+			<div class="latotale" class:totale-spacer={$theData.filtered.length > RANGE}>
 			<div class="bouton-highlight">
 				<button on:click={Markit} class="button is-small" style="border-radius:50%!important;" class:ampoule={states.lightOn} ><span class="icon is-small"><i class="fas fa-lightbulb"></i></span></button>
 			</div>
@@ -686,6 +686,20 @@
 	:global(.mark-formation) {
 		background: lightseagreen;
 		color:black;
+	}
+
+	.above-all {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+		position: absolute;
+		top: 1vh;
+		left: 50vw;
+		z-index: 3;
+	}
+
+	.totale-spacer {
+		margin-top:10vh;
 	}
 
 	
