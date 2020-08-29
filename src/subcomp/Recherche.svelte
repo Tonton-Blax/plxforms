@@ -3,7 +3,7 @@
 	import { Button, Field, Icon, Input, Notification } from 'svelma-pro';
   import { Tabs, Tab } from 'svelma-pro'
   import Select from 'svelte-select';
-  import { API, theData } from '../utils/consts.js'
+  import { API, options } from '../utils/consts.js'
   import axios from 'axios'
 
   export let entriesObject = [];
@@ -273,10 +273,17 @@
   }
 }
 
+
+function showNotification(message, props) {
+		Notification.create({
+			message: message,
+			...props
+		})
+	}
+
 async function gogoFilter (form) {
   
   let queryStr = [];
-  searchHasBegun = true;
   for (const k of Object.keys(filtres[form])) {
     if (filtres[form][k].selectedData && filtres[form][k].selectedData.length) {
       if (Array.isArray(filtres[form][k].selectedData))
@@ -284,14 +291,22 @@ async function gogoFilter (form) {
       else queryStr.push(`${filtres[form][k].formKey}=${filtres[form][k].selectedData.replace(/&/g,'$').replace(/\((.*)\)/, "°$1|").replace(/ +/g,"%20").replace(/,/g,`&${filtres[form][k].formKey}=`)}`);
     }
   }
+
+  if (!queryStr.length) {
+    showNotification("Aucun filtre saisi", { type: 'is-danger', position: 'is-bottom-right', icon: true })
+    return;
+  }
   
-  console.log(API + 'sheet/'+ form +'?'+queryStr.join("&"));
-  $theData = await axios(API + 'sheet/'+ form +'?'+queryStr.join("&"))
-  $theData = $theData.data;
+  queryStr.push(`isOr=${$options.isOr}`)
+
+  //console.log(API + 'sheet/'+ form +'?'+queryStr.join("&"));
+  searchHasBegun = true;
+  entriesObject = await axios(API + 'sheet/'+ form +'?'+queryStr.join("&"))
+  entriesObject = entriesObject.data;
   
-  if ($theData.filters) 
-    results = $theData.filters;  
-  entriesObject = $theData.filtered;
+  if (entriesObject.filters)
+    results = entriesObject.filters;  
+  entriesObject = entriesObject.filtered;
 
   if (!entriesObject || !entriesObject.length)
     searchHasBegun = false;
@@ -307,7 +322,6 @@ function checkInput (obj) {
   if (!_selectedData || !inputRegExp || !inputRegExp instanceof RegExp) return;
   
   if (!_selectedData.match(inputRegExp)) {
-    //if (!inputRegExp.test(_selectedData)) {
     obj.hasInputError = true; 
     gogoDisabled = true;
   }
@@ -407,7 +421,8 @@ function checkInput (obj) {
       </button>
     </p>
   </Tab>
-  
+
+
   <Tab label="COMPETENCES">
 
     <div class="themed">
@@ -505,7 +520,24 @@ function checkInput (obj) {
     </p>
 
   </Tab>
+  <Tab label="Options" icon="cog">
+    <h4>Sélection des résultats : </h4>
+    <Field expanded size="is-large">
+      <div class="fieldwrapper">
+        <input class="is-checkradio" type="radio" name="isOr" id="isOr" bind:group={$options.isOr} value={true}>
+        <label for="isOr">Au moins un des filtres doit correspondre</label>	
+        <input class="is-checkradio" type="radio" name="isAnd" id="isAnd" bind:group={$options.isOr} value={false}>
+        <label for="isAnd">Tous les filtres doivent correspondre</label>			
+      </div>
+    </Field>
 
+    <p class="control" style="text-align:center;margin-top:1em;">
+      <button class="button is-warning" style="padding-left:2em;padding-right:2em;"
+        on:click={() => showNotification("Options sauvegardées", { type: 'is-success', position: 'is-bottom-right', icon: true }) }
+        >Valider
+      </button>
+    </p>
+  </Tab>
 
 </Tabs>
 

@@ -14,7 +14,7 @@
 	import Loading from './subcomp/Loading.svelte';
 	import Modal from './subcomp/Modal.svelte'
 	import Recherche from './subcomp/Recherche.svelte'
-	import { API, theData } from './utils/consts.js'
+	import { API } from './utils/consts.js'
 	import axios from 'axios';
 	import Mark from './utils/mark.es6.js'
 	import { paginate, LightPaginationNav } from 'svelte-paginate'
@@ -38,6 +38,7 @@
 		laTotale : false,
 		forceScreenGrab : false,
 		advancedSearch : false,
+		modalActive : false,
 		currentPage : {slug: "", isUser : false, isAdmin : false }
 	}
 
@@ -86,7 +87,7 @@
 		localStorage.clear();
 		lightOff()
 		
-
+		states.advancedSearch = false; states.laTotale = false; states.modalActive = false;
 		states.currentPage.slug = window.location.hash.split('#');
 		if ((states.currentPage.slug && states.currentPage.slug[1] == 'forward') || states.currentPage.slug.length <= 1) {
 				states.currentPage.isAdmin = false;
@@ -165,6 +166,8 @@
 	function handleSubmitEmail () {
 		
 		if (!states.domReady) return;
+
+		states.advancedSearch = false;
 		
 		if (states.currentPage.isAdmin && !handlePassword()) { 
 			showNotification( "Mot de passe erroné", { type: 'is-danger', position: 'is-bottom-right', icon: true });
@@ -220,7 +223,8 @@
 
 	let handleSearch = (form) => {
 		
-		states.advancedSearch = false;
+		states.modalActive = false;
+		states.advancedSearch = true;
 		states.ready = false;
 		states.loading = true;
 		if(!entriesObject.length) {
@@ -241,8 +245,8 @@
 		else formIndex = 0;
 
 
-		states.currentForm = form;
-		states.loading = false; states.ready = true;
+		form == "retex" ? states.currentForm = "interne" : states.currentForm = form;
+		states.loading = false; states.ready = true; lightOff();
 	}
 
 	function Markit() {
@@ -305,7 +309,7 @@
 	}
 
 </script>
-	{#if entriesObject && entriesObject.length > pageSize}
+	{#if states.laTotale && entriesObject && entriesObject.length > pageSize}
 			<div class="above-all">
 			<LightPaginationNav
 				totalItems="{entriesObject.length}"
@@ -317,7 +321,7 @@
 			/>
 			</div>
 		{/if}
-		<Modal closeText = "Annuler et revenir" title="Recherche Avancée" width="40vw" bind:active={states.advancedSearch}>
+		<Modal closeText = "Annuler et revenir" title="Recherche Avancée" width="40vw" bind:active={states.modalActive}>
 			<Recherche bind:entriesObject bind:results on:searchReady={(e) => handleSearch(e.detail.form)}/>
 		</Modal>
 
@@ -326,7 +330,7 @@
 		<!-- LOGO -->
 		<div class="columns">
 			<div class="column is-one-third global-center">
-				<div class="is-flex" style="text-align:center; margin-bottom:3em;">
+				<div class="is-flex logocontainer">
 					<img src="./img/polyexpert.png" width="300px" alt="logo">
 				</div>
 			
@@ -408,7 +412,7 @@
 					<!-- BOUTON RECHERCHE AVANCEE -->
 						{#if states.currentPage.isAdmin}
 							<button class="button is-warning" class:is-fullwidth={isMobile.matches} style="padding-left:2em;padding-right:2em;" type="submit" 
-							on:click={() => states.advancedSearch = true}>Recherche avancée
+							on:click={() => states.modalActive = true}>Recherche avancée
 							</button>
 						{/if}
 						</p>
@@ -430,14 +434,16 @@
 
 
 		{:else if (states.currentForm=="retex" || states.currentForm=='interne') && states.laTotale}
+			{#if states.advancedSearch}
 			<div class="bouton-highlight">
 				<button on:click={Markit} class="button is-small" style="border-radius:50%!important;" class:ampoule={states.lightOn === true}><span class="icon is-small"><i class="fas fa-lightbulb"></i></span></button>
 			</div>
-			<div class="latotale" class:totale-spacer={$theData.filtered.length > pageSize}>
+			{/if}
+			<div class="latotale" class:totale-spacer={entriesObject.length > pageSize}>
 			{#each paginatedItems as entry,index}
+				<hr>
 				<Retourexp entriesObject={entry} {index} laTotale={states.laTotale} isInterne={states.currentForm == 'interne'} 
 				on:requestForceCapture={(e)=>handleRequestForceCapture(e.detail.index)}/>
-				<hr>
 			{/each}
 			</div>
 
@@ -449,11 +455,11 @@
 			<div class="bouton-highlight">
 				<button on:click={Markit} class="button is-small" style="border-radius:50%!important;" class:ampoule={states.lightOn ===true} ><span class="icon is-small"><i class="fas fa-lightbulb"></i></span></button>
 			</div>
-			<div class="latotale" class:totale-spacer={$theData.filtered.length > pageSize}>
+			<div class="latotale" class:totale-spacer={entriesObject.length > pageSize}>
 			{#each paginatedItems as entry,index}
+				<hr>
 				<Detailsexpert entriesObject={entry} {index} laTotale={states.laTotale}
 				on:requestForceCapture={(e)=>handleRequestForceCapture(e.detail.index)}/>
-				<hr>
 			{/each}
 			</div>
 
@@ -461,11 +467,11 @@
 			<Geco entriesObject={entriesObject[formIndex]} />
 
 		{:else if states.currentForm === "geco" && states.laTotale}
-			<div class="latotale" class:totale-spacer={$theData.filtered.length > pageSize}>
+			<div class="latotale" class:totale-spacer={entriesObject.length > pageSize}>
 			{#each paginatedItems as entry,index}
+				<hr>
 				<Geco entriesObject={entry} {index} laTotale={states.laTotale} 
 				on:requestForceCapture={(e)=>handleRequestForceCapture(e.detail.index)}/>
-				<hr>
 			{/each}
 			</div>
 
@@ -473,14 +479,14 @@
 			<SavoirFaire entriesObject={entriesObject[formIndex]} />
 
 		{:else if states.currentForm ==  "savoirfaire" && states.laTotale}
-			<div class="latotale" class:totale-spacer={$theData.filtered.length > pageSize}>
+			<div class="latotale" class:totale-spacer={entriesObject.length > pageSize}>
 			<div class="bouton-highlight">
 				<button on:click={Markit} class="button is-small" style="border-radius:50%!important;" class:ampoule={states.lightOn} ><span class="icon is-small"><i class="fas fa-lightbulb"></i></span></button>
 			</div>
 			{#each paginatedItems as entry,index}
+				<hr>
 				<SavoirFaire laTotale={states.laTotale} entriesObject={entry} {index}  
 				on:requestForceCapture={(e)=>handleRequestForceCapture(e.detail.index)}/>
-				<hr>
 			{/each}
 			</div>
 		{/if}
@@ -514,8 +520,10 @@
 	}
 
 	:global(hr) {
-		background-color: var(--main-color);
-		height:1px;
+		background-color: darkgrey;
+		height: 2px;
+		background-blend-mode: inherit;
+		margin: 0 !important;
 	}
 
 	:global(h2) {
@@ -551,6 +559,14 @@
 	}
 	:global(.invisible) {
 		display:none!important;
+	}
+
+	.logocontainer {
+		text-align:center; 
+		margin-bottom:3em;
+	}
+	.logocontainer > img {
+		max-width : 50%;
 	}
 
 	.bouton-highlight {
@@ -687,17 +703,22 @@
 	}
 
 	.above-all {
-		display: flex;
-		flex-direction: row;
-		flex-wrap: nowrap;
+		left: 0;
+		right: 0;
+		margin-left: auto;
+		margin-right: auto;
 		position: absolute;
-		top: 1vh;
-		left: 50vw;
-		z-index: 3;
+		width: fit-content;
+		top: 1.8vh;
+		z-index:3;
+	}
+
+	:global(.option.active) {
+		color:var(--main-color)!important;
 	}
 
 	.totale-spacer {
-		margin-top:10vh;
+		margin-top:8vh;
 	}
 
 	
@@ -707,7 +728,7 @@
 		}
 		.switch-interne {
 			display:block;font-size:16px;position:relative;bottom:-1px;
-		}
+		}		
 	}
 	
 	@media only screen and (max-width: 768px) {
@@ -720,6 +741,13 @@
 		}
 		.downspacer {
 			 text-align:center; margin-top:1em; margin-bottom:1em;
+		}
+		:global(.option.number:not(.active)) {
+			display:none!important;
+		}
+		.logocontainer {
+			text-align:center; 
+			margin-bottom:1em;
 		}
 		
 	 }

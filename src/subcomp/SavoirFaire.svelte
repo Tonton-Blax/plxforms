@@ -401,6 +401,7 @@ let searchObj = (obj, term) => {
         color:white;
         height:fit-content;
         min-height:100vh;
+        height: auto;
     }
 
     #colgauche h3 {
@@ -432,7 +433,6 @@ let searchObj = (obj, term) => {
 
     .addon-container {
         padding-right: 2em;
-        padding-bottom: 2em;
     }
 
     table tr td {
@@ -543,6 +543,7 @@ let searchObj = (obj, term) => {
     .columns {
         justify-content: initial;
         margin-top:unset!important;
+        margin:0;
     }
 
     .premax {

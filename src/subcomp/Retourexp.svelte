@@ -1,5 +1,5 @@
 <script>
-import { onMount, afterUpdate, createEventDispatcher  } from 'svelte';
+import { onMount, createEventDispatcher  } from 'svelte';
 import Loading from './Loading.svelte'
 import domtoimage from 'dom-to-image-more';
 import { API } from '../utils/consts.js'
@@ -26,8 +26,7 @@ let detailSecteur = []; let detailSecteurValues = [];
 let IMG = API + "assets/retex/";
 
 let secteurs = [];
-
-        
+      
 onMount(async () => { 
     detailSecteur = searchObj(entriesObject, /du\ssecteur/);
     detailSecteur.push(searchObj(entriesObject, /macro/));

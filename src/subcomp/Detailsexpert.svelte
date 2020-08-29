@@ -406,9 +406,8 @@ let searchObj = (obj, term) => {
         width: -webkit-fill-available;
         width: -moz-fill-available;
         width: fill-available;
-        margin-left: 0rem;
-        margin-right: 0rem;
-        margin-top: 0rem;
+        margin: 0em;
+
     }
 
     h3 img {
