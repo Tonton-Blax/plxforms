@@ -286,7 +286,6 @@ async function gogoFilter (form) {
   }
   
   console.log(API + 'sheet/'+ form +'?'+queryStr.join("&"));
-  //$theData = await (await fetch(API + 'sheet/'+ form +'?'+queryStr.join("&"))).json();
   $theData = await axios(API + 'sheet/'+ form +'?'+queryStr.join("&"))
   $theData = $theData.data;
   

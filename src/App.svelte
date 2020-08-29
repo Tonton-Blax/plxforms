@@ -5,7 +5,7 @@
 <script>
 	import { onMount, onDestroy } from 'svelte';
 	import SparkMD5 from 'spark-md5';
-	import { Button, Field, Icon, Input, Notification, Pagination } from 'svelma-pro';
+	import { Button, Field, Icon, Input, Notification } from 'svelma-pro';
 	import SavoirFaire from './subcomp/SavoirFaire.svelte';
 	import Retourexp from './subcomp/Retourexp.svelte';
 	import Switch from './subcomp/Switch.svelte';
@@ -17,18 +17,18 @@
 	import { API, theData } from './utils/consts.js'
 	import axios from 'axios';
 	import Mark from './utils/mark.es6.js'
+	import { paginate, LightPaginationNav } from 'svelte-paginate'
 	
-	
-	const RANGE = 40;
 	let isMobile = window.matchMedia("(max-width: 768px)");
 
 	let results = [];
 	let instance = {};
 	
 	let formIndex; let indexes = [];
+	let currentRange = 1;
+	let pageSize = 25;
 
 	let states = {
-		currentRange : 0,
 		ready : false,
 		domReady : false,
 		loading : false,
@@ -72,11 +72,14 @@
 	$: 	if (states.ready && window.history && window.history.pushState) {
 
 			window.history.pushState('forward', null, './#forward');
+			
 
 			window.onpopstate = () => {
-				states.ready=false; formIndex = undefined; states.currentForm = "retex"; states.laTotale = false;
+				states.ready=false; formIndex = undefined; states.currentForm = "retex"; states.laTotale = false; states.laTotale = false; entriesObject = []
 			}
 		}
+	let paginatedItems = [];
+	$: if (states.laTotale && states.ready) paginatedItems = paginate({ items : entriesObject, pageSize, currentPage : currentRange } );
 
 	
 	onMount(async () => {	
@@ -225,11 +228,11 @@
 			return;
 		}
 		else if (entriesObject.length >= 1) {
+		
+			if (entriesObject.length > pageSize) 
+				paginatedItems = paginate({ items : entriesObject, pageSize, currentPage : currentRange } );
+			else paginatedItems = entriesObject;
 			
-			if (entriesObject.length > RANGE) {
-				entriesObject = [];
-				entriesObject = $theData.filtered.filter((data, i) => i >= states.currentRange && i <= states.currentRange + RANGE);
-			}
 			states.laTotale = true;
 			let message = entriesObject.length >= 2 ? "résultats trouvés" : "résultat trouvé";
 			
@@ -240,20 +243,8 @@
 
 		states.currentForm = form;
 		states.loading = false; states.ready = true;
-		//console.log(entriesObject.length);
 	}
 
-	function changeRange(dir) {
-		if ((states.currentRange + dir) > entriesObject.length) 
-			states.currentRange = entriesObject.length -1;
-		
-		else if ((states.currentRange + dir) < 0)
-			states.currentRange = 0;
-		else 
-			states.currentRange = states.currentRange + dir;
-		console.log("states.currentRange : ", states.currentRange, "length : ", entriesObject.length);
-	}
-	
 	function Markit() {
 		if (!states.ready || !states.laTotale) return;
 		
@@ -314,9 +305,16 @@
 	}
 
 </script>
-	{#if entriesObject && entriesObject.length > RANGE}
+	{#if entriesObject && entriesObject.length > pageSize}
 			<div class="above-all">
-				<Pagination current="1" total="{Math.floor($theData.filtered.length / RANGE)}" show="5" align="centered" />
+			<LightPaginationNav
+				totalItems="{entriesObject.length}"
+				pageSize="{pageSize}"
+				currentPage="{currentRange}"
+				limit="{1}"
+				showStepOptions="{true}"
+				on:setPage="{(e) => currentRange = e.detail.page}"
+			/>
 			</div>
 		{/if}
 		<Modal closeText = "Annuler et revenir" title="Recherche Avancée" width="40vw" bind:active={states.advancedSearch}>
@@ -435,8 +433,8 @@
 			<div class="bouton-highlight">
 				<button on:click={Markit} class="button is-small" style="border-radius:50%!important;" class:ampoule={states.lightOn === true}><span class="icon is-small"><i class="fas fa-lightbulb"></i></span></button>
 			</div>
-			<div class="latotale" class:totale-spacer={$theData.filtered.length > RANGE}>
-			{#each entriesObject as entry,index}
+			<div class="latotale" class:totale-spacer={$theData.filtered.length > pageSize}>
+			{#each paginatedItems as entry,index}
 				<Retourexp entriesObject={entry} {index} laTotale={states.laTotale} isInterne={states.currentForm == 'interne'} 
 				on:requestForceCapture={(e)=>handleRequestForceCapture(e.detail.index)}/>
 				<hr>
@@ -451,8 +449,8 @@
 			<div class="bouton-highlight">
 				<button on:click={Markit} class="button is-small" style="border-radius:50%!important;" class:ampoule={states.lightOn ===true} ><span class="icon is-small"><i class="fas fa-lightbulb"></i></span></button>
 			</div>
-			<div class="latotale" class:totale-spacer={$theData.filtered.length > RANGE}>
-			{#each entriesObject as entry,index}
+			<div class="latotale" class:totale-spacer={$theData.filtered.length > pageSize}>
+			{#each paginatedItems as entry,index}
 				<Detailsexpert entriesObject={entry} {index} laTotale={states.laTotale}
 				on:requestForceCapture={(e)=>handleRequestForceCapture(e.detail.index)}/>
 				<hr>
@@ -463,8 +461,8 @@
 			<Geco entriesObject={entriesObject[formIndex]} />
 
 		{:else if states.currentForm === "geco" && states.laTotale}
-			<div class="latotale" class:totale-spacer={$theData.filtered.length > RANGE}>
-			{#each entriesObject as entry,index}
+			<div class="latotale" class:totale-spacer={$theData.filtered.length > pageSize}>
+			{#each paginatedItems as entry,index}
 				<Geco entriesObject={entry} {index} laTotale={states.laTotale} 
 				on:requestForceCapture={(e)=>handleRequestForceCapture(e.detail.index)}/>
 				<hr>
@@ -475,11 +473,11 @@
 			<SavoirFaire entriesObject={entriesObject[formIndex]} />
 
 		{:else if states.currentForm ==  "savoirfaire" && states.laTotale}
-			<div class="latotale" class:totale-spacer={$theData.filtered.length > RANGE}>
+			<div class="latotale" class:totale-spacer={$theData.filtered.length > pageSize}>
 			<div class="bouton-highlight">
 				<button on:click={Markit} class="button is-small" style="border-radius:50%!important;" class:ampoule={states.lightOn} ><span class="icon is-small"><i class="fas fa-lightbulb"></i></span></button>
 			</div>
-			{#each entriesObject as entry,index}
+			{#each paginatedItems as entry,index}
 				<SavoirFaire laTotale={states.laTotale} entriesObject={entry} {index}  
 				on:requestForceCapture={(e)=>handleRequestForceCapture(e.detail.index)}/>
 				<hr>
