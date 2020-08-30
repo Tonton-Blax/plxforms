@@ -74,7 +74,8 @@
 			window.history.pushState('forward', null, './#forward');
 			
 
-			window.onpopstate = () => {
+			window.onpopstate = (e) => {
+				states.currentPage.slug[1] && states.currentPage.slug[1].length ? window.history.pushState(states.currentPage.slug, null, `./#${states.currentPage.slug}`) : window.history.pushState('forward', null, './#forward');
 				states.ready=false; formIndex = undefined; states.currentForm = "retex"; states.laTotale = false; states.laTotale = false; entriesObject = []
 			}
 		}
@@ -84,7 +85,7 @@
 	
 	onMount(async () => {	
 		localStorage.clear();
-		lightOff()
+		lightOff();
 		
 		states.advancedSearch = false; states.laTotale = false; states.modalActive = false;
 		states.currentPage.slug = window.location.hash.split('#');
