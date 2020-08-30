@@ -33346,7 +33346,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (355:4) {#if filtres.retex.enjeux.hasInputError}
+    // (362:4) {#if filtres.retex.enjeux.hasInputError}
     function create_if_block_9$1(ctx) {
     	let p;
     	let t_value = /*filtres*/ ctx[2].retex.enjeux.inputErrorMsg + "";
@@ -33357,7 +33357,7 @@ var app = (function () {
     			p = element("p");
     			t = text(t_value);
     			attr_dev(p, "class", "help is-danger svelte-1sanz6e");
-    			add_location(p, file$n, 354, 45, 10332);
+    			add_location(p, file$n, 361, 45, 10661);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -33375,14 +33375,14 @@ var app = (function () {
     		block,
     		id: create_if_block_9$1.name,
     		type: "if",
-    		source: "(355:4) {#if filtres.retex.enjeux.hasInputError}",
+    		source: "(362:4) {#if filtres.retex.enjeux.hasInputError}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (349:4) <Field type="is-primary">
+    // (356:4) <Field type="is-primary">
     function create_default_slot_8(ctx) {
     	let div;
     	let input;
@@ -33409,13 +33409,13 @@ var app = (function () {
     			attr_dev(input, "type", "search");
     			attr_dev(input, "placeholder", "Saisir un ou des mots-clé séparés par une virgule");
     			toggle_class(input, "is-danger", /*filtres*/ ctx[2].retex.enjeux.hasInputError);
-    			add_location(input, file$n, 350, 8, 9880);
+    			add_location(input, file$n, 357, 8, 10209);
     			attr_dev(i, "class", "fas fa-search");
-    			add_location(i, file$n, 352, 50, 10239);
+    			add_location(i, file$n, 359, 50, 10568);
     			attr_dev(span, "class", "icon is-small is-left svelte-1sanz6e");
-    			add_location(span, file$n, 352, 14, 10203);
+    			add_location(span, file$n, 359, 14, 10532);
     			attr_dev(div, "class", "control has-icons-left has-icons-right svelte-1sanz6e");
-    			add_location(div, file$n, 349, 4, 9819);
+    			add_location(div, file$n, 356, 4, 10148);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -33474,14 +33474,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_8.name,
     		type: "slot",
-    		source: "(349:4) <Field type=\\\"is-primary\\\">",
+    		source: "(356:4) <Field type=\\\"is-primary\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (365:4) {#if filtres.retex.resultats.hasInputError}
+    // (372:4) {#if filtres.retex.resultats.hasInputError}
     function create_if_block_8$2(ctx) {
     	let p;
     	let t_value = /*filtres*/ ctx[2].retex.resultats.inputErrorMsg + "";
@@ -33492,7 +33492,7 @@ var app = (function () {
     			p = element("p");
     			t = text(t_value);
     			attr_dev(p, "class", "help is-danger svelte-1sanz6e");
-    			add_location(p, file$n, 364, 48, 11025);
+    			add_location(p, file$n, 371, 48, 11354);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -33510,14 +33510,14 @@ var app = (function () {
     		block,
     		id: create_if_block_8$2.name,
     		type: "if",
-    		source: "(365:4) {#if filtres.retex.resultats.hasInputError}",
+    		source: "(372:4) {#if filtres.retex.resultats.hasInputError}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (359:4) <Field type="is-primary">
+    // (366:4) <Field type="is-primary">
     function create_default_slot_7(ctx) {
     	let div;
     	let input;
@@ -33544,13 +33544,13 @@ var app = (function () {
     			attr_dev(input, "type", "search");
     			attr_dev(input, "placeholder", "Saisir un ou des mots-clé séparés par une virgule");
     			toggle_class(input, "is-danger", /*filtres*/ ctx[2].retex.resultats.hasInputError);
-    			add_location(input, file$n, 360, 8, 10563);
+    			add_location(input, file$n, 367, 8, 10892);
     			attr_dev(i, "class", "fas fa-search");
-    			add_location(i, file$n, 362, 46, 10929);
+    			add_location(i, file$n, 369, 46, 11258);
     			attr_dev(span, "class", "icon is-small is-left svelte-1sanz6e");
-    			add_location(span, file$n, 362, 10, 10893);
+    			add_location(span, file$n, 369, 10, 11222);
     			attr_dev(div, "class", "control has-icons-left has-icons-right svelte-1sanz6e");
-    			add_location(div, file$n, 359, 4, 10502);
+    			add_location(div, file$n, 366, 4, 10831);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -33609,14 +33609,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_7.name,
     		type: "slot",
-    		source: "(359:4) <Field type=\\\"is-primary\\\">",
+    		source: "(366:4) <Field type=\\\"is-primary\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (339:2) <Tab label="RETEX">
+    // (346:2) <Tab label="RETEX">
     function create_default_slot_6(ctx) {
     	let div;
     	let h40;
@@ -33696,23 +33696,23 @@ var app = (function () {
     			button = element("button");
     			t9 = text("Lancer la recherche");
     			attr_dev(h40, "class", "firsth4 svelte-1sanz6e");
-    			add_location(h40, file$n, 341, 8, 9504);
+    			add_location(h40, file$n, 348, 8, 9833);
     			attr_dev(div, "class", "themed svelte-1sanz6e");
-    			add_location(div, file$n, 340, 4, 9475);
+    			add_location(div, file$n, 347, 4, 9804);
     			attr_dev(h41, "class", "svelte-1sanz6e");
-    			add_location(h41, file$n, 347, 4, 9749);
+    			add_location(h41, file$n, 354, 4, 10078);
     			attr_dev(h42, "class", "svelte-1sanz6e");
-    			add_location(h42, file$n, 357, 4, 10422);
+    			add_location(h42, file$n, 364, 4, 10751);
     			attr_dev(button, "class", "button is-warning");
     			set_style(button, "padding-left", "2em");
     			set_style(button, "padding-right", "2em");
     			attr_dev(button, "type", "submit");
     			button.disabled = /*gogoDisabled*/ ctx[0];
     			toggle_class(button, "is-loading", /*searchHasBegun*/ ctx[1]);
-    			add_location(button, file$n, 369, 6, 11179);
+    			add_location(button, file$n, 376, 6, 11508);
     			attr_dev(p, "class", "control");
     			set_style(p, "text-align", "center");
-    			add_location(p, file$n, 367, 5, 11119);
+    			add_location(p, file$n, 374, 5, 11448);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -33807,14 +33807,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_6.name,
     		type: "slot",
-    		source: "(339:2) <Tab label=\\\"RETEX\\\">",
+    		source: "(346:2) <Tab label=\\\"RETEX\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (404:8) {#if filtres.savoirfaire.dossiers.hasInputError}
+    // (411:8) {#if filtres.savoirfaire.dossiers.hasInputError}
     function create_if_block_7$3(ctx) {
     	let p;
     	let t_value = /*filtres*/ ctx[2].savoirfaire.dossiers.inputErrorMsg + "";
@@ -33825,7 +33825,7 @@ var app = (function () {
     			p = element("p");
     			t = text(t_value);
     			attr_dev(p, "class", "help is-danger svelte-1sanz6e");
-    			add_location(p, file$n, 403, 57, 12858);
+    			add_location(p, file$n, 410, 57, 13187);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -33843,14 +33843,14 @@ var app = (function () {
     		block,
     		id: create_if_block_7$3.name,
     		type: "if",
-    		source: "(404:8) {#if filtres.savoirfaire.dossiers.hasInputError}",
+    		source: "(411:8) {#if filtres.savoirfaire.dossiers.hasInputError}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (414:8) {#if filtres.savoirfaire.formation.hasInputError}
+    // (421:8) {#if filtres.savoirfaire.formation.hasInputError}
     function create_if_block_6$3(ctx) {
     	let p;
     	let t_value = /*filtres*/ ctx[2].savoirfaire.formation.inputErrorMsg + "";
@@ -33861,7 +33861,7 @@ var app = (function () {
     			p = element("p");
     			t = text(t_value);
     			attr_dev(p, "class", "help is-danger svelte-1sanz6e");
-    			add_location(p, file$n, 413, 58, 13601);
+    			add_location(p, file$n, 420, 58, 13930);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -33879,14 +33879,14 @@ var app = (function () {
     		block,
     		id: create_if_block_6$3.name,
     		type: "if",
-    		source: "(414:8) {#if filtres.savoirfaire.formation.hasInputError}",
+    		source: "(421:8) {#if filtres.savoirfaire.formation.hasInputError}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (377:2) <Tab label="SAVOIR-FAIRE">
+    // (384:2) <Tab label="SAVOIR-FAIRE">
     function create_default_slot_5(ctx) {
     	let div0;
     	let h40;
@@ -34030,53 +34030,53 @@ var app = (function () {
     			button = element("button");
     			t19 = text("Lancer la recherche");
     			attr_dev(h40, "class", "firsth4 svelte-1sanz6e");
-    			add_location(h40, file$n, 379, 4, 11495);
+    			add_location(h40, file$n, 386, 4, 11824);
     			attr_dev(h41, "class", "svelte-1sanz6e");
-    			add_location(h41, file$n, 384, 4, 11723);
+    			add_location(h41, file$n, 391, 4, 12052);
     			attr_dev(h42, "class", "svelte-1sanz6e");
-    			add_location(h42, file$n, 389, 4, 11955);
+    			add_location(h42, file$n, 396, 4, 12284);
     			attr_dev(div0, "class", "themed svelte-1sanz6e");
-    			add_location(div0, file$n, 378, 4, 11470);
+    			add_location(div0, file$n, 385, 4, 11799);
     			attr_dev(h43, "class", "svelte-1sanz6e");
-    			add_location(h43, file$n, 395, 4, 12195);
+    			add_location(h43, file$n, 402, 4, 12524);
     			attr_dev(input0, "class", "input svelte-1sanz6e");
     			attr_dev(input0, "type", "search");
     			attr_dev(input0, "placeholder", "Saisir un ou des mots-clé séparés par une virgule");
     			toggle_class(input0, "is-danger", /*filtres*/ ctx[2].savoirfaire.dossiers.hasInputError);
-    			add_location(input0, file$n, 398, 8, 12333);
+    			add_location(input0, file$n, 405, 8, 12662);
     			attr_dev(i0, "class", "fas fa-search");
-    			add_location(i0, file$n, 401, 50, 12749);
+    			add_location(i0, file$n, 408, 50, 13078);
     			attr_dev(span0, "class", "icon is-small is-left svelte-1sanz6e");
-    			add_location(span0, file$n, 401, 14, 12713);
+    			add_location(span0, file$n, 408, 14, 13042);
     			attr_dev(div1, "class", "control has-icons-left has-icons-right svelte-1sanz6e");
-    			add_location(div1, file$n, 397, 8, 12272);
+    			add_location(div1, file$n, 404, 8, 12601);
     			attr_dev(div2, "class", "field");
-    			add_location(div2, file$n, 396, 4, 12244);
+    			add_location(div2, file$n, 403, 4, 12573);
     			attr_dev(h44, "class", "svelte-1sanz6e");
-    			add_location(h44, file$n, 406, 4, 12954);
+    			add_location(h44, file$n, 413, 4, 13283);
     			attr_dev(input1, "class", "input svelte-1sanz6e");
     			attr_dev(input1, "type", "search");
     			attr_dev(input1, "placeholder", "Saisir un ou des mots-clé séparés par une virgule");
     			toggle_class(input1, "is-danger", /*filtres*/ ctx[2].savoirfaire.formation.hasInputError);
-    			add_location(input1, file$n, 409, 8, 13087);
+    			add_location(input1, file$n, 416, 8, 13416);
     			attr_dev(i1, "class", "fas fa-search");
-    			add_location(i1, file$n, 411, 50, 13491);
+    			add_location(i1, file$n, 418, 50, 13820);
     			attr_dev(span1, "class", "icon is-small is-left svelte-1sanz6e");
-    			add_location(span1, file$n, 411, 14, 13455);
+    			add_location(span1, file$n, 418, 14, 13784);
     			attr_dev(div3, "class", "control has-icons-left has-icons-right svelte-1sanz6e");
-    			add_location(div3, file$n, 408, 8, 13026);
+    			add_location(div3, file$n, 415, 8, 13355);
     			attr_dev(div4, "class", "field");
-    			add_location(div4, file$n, 407, 4, 12998);
+    			add_location(div4, file$n, 414, 4, 13327);
     			attr_dev(button, "class", "button is-warning");
     			set_style(button, "padding-left", "2em");
     			set_style(button, "padding-right", "2em");
     			attr_dev(button, "type", "submit");
     			button.disabled = /*gogoDisabled*/ ctx[0];
     			toggle_class(button, "is-loading", /*searchHasBegun*/ ctx[1]);
-    			add_location(button, file$n, 418, 6, 13758);
+    			add_location(button, file$n, 425, 6, 14087);
     			attr_dev(p, "class", "control");
     			set_style(p, "text-align", "center");
-    			add_location(p, file$n, 416, 4, 13698);
+    			add_location(p, file$n, 423, 4, 14027);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div0, anchor);
@@ -34256,14 +34256,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_5.name,
     		type: "slot",
-    		source: "(377:2) <Tab label=\\\"SAVOIR-FAIRE\\\">",
+    		source: "(384:2) <Tab label=\\\"SAVOIR-FAIRE\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (450:73) 
+    // (457:73) 
     function create_if_block_5$5(ctx) {
     	let span;
     	let i;
@@ -34273,9 +34273,9 @@ var app = (function () {
     			span = element("span");
     			i = element("i");
     			attr_dev(i, "class", "fas fa-check");
-    			add_location(i, file$n, 450, 51, 15145);
+    			add_location(i, file$n, 457, 51, 15487);
     			attr_dev(span, "class", "icon is-small is-right svelte-1sanz6e");
-    			add_location(span, file$n, 450, 14, 15108);
+    			add_location(span, file$n, 457, 14, 15450);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -34290,14 +34290,14 @@ var app = (function () {
     		block,
     		id: create_if_block_5$5.name,
     		type: "if",
-    		source: "(450:73) ",
+    		source: "(457:73) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (448:12) {#if filtres.experts.departement.hasInputError ===true}
+    // (455:12) {#if filtres.experts.departement.hasInputError ===true}
     function create_if_block_4$5(ctx) {
     	let span;
     	let i;
@@ -34307,9 +34307,9 @@ var app = (function () {
     			span = element("span");
     			i = element("i");
     			attr_dev(i, "class", "fas fa-exclamation-triangle");
-    			add_location(i, file$n, 448, 51, 14968);
+    			add_location(i, file$n, 455, 51, 15310);
     			attr_dev(span, "class", "icon is-small is-right svelte-1sanz6e");
-    			add_location(span, file$n, 448, 14, 14931);
+    			add_location(span, file$n, 455, 14, 15273);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -34324,14 +34324,14 @@ var app = (function () {
     		block,
     		id: create_if_block_4$5.name,
     		type: "if",
-    		source: "(448:12) {#if filtres.experts.departement.hasInputError ===true}",
+    		source: "(455:12) {#if filtres.experts.departement.hasInputError ===true}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (466:67) 
+    // (473:67) 
     function create_if_block_3$7(ctx) {
     	let span;
     	let i;
@@ -34341,9 +34341,9 @@ var app = (function () {
     			span = element("span");
     			i = element("i");
     			attr_dev(i, "class", "fas fa-check");
-    			add_location(i, file$n, 466, 51, 15958);
+    			add_location(i, file$n, 473, 51, 16300);
     			attr_dev(span, "class", "icon is-small is-right svelte-1sanz6e");
-    			add_location(span, file$n, 466, 14, 15921);
+    			add_location(span, file$n, 473, 14, 16263);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -34358,14 +34358,14 @@ var app = (function () {
     		block,
     		id: create_if_block_3$7.name,
     		type: "if",
-    		source: "(466:67) ",
+    		source: "(473:67) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (464:12) {#if filtres.experts.darva.hasInputError ===true}
+    // (471:12) {#if filtres.experts.darva.hasInputError ===true}
     function create_if_block_2$a(ctx) {
     	let span;
     	let i;
@@ -34375,9 +34375,9 @@ var app = (function () {
     			span = element("span");
     			i = element("i");
     			attr_dev(i, "class", "fas fa-exclamation-triangle");
-    			add_location(i, file$n, 464, 51, 15787);
+    			add_location(i, file$n, 471, 51, 16129);
     			attr_dev(span, "class", "icon is-small is-right svelte-1sanz6e");
-    			add_location(span, file$n, 464, 14, 15750);
+    			add_location(span, file$n, 471, 14, 16092);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -34392,14 +34392,14 @@ var app = (function () {
     		block,
     		id: create_if_block_2$a.name,
     		type: "if",
-    		source: "(464:12) {#if filtres.experts.darva.hasInputError ===true}",
+    		source: "(471:12) {#if filtres.experts.darva.hasInputError ===true}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (482:67) 
+    // (489:67) 
     function create_if_block_1$b(ctx) {
     	let span;
     	let i;
@@ -34409,9 +34409,9 @@ var app = (function () {
     			span = element("span");
     			i = element("i");
     			attr_dev(i, "class", "fas fa-check");
-    			add_location(i, file$n, 482, 51, 16771);
+    			add_location(i, file$n, 489, 51, 17113);
     			attr_dev(span, "class", "icon is-small is-right svelte-1sanz6e");
-    			add_location(span, file$n, 482, 14, 16734);
+    			add_location(span, file$n, 489, 14, 17076);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -34426,14 +34426,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1$b.name,
     		type: "if",
-    		source: "(482:67) ",
+    		source: "(489:67) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (480:12) {#if filtres.experts.gecor.hasInputError ===true}
+    // (487:12) {#if filtres.experts.gecor.hasInputError ===true}
     function create_if_block$g(ctx) {
     	let span;
     	let i;
@@ -34443,9 +34443,9 @@ var app = (function () {
     			span = element("span");
     			i = element("i");
     			attr_dev(i, "class", "fas fa-exclamation-triangle");
-    			add_location(i, file$n, 480, 51, 16600);
+    			add_location(i, file$n, 487, 51, 16942);
     			attr_dev(span, "class", "icon is-small is-right svelte-1sanz6e");
-    			add_location(span, file$n, 480, 14, 16563);
+    			add_location(span, file$n, 487, 14, 16905);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -34460,14 +34460,14 @@ var app = (function () {
     		block,
     		id: create_if_block$g.name,
     		type: "if",
-    		source: "(480:12) {#if filtres.experts.gecor.hasInputError ===true}",
+    		source: "(487:12) {#if filtres.experts.gecor.hasInputError ===true}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (426:2) <Tab label="COMPETENCES">
+    // (433:2) <Tab label="COMPETENCES">
     function create_default_slot_4(ctx) {
     	let div0;
     	let h40;
@@ -34719,79 +34719,80 @@ var app = (function () {
     			button = element("button");
     			t30 = text("Lancer la recherche");
     			attr_dev(h40, "class", "firsth4 svelte-1sanz6e");
-    			add_location(h40, file$n, 429, 6, 14076);
+    			add_location(h40, file$n, 436, 6, 14405);
     			attr_dev(div0, "class", "themed svelte-1sanz6e");
-    			add_location(div0, file$n, 427, 4, 14048);
+    			add_location(div0, file$n, 434, 4, 14377);
     			attr_dev(h41, "class", "svelte-1sanz6e");
-    			add_location(h41, file$n, 440, 8, 14386);
+    			add_location(h41, file$n, 447, 8, 14715);
+    			attr_dev(input0, "maxlength", "2");
     			attr_dev(input0, "class", "input svelte-1sanz6e");
     			attr_dev(input0, "type", "text");
     			attr_dev(input0, "placeholder", "Saisissez un ou plusieurs départements séparés par des virgules");
-    			add_location(input0, file$n, 443, 12, 14512);
+    			add_location(input0, file$n, 450, 12, 14841);
     			attr_dev(i0, "class", "fas fa-search");
-    			add_location(i0, file$n, 445, 50, 14799);
+    			add_location(i0, file$n, 452, 50, 15141);
     			attr_dev(span0, "class", "icon is-small is-left svelte-1sanz6e");
-    			add_location(span0, file$n, 445, 14, 14763);
+    			add_location(span0, file$n, 452, 14, 15105);
     			attr_dev(p0, "class", "control has-icons-left has-icons-right svelte-1sanz6e");
-    			add_location(p0, file$n, 442, 10, 14449);
+    			add_location(p0, file$n, 449, 10, 14778);
     			attr_dev(div1, "class", "field");
-    			add_location(div1, file$n, 441, 8, 14419);
+    			add_location(div1, file$n, 448, 8, 14748);
     			attr_dev(div2, "class", "column is-one third");
-    			add_location(div2, file$n, 438, 6, 14337);
+    			add_location(div2, file$n, 445, 6, 14666);
     			attr_dev(h42, "class", "svelte-1sanz6e");
-    			add_location(h42, file$n, 457, 8, 15291);
+    			add_location(h42, file$n, 464, 8, 15633);
     			attr_dev(input1, "class", "input svelte-1sanz6e");
     			attr_dev(input1, "type", "text");
     			attr_dev(input1, "placeholder", "Saisir le code");
-    			add_location(input1, file$n, 460, 12, 15412);
+    			add_location(input1, file$n, 467, 12, 15754);
     			attr_dev(i1, "class", "fas fa-search");
-    			add_location(i1, file$n, 462, 50, 15637);
+    			add_location(i1, file$n, 469, 50, 15979);
     			attr_dev(span1, "class", "icon is-small is-left svelte-1sanz6e");
-    			add_location(span1, file$n, 462, 14, 15601);
+    			add_location(span1, file$n, 469, 14, 15943);
     			attr_dev(p1, "class", "control has-icons-left has-icons-right svelte-1sanz6e");
-    			add_location(p1, file$n, 459, 10, 15349);
+    			add_location(p1, file$n, 466, 10, 15691);
     			attr_dev(div3, "class", "field");
-    			add_location(div3, file$n, 458, 8, 15319);
+    			add_location(div3, file$n, 465, 8, 15661);
     			attr_dev(div4, "class", "column is-one third");
-    			add_location(div4, file$n, 456, 6, 15249);
+    			add_location(div4, file$n, 463, 6, 15591);
     			attr_dev(h43, "class", "svelte-1sanz6e");
-    			add_location(h43, file$n, 473, 8, 16104);
+    			add_location(h43, file$n, 480, 8, 16446);
     			attr_dev(input2, "class", "input svelte-1sanz6e");
     			attr_dev(input2, "type", "text");
     			attr_dev(input2, "placeholder", "Saisir le code");
-    			add_location(input2, file$n, 476, 12, 16225);
+    			add_location(input2, file$n, 483, 12, 16567);
     			attr_dev(i2, "class", "fas fa-search");
-    			add_location(i2, file$n, 478, 50, 16450);
+    			add_location(i2, file$n, 485, 50, 16792);
     			attr_dev(span2, "class", "icon is-small is-left svelte-1sanz6e");
-    			add_location(span2, file$n, 478, 14, 16414);
+    			add_location(span2, file$n, 485, 14, 16756);
     			attr_dev(p2, "class", "control has-icons-left has-icons-right svelte-1sanz6e");
-    			add_location(p2, file$n, 475, 10, 16162);
+    			add_location(p2, file$n, 482, 10, 16504);
     			attr_dev(div5, "class", "field");
-    			add_location(div5, file$n, 474, 8, 16132);
+    			add_location(div5, file$n, 481, 8, 16474);
     			attr_dev(div6, "class", "column is-one third");
-    			add_location(div6, file$n, 472, 6, 16062);
+    			add_location(div6, file$n, 479, 6, 16404);
     			attr_dev(div7, "class", "columns");
-    			add_location(div7, file$n, 436, 4, 14308);
+    			add_location(div7, file$n, 443, 4, 14637);
     			attr_dev(h44, "class", "firsth4 svelte-1sanz6e");
-    			add_location(h44, file$n, 492, 6, 16917);
+    			add_location(h44, file$n, 499, 6, 17259);
     			attr_dev(h45, "class", "svelte-1sanz6e");
-    			add_location(h45, file$n, 497, 6, 17160);
+    			add_location(h45, file$n, 504, 6, 17502);
     			attr_dev(h46, "class", "svelte-1sanz6e");
-    			add_location(h46, file$n, 502, 6, 17376);
+    			add_location(h46, file$n, 509, 6, 17718);
     			attr_dev(h47, "class", "svelte-1sanz6e");
-    			add_location(h47, file$n, 507, 6, 17568);
+    			add_location(h47, file$n, 514, 6, 17910);
     			attr_dev(div8, "class", "themed svelte-1sanz6e");
-    			add_location(div8, file$n, 490, 4, 16889);
+    			add_location(div8, file$n, 497, 4, 17231);
     			attr_dev(button, "class", "button is-warning");
     			set_style(button, "padding-left", "2em");
     			set_style(button, "padding-right", "2em");
     			button.disabled = /*gogoDisabled*/ ctx[0];
     			toggle_class(button, "is-loading", /*searchHasBegun*/ ctx[1]);
-    			add_location(button, file$n, 516, 6, 17861);
+    			add_location(button, file$n, 523, 6, 18203);
     			attr_dev(p3, "class", "control");
     			set_style(p3, "text-align", "center");
     			set_style(p3, "margin-top", "1em");
-    			add_location(p3, file$n, 514, 5, 17786);
+    			add_location(p3, file$n, 521, 5, 18128);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div0, anchor);
@@ -35030,14 +35031,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_4.name,
     		type: "slot",
-    		source: "(426:2) <Tab label=\\\"COMPETENCES\\\">",
+    		source: "(433:2) <Tab label=\\\"COMPETENCES\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (525:4) <Field expanded size="is-large">
+    // (532:4) <Field expanded size="is-large">
     function create_default_slot_3(ctx) {
     	let div;
     	let input0;
@@ -35071,9 +35072,9 @@ var app = (function () {
     			input0.__value = input0_value_value = true;
     			input0.value = input0.__value;
     			/*$$binding_groups*/ ctx[40][0].push(input0);
-    			add_location(input0, file$n, 526, 8, 18252);
+    			add_location(input0, file$n, 533, 8, 18594);
     			attr_dev(label0, "for", "isOr");
-    			add_location(label0, file$n, 527, 8, 18365);
+    			add_location(label0, file$n, 534, 8, 18707);
     			attr_dev(input1, "class", "is-checkradio");
     			attr_dev(input1, "type", "radio");
     			attr_dev(input1, "name", "isAnd");
@@ -35081,11 +35082,11 @@ var app = (function () {
     			input1.__value = input1_value_value = false;
     			input1.value = input1.__value;
     			/*$$binding_groups*/ ctx[40][0].push(input1);
-    			add_location(input1, file$n, 528, 8, 18442);
+    			add_location(input1, file$n, 535, 8, 18784);
     			attr_dev(label1, "for", "isAnd");
-    			add_location(label1, file$n, 529, 8, 18558);
+    			add_location(label1, file$n, 536, 8, 18900);
     			attr_dev(div, "class", "fieldwrapper");
-    			add_location(div, file$n, 525, 6, 18217);
+    			add_location(div, file$n, 532, 6, 18559);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -35130,14 +35131,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_3.name,
     		type: "slot",
-    		source: "(525:4) <Field expanded size=\\\"is-large\\\">",
+    		source: "(532:4) <Field expanded size=\\\"is-large\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (537:6) {#each [25,50,75,100] as num}
+    // (544:6) {#each [25,50,75,100] as num}
     function create_each_block$9(ctx) {
     	let button;
     	let t;
@@ -35154,7 +35155,7 @@ var app = (function () {
     			t = text(/*num*/ ctx[47]);
     			attr_dev(button, "class", "button");
     			toggle_class(button, "is-primary", /*num*/ ctx[47] === /*$options*/ ctx[3].pageSize);
-    			add_location(button, file$n, 537, 10, 18811);
+    			add_location(button, file$n, 544, 10, 19153);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
@@ -35183,14 +35184,14 @@ var app = (function () {
     		block,
     		id: create_each_block$9.name,
     		type: "each",
-    		source: "(537:6) {#each [25,50,75,100] as num}",
+    		source: "(544:6) {#each [25,50,75,100] as num}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (535:4) <Field grouped groupMultiline>
+    // (542:4) <Field grouped groupMultiline>
     function create_default_slot_2(ctx) {
     	let div;
     	let each_value = [25, 50, 75, 100];
@@ -35210,7 +35211,7 @@ var app = (function () {
     			}
 
     			attr_dev(div, "class", "control");
-    			add_location(div, file$n, 535, 6, 18743);
+    			add_location(div, file$n, 542, 6, 19085);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -35252,14 +35253,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_2.name,
     		type: "slot",
-    		source: "(535:4) <Field grouped groupMultiline>",
+    		source: "(542:4) <Field grouped groupMultiline>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (523:2) <Tab label="Options" icon="cog">
+    // (530:2) <Tab label="Options" icon="cog">
     function create_default_slot_1$1(ctx) {
     	let h40;
     	let t1;
@@ -35311,17 +35312,17 @@ var app = (function () {
     			button = element("button");
     			button.textContent = "Valider";
     			attr_dev(h40, "class", "svelte-1sanz6e");
-    			add_location(h40, file$n, 523, 4, 18138);
+    			add_location(h40, file$n, 530, 4, 18480);
     			attr_dev(h41, "class", "svelte-1sanz6e");
-    			add_location(h41, file$n, 533, 4, 18657);
+    			add_location(h41, file$n, 540, 4, 18999);
     			attr_dev(button, "class", "button is-warning");
     			set_style(button, "padding-left", "2em");
     			set_style(button, "padding-right", "2em");
-    			add_location(button, file$n, 544, 6, 19058);
+    			add_location(button, file$n, 551, 6, 19400);
     			attr_dev(p, "class", "control");
     			set_style(p, "text-align", "center");
     			set_style(p, "margin-top", "1em");
-    			add_location(p, file$n, 543, 4, 18990);
+    			add_location(p, file$n, 550, 4, 19332);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, h40, anchor);
@@ -35337,7 +35338,7 @@ var app = (function () {
     			current = true;
 
     			if (!mounted) {
-    				dispose = listen_dev(button, "click", /*click_handler_4*/ ctx[43], false, false, false);
+    				dispose = listen_dev(button, "click", /*setOptions*/ ctx[6], false, false, false);
     				mounted = true;
     			}
     		},
@@ -35387,14 +35388,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_1$1.name,
     		type: "slot",
-    		source: "(523:2) <Tab label=\\\"Options\\\" icon=\\\"cog\\\">",
+    		source: "(530:2) <Tab label=\\\"Options\\\" icon=\\\"cog\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (337:0) <Tabs on:activeTabChanged={()=>gogoDisabled=false}>
+    // (344:0) <Tabs on:activeTabChanged={()=>gogoDisabled=false}>
     function create_default_slot$2(ctx) {
     	let tab0;
     	let t0;
@@ -35522,7 +35523,7 @@ var app = (function () {
     		block,
     		id: create_default_slot$2.name,
     		type: "slot",
-    		source: "(337:0) <Tabs on:activeTabChanged={()=>gogoDisabled=false}>",
+    		source: "(344:0) <Tabs on:activeTabChanged={()=>gogoDisabled=false}>",
     		ctx
     	});
 
@@ -35541,7 +35542,7 @@ var app = (function () {
     			$$inline: true
     		});
 
-    	tabs.$on("activeTabChanged", /*activeTabChanged_handler*/ ctx[44]);
+    	tabs.$on("activeTabChanged", /*activeTabChanged_handler*/ ctx[43]);
 
     	const block = {
     		c: function create() {
@@ -35882,7 +35883,18 @@ var app = (function () {
     		$$invalidate(7, entriesObject = entriesObject.data);
     		if (entriesObject.filters) $$invalidate(8, results = entriesObject.filters);
     		$$invalidate(7, entriesObject = entriesObject.filtered);
-    		if (!entriesObject || !entriesObject.length) $$invalidate(1, searchHasBegun = false);
+
+    		if (!entriesObject || !entriesObject.length) {
+    			showNotification("Aucun résultat trouvé", {
+    				type: "is-danger",
+    				position: "is-bottom-right",
+    				icon: true
+    			});
+
+    			$$invalidate(1, searchHasBegun = false);
+    			return;
+    		}
+
     		dispatch("searchReady", { form });
     	}
 
@@ -35900,6 +35912,16 @@ var app = (function () {
     			$$invalidate(0, gogoDisabled = false);
     		}
     	}
+
+    	let setOptions = () => {
+    		showNotification("Options sauvegardées", {
+    			type: "is-success",
+    			position: "is-bottom-right",
+    			icon: true
+    		});
+
+    		localStorage.setItem("options", JSON.stringify($options));
+    	};
 
     	const writable_props = ["entriesObject", "results"];
 
@@ -36026,13 +36048,6 @@ var app = (function () {
     	}
 
     	const click_handler_3 = num => set_store_value(options, $options.pageSize = num, $options);
-
-    	const click_handler_4 = () => showNotification("Options sauvegardées", {
-    		type: "is-success",
-    		position: "is-bottom-right",
-    		icon: true
-    	});
-
     	const activeTabChanged_handler = () => $$invalidate(0, gogoDisabled = false);
 
     	$$self.$$set = $$props => {
@@ -36064,6 +36079,7 @@ var app = (function () {
     		gogoFilter,
     		groupBy,
     		checkInput,
+    		setOptions,
     		$options
     	});
 
@@ -36074,6 +36090,7 @@ var app = (function () {
     		if ("searchHasBegun" in $$props) $$invalidate(1, searchHasBegun = $$props.searchHasBegun);
     		if ("filtres" in $$props) $$invalidate(2, filtres = $$props.filtres);
     		if ("groupBy" in $$props) groupBy = $$props.groupBy;
+    		if ("setOptions" in $$props) $$invalidate(6, setOptions = $$props.setOptions);
     	};
 
     	if ($$props && "$$inject" in $$props) {
@@ -36085,9 +36102,9 @@ var app = (function () {
     		searchHasBegun,
     		filtres,
     		$options,
-    		showNotification,
     		gogoFilter,
     		checkInput,
+    		setOptions,
     		entriesObject,
     		results,
     		select_selectedValue_binding,
@@ -36124,7 +36141,6 @@ var app = (function () {
     		$$binding_groups,
     		input1_change_handler,
     		click_handler_3,
-    		click_handler_4,
     		activeTabChanged_handler
     	];
     }
@@ -38139,7 +38155,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (312:1) {#if states.laTotale && entriesObject && entriesObject.length > $options.pageSize}
+    // (314:1) {#if states.laTotale && entriesObject && entriesObject.length > $options.pageSize}
     function create_if_block_19(ctx) {
     	let div;
     	let lightpaginationnav;
@@ -38163,7 +38179,7 @@ var app = (function () {
     			div = element("div");
     			create_component(lightpaginationnav.$$.fragment);
     			attr_dev(div, "class", "above-all");
-    			add_location(div, file$q, 312, 3, 9919);
+    			add_location(div, file$q, 314, 3, 9857);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -38196,14 +38212,14 @@ var app = (function () {
     		block,
     		id: create_if_block_19.name,
     		type: "if",
-    		source: "(312:1) {#if states.laTotale && entriesObject && entriesObject.length > $options.pageSize}",
+    		source: "(314:1) {#if states.laTotale && entriesObject && entriesObject.length > $options.pageSize}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (324:2) <Modal closeText = "Annuler et revenir" title="Recherche Avancée" width="40vw" bind:active={states.modalActive}>
+    // (326:2) <Modal closeText = "Annuler et revenir" title="Recherche Avancée" width="50vw" bind:active={states.modalActive}>
     function create_default_slot_6$1(ctx) {
     	let recherche;
     	let updating_entriesObject;
@@ -38276,14 +38292,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_6$1.name,
     		type: "slot",
-    		source: "(324:2) <Modal closeText = \\\"Annuler et revenir\\\" title=\\\"Recherche Avancée\\\" width=\\\"40vw\\\" bind:active={states.modalActive}>",
+    		source: "(326:2) <Modal closeText = \\\"Annuler et revenir\\\" title=\\\"Recherche Avancée\\\" width=\\\"50vw\\\" bind:active={states.modalActive}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (481:68) 
+    // (483:68) 
     function create_if_block_18(ctx) {
     	let div1;
     	let div0;
@@ -38320,18 +38336,18 @@ var app = (function () {
     			}
 
     			attr_dev(i_1, "class", "fas fa-lightbulb");
-    			add_location(i_1, file$q, 483, 151, 18389);
+    			add_location(i_1, file$q, 485, 151, 18327);
     			attr_dev(span, "class", "icon is-small");
-    			add_location(span, file$q, 483, 123, 18361);
+    			add_location(span, file$q, 485, 123, 18299);
     			attr_dev(button, "class", "button is-small");
     			set_style(button, "border-radius", "50%", 1);
     			toggle_class(button, "ampoule", /*states*/ ctx[3].lightOn);
-    			add_location(button, file$q, 483, 4, 18242);
+    			add_location(button, file$q, 485, 4, 18180);
     			attr_dev(div0, "class", "bouton-highlight");
-    			add_location(div0, file$q, 482, 3, 18207);
+    			add_location(div0, file$q, 484, 3, 18145);
     			attr_dev(div1, "class", "latotale");
     			toggle_class(div1, "totale-spacer", /*entriesObject*/ ctx[4].length > /*$options*/ ctx[8].pageSize);
-    			add_location(div1, file$q, 481, 3, 18118);
+    			add_location(div1, file$q, 483, 3, 18056);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div1, anchor);
@@ -38419,14 +38435,14 @@ var app = (function () {
     		block,
     		id: create_if_block_18.name,
     		type: "if",
-    		source: "(481:68) ",
+    		source: "(483:68) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (478:69) 
+    // (480:69) 
     function create_if_block_17(ctx) {
     	let savoirfaire;
     	let current;
@@ -38469,14 +38485,14 @@ var app = (function () {
     		block,
     		id: create_if_block_17.name,
     		type: "if",
-    		source: "(478:69) ",
+    		source: "(480:69) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (469:61) 
+    // (471:61) 
     function create_if_block_16(ctx) {
     	let div;
     	let current;
@@ -38502,7 +38518,7 @@ var app = (function () {
 
     			attr_dev(div, "class", "latotale");
     			toggle_class(div, "totale-spacer", /*entriesObject*/ ctx[4].length > /*$options*/ ctx[8].pageSize);
-    			add_location(div, file$q, 469, 3, 17611);
+    			add_location(div, file$q, 471, 3, 17549);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -38574,14 +38590,14 @@ var app = (function () {
     		block,
     		id: create_if_block_16.name,
     		type: "if",
-    		source: "(469:61) ",
+    		source: "(471:61) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (466:62) 
+    // (468:62) 
     function create_if_block_15(ctx) {
     	let geco;
     	let current;
@@ -38624,14 +38640,14 @@ var app = (function () {
     		block,
     		id: create_if_block_15.name,
     		type: "if",
-    		source: "(466:62) ",
+    		source: "(468:62) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (454:106) 
+    // (456:106) 
     function create_if_block_14(ctx) {
     	let div0;
     	let button;
@@ -38668,18 +38684,18 @@ var app = (function () {
     			}
 
     			attr_dev(i_1, "class", "fas fa-lightbulb");
-    			add_location(i_1, file$q, 455, 159, 17055);
+    			add_location(i_1, file$q, 457, 159, 16993);
     			attr_dev(span, "class", "icon is-small");
-    			add_location(span, file$q, 455, 131, 17027);
+    			add_location(span, file$q, 457, 131, 16965);
     			attr_dev(button, "class", "button is-small");
     			set_style(button, "border-radius", "50%", 1);
     			toggle_class(button, "ampoule", /*states*/ ctx[3].lightOn === true);
-    			add_location(button, file$q, 455, 4, 16900);
+    			add_location(button, file$q, 457, 4, 16838);
     			attr_dev(div0, "class", "bouton-highlight");
-    			add_location(div0, file$q, 454, 3, 16865);
+    			add_location(div0, file$q, 456, 3, 16803);
     			attr_dev(div1, "class", "latotale");
     			toggle_class(div1, "totale-spacer", /*entriesObject*/ ctx[4].length > /*$options*/ ctx[8].pageSize);
-    			add_location(div1, file$q, 457, 3, 17117);
+    			add_location(div1, file$q, 459, 3, 17055);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div0, anchor);
@@ -38769,14 +38785,14 @@ var app = (function () {
     		block,
     		id: create_if_block_14.name,
     		type: "if",
-    		source: "(454:106) ",
+    		source: "(456:106) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (450:107) 
+    // (452:107) 
     function create_if_block_13(ctx) {
     	let detailsexpert;
     	let current;
@@ -38823,14 +38839,14 @@ var app = (function () {
     		block,
     		id: create_if_block_13.name,
     		type: "if",
-    		source: "(450:107) ",
+    		source: "(452:107) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (436:94) 
+    // (438:94) 
     function create_if_block_11$1(ctx) {
     	let t;
     	let div;
@@ -38860,7 +38876,7 @@ var app = (function () {
 
     			attr_dev(div, "class", "latotale");
     			toggle_class(div, "totale-spacer", /*entriesObject*/ ctx[4].length > /*$options*/ ctx[8].pageSize);
-    			add_location(div, file$q, 441, 3, 16154);
+    			add_location(div, file$q, 443, 3, 16092);
     		},
     		m: function mount(target, anchor) {
     			if (if_block) if_block.m(target, anchor);
@@ -38949,14 +38965,14 @@ var app = (function () {
     		block,
     		id: create_if_block_11$1.name,
     		type: "if",
-    		source: "(436:94) ",
+    		source: "(438:94) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (430:2) {#if (states.currentForm=="retex" || states.currentForm=='interne') && !states.laTotale}
+    // (432:2) {#if (states.currentForm=="retex" || states.currentForm=='interne') && !states.laTotale}
     function create_if_block_10$1(ctx) {
     	let retourexp;
     	let current;
@@ -39005,14 +39021,14 @@ var app = (function () {
     		block,
     		id: create_if_block_10$1.name,
     		type: "if",
-    		source: "(430:2) {#if (states.currentForm==\\\"retex\\\" || states.currentForm=='interne') && !states.laTotale}",
+    		source: "(432:2) {#if (states.currentForm==\\\"retex\\\" || states.currentForm=='interne') && !states.laTotale}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (328:1) {#if !states.ready}
+    // (330:1) {#if !states.ready}
     function create_if_block$i(ctx) {
     	let div2;
     	let div1;
@@ -39045,13 +39061,13 @@ var app = (function () {
     			if (img.src !== (img_src_value = "./img/polyexpert.png")) attr_dev(img, "src", img_src_value);
     			attr_dev(img, "width", "300px");
     			attr_dev(img, "alt", "logo");
-    			add_location(img, file$q, 333, 5, 10585);
+    			add_location(img, file$q, 335, 5, 10523);
     			attr_dev(div0, "class", "is-flex logocontainer");
-    			add_location(div0, file$q, 332, 4, 10544);
+    			add_location(div0, file$q, 334, 4, 10482);
     			attr_dev(div1, "class", "column is-one-third global-center");
-    			add_location(div1, file$q, 331, 3, 10492);
+    			add_location(div1, file$q, 333, 3, 10430);
     			attr_dev(div2, "class", "columns");
-    			add_location(div2, file$q, 330, 2, 10467);
+    			add_location(div2, file$q, 332, 2, 10405);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div2, anchor);
@@ -39106,14 +39122,14 @@ var app = (function () {
     		block,
     		id: create_if_block$i.name,
     		type: "if",
-    		source: "(328:1) {#if !states.ready}",
+    		source: "(330:1) {#if !states.ready}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (486:3) {#each paginatedItems as entry,index}
+    // (488:3) {#each paginatedItems as entry,index}
     function create_each_block_3$3(ctx) {
     	let hr;
     	let t;
@@ -39136,7 +39152,7 @@ var app = (function () {
     			hr = element("hr");
     			t = space();
     			create_component(savoirfaire.$$.fragment);
-    			add_location(hr, file$q, 486, 4, 18493);
+    			add_location(hr, file$q, 488, 4, 18431);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, hr, anchor);
@@ -39170,14 +39186,14 @@ var app = (function () {
     		block,
     		id: create_each_block_3$3.name,
     		type: "each",
-    		source: "(486:3) {#each paginatedItems as entry,index}",
+    		source: "(488:3) {#each paginatedItems as entry,index}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (471:3) {#each paginatedItems as entry,index}
+    // (473:3) {#each paginatedItems as entry,index}
     function create_each_block_2$3(ctx) {
     	let hr;
     	let t;
@@ -39200,7 +39216,7 @@ var app = (function () {
     			hr = element("hr");
     			t = space();
     			create_component(geco.$$.fragment);
-    			add_location(hr, file$q, 471, 4, 17742);
+    			add_location(hr, file$q, 473, 4, 17680);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, hr, anchor);
@@ -39234,14 +39250,14 @@ var app = (function () {
     		block,
     		id: create_each_block_2$3.name,
     		type: "each",
-    		source: "(471:3) {#each paginatedItems as entry,index}",
+    		source: "(473:3) {#each paginatedItems as entry,index}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (459:3) {#each paginatedItems as entry,index}
+    // (461:3) {#each paginatedItems as entry,index}
     function create_each_block_1$4(ctx) {
     	let hr;
     	let t;
@@ -39264,7 +39280,7 @@ var app = (function () {
     			hr = element("hr");
     			t = space();
     			create_component(detailsexpert.$$.fragment);
-    			add_location(hr, file$q, 459, 4, 17248);
+    			add_location(hr, file$q, 461, 4, 17186);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, hr, anchor);
@@ -39298,14 +39314,14 @@ var app = (function () {
     		block,
     		id: create_each_block_1$4.name,
     		type: "each",
-    		source: "(459:3) {#each paginatedItems as entry,index}",
+    		source: "(461:3) {#each paginatedItems as entry,index}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (437:3) {#if states.advancedSearch}
+    // (439:3) {#if states.advancedSearch}
     function create_if_block_12$1(ctx) {
     	let div;
     	let button;
@@ -39321,15 +39337,15 @@ var app = (function () {
     			span = element("span");
     			i_1 = element("i");
     			attr_dev(i_1, "class", "fas fa-lightbulb");
-    			add_location(i_1, file$q, 438, 159, 16083);
+    			add_location(i_1, file$q, 440, 159, 16021);
     			attr_dev(span, "class", "icon is-small");
-    			add_location(span, file$q, 438, 131, 16055);
+    			add_location(span, file$q, 440, 131, 15993);
     			attr_dev(button, "class", "button is-small");
     			set_style(button, "border-radius", "50%", 1);
     			toggle_class(button, "ampoule", /*states*/ ctx[3].lightOn === true);
-    			add_location(button, file$q, 438, 4, 15928);
+    			add_location(button, file$q, 440, 4, 15866);
     			attr_dev(div, "class", "bouton-highlight");
-    			add_location(div, file$q, 437, 3, 15893);
+    			add_location(div, file$q, 439, 3, 15831);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -39358,14 +39374,14 @@ var app = (function () {
     		block,
     		id: create_if_block_12$1.name,
     		type: "if",
-    		source: "(437:3) {#if states.advancedSearch}",
+    		source: "(439:3) {#if states.advancedSearch}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (443:3) {#each paginatedItems as entry,index}
+    // (445:3) {#each paginatedItems as entry,index}
     function create_each_block$b(ctx) {
     	let hr;
     	let t;
@@ -39389,7 +39405,7 @@ var app = (function () {
     			hr = element("hr");
     			t = space();
     			create_component(retourexp.$$.fragment);
-    			add_location(hr, file$q, 443, 4, 16285);
+    			add_location(hr, file$q, 445, 4, 16223);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, hr, anchor);
@@ -39424,14 +39440,14 @@ var app = (function () {
     		block,
     		id: create_each_block$b.name,
     		type: "each",
-    		source: "(443:3) {#each paginatedItems as entry,index}",
+    		source: "(445:3) {#each paginatedItems as entry,index}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (422:4) {:else}
+    // (424:4) {:else}
     function create_else_block$4(ctx) {
     	let loading;
     	let current;
@@ -39472,14 +39488,14 @@ var app = (function () {
     		block,
     		id: create_else_block$4.name,
     		type: "else",
-    		source: "(422:4) {:else}",
+    		source: "(424:4) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (337:4) {#if !states.loading}
+    // (339:4) {#if !states.loading}
     function create_if_block_1$d(ctx) {
     	let current_block_type_index;
     	let if_block0;
@@ -39527,12 +39543,12 @@ var app = (function () {
     			set_style(button, "padding-right", "2em");
     			attr_dev(button, "type", "submit");
     			toggle_class(button, "is-fullwidth", /*isMobile*/ ctx[9].matches);
-    			add_location(button, file$q, 407, 7, 14580);
+    			add_location(button, file$q, 409, 7, 14518);
     			attr_dev(p, "class", "control");
     			set_style(p, "text-align", "center");
-    			add_location(p, file$q, 406, 6, 14526);
+    			add_location(p, file$q, 408, 6, 14464);
     			attr_dev(div, "class", "is-flex downspacer");
-    			add_location(div, file$q, 405, 5, 14487);
+    			add_location(div, file$q, 407, 5, 14425);
     		},
     		m: function mount(target, anchor) {
     			if (~current_block_type_index) {
@@ -39673,14 +39689,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1$d.name,
     		type: "if",
-    		source: "(337:4) {#if !states.loading}",
+    		source: "(339:4) {#if !states.loading}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (362:42) 
+    // (364:42) 
     function create_if_block_8$3(ctx) {
     	let div0;
     	let t0;
@@ -39722,9 +39738,9 @@ var app = (function () {
     			create_component(field1.$$.fragment);
     			attr_dev(div0, "class", "is-flex");
     			set_style(div0, "margin-bottom", "10px");
-    			add_location(div0, file$q, 363, 6, 12141);
+    			add_location(div0, file$q, 365, 6, 12079);
     			attr_dev(div1, "class", "is-flex downspacer");
-    			add_location(div1, file$q, 371, 6, 12582);
+    			add_location(div1, file$q, 373, 6, 12520);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div0, anchor);
@@ -39788,14 +39804,14 @@ var app = (function () {
     		block,
     		id: create_if_block_8$3.name,
     		type: "if",
-    		source: "(362:42) ",
+    		source: "(364:42) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (352:41) 
+    // (354:41) 
     function create_if_block_6$4(ctx) {
     	let div;
     	let t;
@@ -39821,7 +39837,7 @@ var app = (function () {
     			create_component(field.$$.fragment);
     			attr_dev(div, "class", "is-flex");
     			set_style(div, "margin-bottom", "10px");
-    			add_location(div, file$q, 353, 6, 11593);
+    			add_location(div, file$q, 355, 6, 11531);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -39870,14 +39886,14 @@ var app = (function () {
     		block,
     		id: create_if_block_6$4.name,
     		type: "if",
-    		source: "(352:41) ",
+    		source: "(354:41) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (341:5) {#if !states.currentPage.isUser && !states.currentPage.isAdmin}
+    // (343:5) {#if !states.currentPage.isUser && !states.currentPage.isAdmin}
     function create_if_block_4$6(ctx) {
     	let div;
     	let p;
@@ -39911,12 +39927,12 @@ var app = (function () {
     			if (if_block) if_block.c();
     			t3 = space();
     			create_component(field.$$.fragment);
-    			add_location(br, file$q, 343, 94, 11005);
+    			add_location(br, file$q, 345, 94, 10943);
     			set_style(p, "margin-bottom", "1em");
-    			add_location(p, file$q, 343, 6, 10917);
+    			add_location(p, file$q, 345, 6, 10855);
     			attr_dev(div, "class", "is-flex");
     			toggle_class(div, "downspacer", !/*states*/ ctx[3].currentPage.isAdmin);
-    			add_location(div, file$q, 342, 6, 10842);
+    			add_location(div, file$q, 344, 6, 10780);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -39974,14 +39990,14 @@ var app = (function () {
     		block,
     		id: create_if_block_4$6.name,
     		type: "if",
-    		source: "(341:5) {#if !states.currentPage.isUser && !states.currentPage.isAdmin}",
+    		source: "(343:5) {#if !states.currentPage.isUser && !states.currentPage.isAdmin}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (365:6) {#if states.inputError}
+    // (367:6) {#if states.inputError}
     function create_if_block_9$2(ctx) {
     	let div;
 
@@ -39990,7 +40006,7 @@ var app = (function () {
     			div = element("div");
     			div.textContent = "Syntaxe du mail invalide";
     			attr_dev(div, "class", "help is-danger help-max");
-    			add_location(div, file$q, 364, 29, 12220);
+    			add_location(div, file$q, 366, 29, 12158);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -40004,14 +40020,14 @@ var app = (function () {
     		block,
     		id: create_if_block_9$2.name,
     		type: "if",
-    		source: "(365:6) {#if states.inputError}",
+    		source: "(367:6) {#if states.inputError}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (366:7) <Field expanded size="is-large">
+    // (368:7) <Field expanded size="is-large">
     function create_default_slot_5$1(ctx) {
     	let input;
     	let mounted;
@@ -40023,7 +40039,7 @@ var app = (function () {
     			attr_dev(input, "type", "email");
     			set_style(input, "width", "100%");
     			attr_dev(input, "placeholder", "e-mail du répondant");
-    			add_location(input, file$q, 366, 8, 12341);
+    			add_location(input, file$q, 368, 8, 12279);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, input, anchor);
@@ -40055,14 +40071,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_5$1.name,
     		type: "slot",
-    		source: "(366:7) <Field expanded size=\\\"is-large\\\">",
+    		source: "(368:7) <Field expanded size=\\\"is-large\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (373:7) <Field expanded size="is-large">
+    // (375:7) <Field expanded size="is-large">
     function create_default_slot_4$1(ctx) {
     	let input;
     	let input_passwordreveal_value;
@@ -40076,7 +40092,7 @@ var app = (function () {
     			set_style(input, "width", "100%");
     			attr_dev(input, "passwordreveal", input_passwordreveal_value = true);
     			attr_dev(input, "placeholder", "mot de passe administrateur");
-    			add_location(input, file$q, 373, 8, 12663);
+    			add_location(input, file$q, 375, 8, 12601);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, input, anchor);
@@ -40107,14 +40123,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_4$1.name,
     		type: "slot",
-    		source: "(373:7) <Field expanded size=\\\"is-large\\\">",
+    		source: "(375:7) <Field expanded size=\\\"is-large\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (355:6) {#if states.inputError}
+    // (357:6) {#if states.inputError}
     function create_if_block_7$4(ctx) {
     	let div;
 
@@ -40123,7 +40139,7 @@ var app = (function () {
     			div = element("div");
     			div.textContent = "Syntaxe du mail invalide";
     			attr_dev(div, "class", "help is-danger help-max");
-    			add_location(div, file$q, 354, 29, 11672);
+    			add_location(div, file$q, 356, 29, 11610);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -40137,14 +40153,14 @@ var app = (function () {
     		block,
     		id: create_if_block_7$4.name,
     		type: "if",
-    		source: "(355:6) {#if states.inputError}",
+    		source: "(357:6) {#if states.inputError}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (356:7) <Field expanded size="is-large">
+    // (358:7) <Field expanded size="is-large">
     function create_default_slot_3$1(ctx) {
     	let input;
     	let mounted;
@@ -40156,7 +40172,7 @@ var app = (function () {
     			attr_dev(input, "type", "email");
     			set_style(input, "width", "100%");
     			attr_dev(input, "placeholder", "Saisissez votre e-mail pour vérification");
-    			add_location(input, file$q, 356, 8, 11793);
+    			add_location(input, file$q, 358, 8, 11731);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, input, anchor);
@@ -40188,14 +40204,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_3$1.name,
     		type: "slot",
-    		source: "(356:7) <Field expanded size=\\\"is-large\\\">",
+    		source: "(358:7) <Field expanded size=\\\"is-large\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (345:6) {#if states.inputError}
+    // (347:6) {#if states.inputError}
     function create_if_block_5$6(ctx) {
     	let div;
 
@@ -40204,7 +40220,7 @@ var app = (function () {
     			div = element("div");
     			div.textContent = "Syntaxe du mail invalide";
     			attr_dev(div, "class", "help is-danger help-max");
-    			add_location(div, file$q, 344, 29, 11115);
+    			add_location(div, file$q, 346, 29, 11053);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -40218,14 +40234,14 @@ var app = (function () {
     		block,
     		id: create_if_block_5$6.name,
     		type: "if",
-    		source: "(345:6) {#if states.inputError}",
+    		source: "(347:6) {#if states.inputError}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (346:7) <Field expanded size="is-large">
+    // (348:7) <Field expanded size="is-large">
     function create_default_slot_2$1(ctx) {
     	let input;
     	let mounted;
@@ -40237,7 +40253,7 @@ var app = (function () {
     			attr_dev(input, "type", "email");
     			set_style(input, "width", "100%");
     			attr_dev(input, "placeholder", "Saisissez votre-email pour recevoir votre lien unique");
-    			add_location(input, file$q, 346, 8, 11236);
+    			add_location(input, file$q, 348, 8, 11174);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, input, anchor);
@@ -40269,14 +40285,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_2$1.name,
     		type: "slot",
-    		source: "(346:7) <Field expanded size=\\\"is-large\\\">",
+    		source: "(348:7) <Field expanded size=\\\"is-large\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (381:5) {#if states.currentPage.isAdmin || states.currentPage.isUser}
+    // (383:5) {#if states.currentPage.isAdmin || states.currentPage.isUser}
     function create_if_block_3$9(ctx) {
     	let field;
     	let t;
@@ -40320,7 +40336,7 @@ var app = (function () {
     			create_component(switch_1.$$.fragment);
     			attr_dev(div, "class", "switch");
     			toggle_class(div, "hide", /*states*/ ctx[3].currentForm !== "interne" && /*states*/ ctx[3].currentForm !== "retex");
-    			add_location(div, file$q, 397, 5, 14125);
+    			add_location(div, file$q, 399, 5, 14063);
     		},
     		m: function mount(target, anchor) {
     			mount_component(field, target, anchor);
@@ -40378,14 +40394,14 @@ var app = (function () {
     		block,
     		id: create_if_block_3$9.name,
     		type: "if",
-    		source: "(381:5) {#if states.currentPage.isAdmin || states.currentPage.isUser}",
+    		source: "(383:5) {#if states.currentPage.isAdmin || states.currentPage.isUser}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (382:5) <Field expanded size="is-large">
+    // (384:5) <Field expanded size="is-large">
     function create_default_slot_1$2(ctx) {
     	let div;
     	let input0;
@@ -40449,9 +40465,9 @@ var app = (function () {
     			input0.__value = input0_value_value = "retex";
     			input0.value = input0.__value;
     			/*$$binding_groups*/ ctx[35][0].push(input0);
-    			add_location(input0, file$q, 383, 8, 13072);
+    			add_location(input0, file$q, 385, 8, 13010);
     			attr_dev(label0, "for", "retourxp");
-    			add_location(label0, file$q, 384, 8, 13201);
+    			add_location(label0, file$q, 386, 8, 13139);
     			attr_dev(input1, "class", "is-checkradio");
     			attr_dev(input1, "type", "radio");
     			attr_dev(input1, "name", "retourxpinterne");
@@ -40459,9 +40475,9 @@ var app = (function () {
     			input1.__value = input1_value_value = "interne";
     			input1.value = input1.__value;
     			/*$$binding_groups*/ ctx[35][0].push(input1);
-    			add_location(input1, file$q, 385, 8, 13262);
+    			add_location(input1, file$q, 387, 8, 13200);
     			attr_dev(label1, "for", "retourxpinterne");
-    			add_location(label1, file$q, 386, 8, 13407);
+    			add_location(label1, file$q, 388, 8, 13345);
     			attr_dev(input2, "class", "is-checkradio");
     			attr_dev(input2, "type", "radio");
     			attr_dev(input2, "name", "savoirfaire");
@@ -40469,9 +40485,9 @@ var app = (function () {
     			input2.__value = input2_value_value = "savoirfaire";
     			input2.value = input2.__value;
     			/*$$binding_groups*/ ctx[35][0].push(input2);
-    			add_location(input2, file$q, 387, 8, 13487);
+    			add_location(input2, file$q, 389, 8, 13425);
     			attr_dev(label2, "for", "savoirfaire");
-    			add_location(label2, file$q, 388, 8, 13628);
+    			add_location(label2, file$q, 390, 8, 13566);
     			attr_dev(input3, "class", "is-checkradio");
     			attr_dev(input3, "type", "radio");
     			attr_dev(input3, "name", "detailsexpert");
@@ -40479,9 +40495,9 @@ var app = (function () {
     			input3.__value = input3_value_value = "detailsexpert";
     			input3.value = input3.__value;
     			/*$$binding_groups*/ ctx[35][0].push(input3);
-    			add_location(input3, file$q, 389, 8, 13682);
+    			add_location(input3, file$q, 391, 8, 13620);
     			attr_dev(label3, "for", "detailsexpert");
-    			add_location(label3, file$q, 390, 8, 13829);
+    			add_location(label3, file$q, 392, 8, 13767);
     			attr_dev(input4, "class", "is-checkradio");
     			attr_dev(input4, "type", "radio");
     			attr_dev(input4, "name", "geco");
@@ -40489,11 +40505,11 @@ var app = (function () {
     			input4.__value = input4_value_value = "geco";
     			input4.value = input4.__value;
     			/*$$binding_groups*/ ctx[35][0].push(input4);
-    			add_location(input4, file$q, 391, 8, 13884);
+    			add_location(input4, file$q, 393, 8, 13822);
     			attr_dev(label4, "for", "geco");
-    			add_location(label4, file$q, 392, 8, 14004);
+    			add_location(label4, file$q, 394, 8, 13942);
     			attr_dev(div, "class", "fieldwrapper");
-    			add_location(div, file$q, 382, 7, 13037);
+    			add_location(div, file$q, 384, 7, 12975);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -40571,14 +40587,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_1$2.name,
     		type: "slot",
-    		source: "(382:5) <Field expanded size=\\\"is-large\\\">",
+    		source: "(384:5) <Field expanded size=\\\"is-large\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (399:6) <Switch bind:checked={states.laTotale} type="is-success">
+    // (401:6) <Switch bind:checked={states.laTotale} type="is-success">
     function create_default_slot$3(ctx) {
     	let div;
 
@@ -40593,7 +40609,7 @@ var app = (function () {
     			div = element("div");
     			t = text(t_value);
     			attr_dev(div, "class", "switch-interne");
-    			add_location(div, file$q, 398, 63, 14289);
+    			add_location(div, file$q, 400, 63, 14227);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -40613,14 +40629,14 @@ var app = (function () {
     		block,
     		id: create_default_slot$3.name,
     		type: "slot",
-    		source: "(399:6) <Switch bind:checked={states.laTotale} type=\\\"is-success\\\">",
+    		source: "(401:6) <Switch bind:checked={states.laTotale} type=\\\"is-success\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (413:6) {#if states.currentPage.isAdmin}
+    // (415:6) {#if states.currentPage.isAdmin}
     function create_if_block_2$c(ctx) {
     	let button;
     	let mounted;
@@ -40635,7 +40651,7 @@ var app = (function () {
     			set_style(button, "padding-right", "2em");
     			attr_dev(button, "type", "submit");
     			toggle_class(button, "is-fullwidth", /*isMobile*/ ctx[9].matches);
-    			add_location(button, file$q, 413, 7, 15055);
+    			add_location(button, file$q, 415, 7, 14993);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
@@ -40661,7 +40677,7 @@ var app = (function () {
     		block,
     		id: create_if_block_2$c.name,
     		type: "if",
-    		source: "(413:6) {#if states.currentPage.isAdmin}",
+    		source: "(415:6) {#if states.currentPage.isAdmin}",
     		ctx
     	});
 
@@ -40689,7 +40705,7 @@ var app = (function () {
     	let modal_props = {
     		closeText: "Annuler et revenir",
     		title: "Recherche Avancée",
-    		width: "40vw",
+    		width: "50vw",
     		$$slots: { default: [create_default_slot_6$1] },
     		$$scope: { ctx }
     	};
@@ -40949,7 +40965,10 @@ var app = (function () {
     	let paginatedItems = [];
 
     	onMount(async () => {
-    		localStorage.clear();
+    		if (localStorage.getItem("options") !== null) {
+    			set_store_value(options, $options = JSON.parse(localStorage.getItem("options")));
+    		}
+
     		lightOff();
     		$$invalidate(3, states.advancedSearch = false, states);
     		$$invalidate(3, states.laTotale = false, states);
@@ -41101,15 +41120,7 @@ var app = (function () {
     		$$invalidate(3, states.ready = false, states);
     		$$invalidate(3, states.loading = true, states);
 
-    		if (!entriesObject.length) {
-    			showNotification("Aucun résultat trouvé", {
-    				type: "is-danger",
-    				position: "is-bottom-right",
-    				icon: true
-    			});
-
-    			return;
-    		} else if (entriesObject.length >= 1) {
+    		if (entriesObject.length >= 1) {
     			if (entriesObject.length > $options.pageSize) $$invalidate(7, paginatedItems = paginate({
     				items: entriesObject,
     				pageSize: $options.pageSize,
@@ -41170,11 +41181,9 @@ var app = (function () {
     					if (!instance[h]) instance[h] = new mark_es6(document.querySelectorAll(`${elMap[h]}`));
     					if (Object.prototype.toString.call(results[h]).indexOf("Object") > -1) $$invalidate(0, results[h] = Object.values(results[h]), results);
 
-    					//console.log(results[h]);
-    					//console.log("h :", h, "\n", "res :", results[h], "\n")
     					instance[h].mark(results[h], {
     						separateWordSearch: false,
-    						className: `mark-${h}`
+    						className: `mark-${elMap[h].substring(1)}`
     					});
     				});
     			}
@@ -41365,7 +41374,7 @@ var app = (function () {
     			 if (states.ready && window.history && window.history.pushState) {
     				window.history.pushState("forward", null, "./#forward");
 
-    				window.onpopstate = e => {
+    				window.onpopstate = () => {
     					states.currentPage.slug[1] && states.currentPage.slug[1].length
     					? window.history.pushState(states.currentPage.slug, null, `./#${states.currentPage.slug}`)
     					: window.history.pushState("forward", null, "./#forward");
@@ -41377,7 +41386,9 @@ var app = (function () {
     					$$invalidate(3, states.laTotale = false, states);
     					$$invalidate(4, entriesObject = []);
     				};
-    			}
+    			} else window.onhashchange = () => {
+    				document.location.reload(true);
+    			};
     		}
 
     		if ($$self.$$.dirty[0] & /*states, entriesObject, $options, currentRange*/ 284) {

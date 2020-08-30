@@ -308,8 +308,11 @@ async function gogoFilter (form) {
     results = entriesObject.filters;  
   entriesObject = entriesObject.filtered;
 
-  if (!entriesObject || !entriesObject.length)
-    searchHasBegun = false;
+  if (!entriesObject || !entriesObject.length) { 
+     showNotification("Aucun résultat trouvé", { type: 'is-danger', position: 'is-bottom-right', icon: true })
+     searchHasBegun = false;
+     return;
+  }
 
   dispatch('searchReady', {form: form});
 }
@@ -329,7 +332,11 @@ function checkInput (obj) {
     obj.hasInputError = false; 
     gogoDisabled = false;
   }
+}
 
+let setOptions = () => {
+  showNotification("Options sauvegardées", { type: 'is-success', position: 'is-bottom-right', icon: true }) 
+  localStorage.setItem('options', JSON.stringify($options));
 }
 
 </script>
@@ -441,7 +448,7 @@ function checkInput (obj) {
         <h4>Département</h4>    
         <div class="field">
           <p class="control has-icons-left has-icons-right">
-            <input on:input={() => checkInput(filtres.experts.departement)} 
+            <input on:input={() => checkInput(filtres.experts.departement)} maxlength="2"
             bind:value={filtres.experts.departement._selectedData} class="input" type="text" placeholder="Saisissez un ou plusieurs départements séparés par des virgules">
               <span class="icon is-small is-left"><i class="fas fa-search"></i></span>
             
@@ -543,12 +550,11 @@ function checkInput (obj) {
 
     <p class="control" style="text-align:center;margin-top:1em;">
       <button class="button is-warning" style="padding-left:2em;padding-right:2em;"
-        on:click={() => showNotification("Options sauvegardées", { type: 'is-success', position: 'is-bottom-right', icon: true }) }
+        on:click={setOptions}
         >Valider
       </button>
     </p>
   </Tab>
-
 </Tabs>
 
 <style>

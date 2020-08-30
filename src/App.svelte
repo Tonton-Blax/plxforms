@@ -74,17 +74,24 @@
 			window.history.pushState('forward', null, './#forward');
 			
 
-			window.onpopstate = (e) => {
+			window.onpopstate = () => {
 				states.currentPage.slug[1] && states.currentPage.slug[1].length ? window.history.pushState(states.currentPage.slug, null, `./#${states.currentPage.slug}`) : window.history.pushState('forward', null, './#forward');
 				states.ready=false; formIndex = undefined; states.currentForm = "retex"; states.laTotale = false; states.laTotale = false; entriesObject = []
 			}
 		}
+		else
+			window.onhashchange = () => {
+				document.location.reload(true);
+	}
+	
 	let paginatedItems = [];
 	$: if (states.laTotale && states.ready) paginatedItems = paginate({ items : entriesObject, pageSize : $options.pageSize, currentPage : currentRange } );
 
 	
 	onMount(async () => {	
-		localStorage.clear();
+		if (localStorage.getItem("options") !== null) {
+			$options = JSON.parse(localStorage.getItem('options'));
+		}
 		lightOff();
 		
 		states.advancedSearch = false; states.laTotale = false; states.modalActive = false;
@@ -227,11 +234,8 @@
 		states.advancedSearch = true;
 		states.ready = false;
 		states.loading = true;
-		if(!entriesObject.length) {
-			showNotification("Aucun résultat trouvé", { type: 'is-danger', position: 'is-bottom-right', icon: true });
-			return;
-		}
-		else if (entriesObject.length >= 1) {
+		
+		if (entriesObject.length >= 1) {
 		
 			if (entriesObject.length > $options.pageSize) 
 				paginatedItems = paginate({ items : entriesObject, pageSize : $options.pageSize, currentPage : currentRange } );
@@ -290,10 +294,8 @@
 						instance[h] = new Mark(document.querySelectorAll(`${elMap[h]}`));
 					if ((Object.prototype.toString.call(results[h]).indexOf("Object")>-1))
 						results[h] = Object.values(results[h]);
-					//console.log(results[h]);
-					//console.log("h :", h, "\n", "res :", results[h], "\n")
 					
-					instance[h].mark(results[h], {separateWordSearch : false, className : `mark-${h}`});
+					instance[h].mark(results[h], {separateWordSearch : false, className : `mark-${elMap[h].substring(1)}`});
 				});
 			}
 		}
@@ -321,7 +323,7 @@
 			/>
 			</div>
 		{/if}
-		<Modal closeText = "Annuler et revenir" title="Recherche Avancée" width="40vw" bind:active={states.modalActive}>
+		<Modal closeText = "Annuler et revenir" title="Recherche Avancée" width="50vw" bind:active={states.modalActive}>
 			<Recherche bind:entriesObject bind:results on:searchReady={(e) => handleSearch(e.detail.form)}/>
 		</Modal>
 
@@ -658,7 +660,7 @@
 	}
 
 	:global(.mark-domaines) {
-		background:lightgoldenrodyellow;
+		background:yellow;
 		color:black;
 	}
 
@@ -693,13 +695,13 @@
 	}
 
 	:global(.mark-timeline) {
-		background: yellow;
+		background: cyan;
 		color:black;
 	}
 
 	:global(.mark-formation) {
 		background: lightseagreen;
-		color:black;
+		color:white;
 	}
 
 	.above-all {
