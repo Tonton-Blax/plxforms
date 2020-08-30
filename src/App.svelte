@@ -14,7 +14,7 @@
 	import Loading from './subcomp/Loading.svelte';
 	import Modal from './subcomp/Modal.svelte'
 	import Recherche from './subcomp/Recherche.svelte'
-	import { API } from './utils/consts.js'
+	import { API, options } from './utils/consts.js'
 	import axios from 'axios';
 	import Mark from './utils/mark.es6.js'
 	import { paginate, LightPaginationNav } from 'svelte-paginate'
@@ -26,7 +26,6 @@
 	
 	let formIndex; let indexes = [];
 	let currentRange = 1;
-	let pageSize = 25;
 
 	let states = {
 		ready : false,
@@ -80,7 +79,7 @@
 			}
 		}
 	let paginatedItems = [];
-	$: if (states.laTotale && states.ready) paginatedItems = paginate({ items : entriesObject, pageSize, currentPage : currentRange } );
+	$: if (states.laTotale && states.ready) paginatedItems = paginate({ items : entriesObject, pageSize : $options.pageSize, currentPage : currentRange } );
 
 	
 	onMount(async () => {	
@@ -233,8 +232,8 @@
 		}
 		else if (entriesObject.length >= 1) {
 		
-			if (entriesObject.length > pageSize) 
-				paginatedItems = paginate({ items : entriesObject, pageSize, currentPage : currentRange } );
+			if (entriesObject.length > $options.pageSize) 
+				paginatedItems = paginate({ items : entriesObject, pageSize : $options.pageSize, currentPage : currentRange } );
 			else paginatedItems = entriesObject;
 			
 			states.laTotale = true;
@@ -309,11 +308,11 @@
 	}
 
 </script>
-	{#if states.laTotale && entriesObject && entriesObject.length > pageSize}
+	{#if states.laTotale && entriesObject && entriesObject.length > $options.pageSize}
 			<div class="above-all">
 			<LightPaginationNav
 				totalItems="{entriesObject.length}"
-				pageSize="{pageSize}"
+				pageSize="{$options.pageSize}"
 				currentPage="{currentRange}"
 				limit="{1}"
 				showStepOptions="{true}"
@@ -439,7 +438,7 @@
 				<button on:click={Markit} class="button is-small" style="border-radius:50%!important;" class:ampoule={states.lightOn === true}><span class="icon is-small"><i class="fas fa-lightbulb"></i></span></button>
 			</div>
 			{/if}
-			<div class="latotale" class:totale-spacer={entriesObject.length > pageSize}>
+			<div class="latotale" class:totale-spacer={entriesObject.length > $options.pageSize}>
 			{#each paginatedItems as entry,index}
 				<hr>
 				<Retourexp entriesObject={entry} {index} laTotale={states.laTotale} isInterne={states.currentForm == 'interne'} 
@@ -455,7 +454,7 @@
 			<div class="bouton-highlight">
 				<button on:click={Markit} class="button is-small" style="border-radius:50%!important;" class:ampoule={states.lightOn ===true} ><span class="icon is-small"><i class="fas fa-lightbulb"></i></span></button>
 			</div>
-			<div class="latotale" class:totale-spacer={entriesObject.length > pageSize}>
+			<div class="latotale" class:totale-spacer={entriesObject.length > $options.pageSize}>
 			{#each paginatedItems as entry,index}
 				<hr>
 				<Detailsexpert entriesObject={entry} {index} laTotale={states.laTotale}
@@ -467,7 +466,7 @@
 			<Geco entriesObject={entriesObject[formIndex]} />
 
 		{:else if states.currentForm === "geco" && states.laTotale}
-			<div class="latotale" class:totale-spacer={entriesObject.length > pageSize}>
+			<div class="latotale" class:totale-spacer={entriesObject.length > $options.pageSize}>
 			{#each paginatedItems as entry,index}
 				<hr>
 				<Geco entriesObject={entry} {index} laTotale={states.laTotale} 
@@ -479,7 +478,7 @@
 			<SavoirFaire entriesObject={entriesObject[formIndex]} />
 
 		{:else if states.currentForm ==  "savoirfaire" && states.laTotale}
-			<div class="latotale" class:totale-spacer={entriesObject.length > pageSize}>
+			<div class="latotale" class:totale-spacer={entriesObject.length > $options.pageSize}>
 			<div class="bouton-highlight">
 				<button on:click={Markit} class="button is-small" style="border-radius:50%!important;" class:ampoule={states.lightOn} ><span class="icon is-small"><i class="fas fa-lightbulb"></i></span></button>
 			</div>

@@ -531,6 +531,16 @@ function checkInput (obj) {
       </div>
     </Field>
 
+    <h4>Nombre de résultats par page : </h4>    
+    <Field grouped groupMultiline>
+      <div class="control">
+      {#each [25,50,75,100] as num}
+          <button class="button" class:is-primary={num === $options.pageSize} on:click={() => $options.pageSize = num}>{num}</button>
+      {/each}
+        </div>       
+    </Field>
+
+
     <p class="control" style="text-align:center;margin-top:1em;">
       <button class="button is-warning" style="padding-left:2em;padding-right:2em;"
         on:click={() => showNotification("Options sauvegardées", { type: 'is-success', position: 'is-bottom-right', icon: true }) }
