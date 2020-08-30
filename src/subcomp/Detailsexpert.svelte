@@ -566,7 +566,6 @@ let searchObj = (obj, term) => {
     @media only screen and (min-width: 860px) {
     
         #colgauche {
-            height:100vh;
             padding-left: 1.5em;
         }
 
