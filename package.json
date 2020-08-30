@@ -33,7 +33,7 @@
     "rollup-plugin-postcss": "^3.1.5",
     "sirv-cli": "^1.0.6",
     "spark-md5": "^3.0.1",
-    "svelma-pro": "^1.2.3",
+    "svelma-pro": "Tonton-Blax/svelma-pro",
     "svelte-preprocess": "^4.1.1",
     "svelte-select": "^3.11.1"
   }
