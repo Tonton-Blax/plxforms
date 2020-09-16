@@ -131,6 +131,9 @@ let searchObj = (obj, term) => {
       keys.push(key)
   return keys.length ? keys : [""];
 }
+function getImageSrc(field, fallback) {
+    return entriesObject[field].split('?id=')[1] === undefined ? fallback :  IMG + entriesObject[field].split('?id=')[1];
+}
 
 
 </script>
@@ -148,7 +151,7 @@ let searchObj = (obj, term) => {
                     <Loading extraStyle={"left:1.5em;top:1.5em;width:100px;height:100px;filter:invert(1);"} text={''}/>
                 {/if}
 
-                <img on:load={()=>photoVisible = true} class="is-rounded" crossorigin="anonymous" src={IMG+entriesObject["Insérer votre photo"].split('?id=')[1]} alt="Portrait du renseignant">
+                <img on:load={()=>photoVisible = true} class="is-rounded" crossorigin="anonymous" src={getImageSrc("Insérer votre photo", "./img/avatar_fallback.png")} alt="Portrait du renseignant">
                 <div class="figure-p">
                     <p><strong>{capitalizer(entriesObject[searchObj(entriesObject,/prénom/)[0]],['-'])}{capitalizer(entriesObject[searchObj(entriesObject,/otre\snom/)[0]],['-'])}</strong></p>
                     <p style="font-size:16px; font-weight:300;padding-top: 7px;">✉ : <a     href=mailto:{entriesObject["Adresse e-mail"]}>{entriesObject["Adresse e-mail"]}</a></p>                    

@@ -128,6 +128,10 @@ let searchObj = (obj, term) => {
   return keys.length ? keys : [""];
 }
 
+function getImageSrc(field, fallback) {
+    return entriesObject[field].split('?id=')[1] === undefined ? fallback :  IMG + entriesObject[field].split('?id=')[1];
+}
+
 
 </script>
 
@@ -144,9 +148,9 @@ let searchObj = (obj, term) => {
                     <Loading extraStyle={"left:1.5em;top:1.5em;width:100px;height:100px;filter:invert(1);"} text={''}/>
                 {/if}
 
-                <img on:load={()=>photoVisible = true} src={IMG + entriesObject["Insérer votre photo"].split('?id=')[1]} alt="Portrait du renseignant">
+                <img on:load={()=>photoVisible = true} src={getImageSrc("Insérer votre photo", "./img/avatar_fallback.png")} alt="Portrait du renseignant">
                 <div class="figure-p">
-                    <p><strong>{capitalizer(entriesObject[searchObj(entriesObject,/prénom/)[0]],['-'])}{capitalizer(entriesObject[searchObj(entriesObject,/otre\snom/)[0]],['-'])}</strong></p>
+                    <p><strong>{capitalizer(entriesObject[searchObj(entriesObject,/prénom/)[0]],['-'])}&nbsp;{capitalizer(entriesObject[searchObj(entriesObject,/otre\snom/)[0]],['-'])}</strong></p>
                     <p style="font-size:16px; font-weight:300;padding-top: 7px;"><a href=mailto:{entriesObject["Adresse e-mail"]}>{entriesObject["Adresse e-mail"]}</a></p>                    
               <!--  <p style="font-size:16px; font-weight:300;padding-top: 7px;">{entriesObject["Téléphone"]}</p> -->
                     <p style="font-size:16px; font-weight:300;padding-top: 7px;">{entriesObject[searchObj(entriesObject,/expérience dans l'assurance/)[0]]} an(s) dans l'assurance</p>
@@ -189,27 +193,7 @@ let searchObj = (obj, term) => {
             {/each}
 
             </table>
-             <table id="tablecertif" class="table is-narrow" style="margin-top:1.5em;">
-            <tr>
-                <td colspan="2" style="border:none;padding-top: 0.3vh!important;">
-                    <h3><img src="./img/cv_certifications.svg" alt="client">Compétence assurantielle</h3>
-                </td>
-            </tr>
-
-            {#each Object.entries(entriesObject[searchObj(entriesObject,/autres\ssecteurs/)]) as [sect,val]}
-                {#if val.length && val != "Jamais intervenu"}
-                 <tr>
-                    <td width="80%">
-                        { sect }
-                    </td> 
-                    <td width="20%" style="text-align: right;">
-                        <Dots length={2} score={QCM.levelsAutresSecteurs[val]} />
-                    </td>
-                </tr>
-                {/if}
-            {/each}
-
-            </table>
+            
         </div>
         
         <!-- BIG BLOC 2 COLONNES A DROITE -->
@@ -308,22 +292,26 @@ let searchObj = (obj, term) => {
                                 
                     <!-- BLOC FORMATION DOSSIERS MARQUANTS -->
                     <div class="column is-full">
-                        <h3 class="h3rien"><img src="./img/cv_projet.svg" alt="client">Dossiers marquants</h3>
+                        <h3 class="h3rien"><img src="./img/cv_projet.svg" alt="client">Compétence assurantielle</h3>
                     </div>
-                    <div class="column is-full pingouin gauche">
-                        
-                        <div class="timeline">
-                            {#each entriesObject["Dossiers marquant"] as dossier, index}
-                                {#if dossier["Année"] && dossier[searchObj(dossier,/problématique/)]}
-                                <div class="timeline-item">
-                                    <div class="timeline-marker is-primary"><span class="annees tagmax">{dossier["Année"]}</span></div>
-                                    <div class="timeline-content">
-                                        <p>{dossier[searchObj(dossier,/problématique/)]}</p>
-                                    </div>
-                                </div>
+                    <div class="column is-full">
+                        <table id="tablecertif" class="table is-narrow" style="margin-top:1.5em;">
+               
+                            {#each Object.entries(entriesObject[searchObj(entriesObject,/autres\ssecteurs/)]) as [sect,val]}
+                                {#if val.length && val != "Jamais intervenu"}
+                                <tr>
+                                    <td width="80%">
+                                        { sect }
+                                    </td> 
+                                    <td width="20%" style="text-align: right;">
+                                        <Dots length={2} score={QCM.levelsAutresSecteurs[val]} />
+                                    </td>
+                                </tr>
                                 {/if}
                             {/each}
-                        </div>
+
+                        </table>
+                        
                     </div>
                 </div>
                 </div>
@@ -462,11 +450,15 @@ let searchObj = (obj, term) => {
         padding-bottom: 2em;
     }
 
-    #colgauche table tr td {
+    #colgauche table:not(#tablecertif) tr td {
         font-size: 1em;
         color: white;
         border-color:rgba(255,255,255,0.5)!important;
         vertical-align: middle;
+    }
+
+    #tablecertif {
+        color:var(--main-color)
     }
 
     td + td { 
@@ -521,7 +513,7 @@ let searchObj = (obj, term) => {
         font-weight:800;
     }
 
-    .table {
+    .table:not(#tablecertif) {
         /*width: -webkit-fill-available;*/
         width: 92%;
         background-color: transparent;
