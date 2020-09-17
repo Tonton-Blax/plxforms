@@ -1,5 +1,6 @@
 <script>
 import { onMount, createEventDispatcher  } from 'svelte';
+import { Notification } from 'svelma-pro';
 import Loading from './Loading.svelte'
 import Dots from './Dots.svelte'
 export let entriesObject;
@@ -7,16 +8,20 @@ export let index = 0;
 export let forceScreenGrab = false;
 import domtoimage from 'dom-to-image-more';
 import { API } from '../utils/consts.js'
+import Modal from './Modal.svelte'
 
 let laTotale;
 let ready = false;
 let buttonGrab;
 let photoVisible;
+let modalActive = false;
+let files;
+let newName;
 
 const dispatch = createEventDispatcher();
 
 $: if (forceScreenGrab) screenGrab();
-
+	
 let photos = [];
 
 let QCM = {
@@ -38,6 +43,13 @@ function capitalizer(str, separators) {
   var regex = new RegExp('(^|[' + separators.join('') + '])(\\w)', 'g');
   return str.toLowerCase().replace(regex, function(x) { return x.toUpperCase(); });
 }
+
+function showNotification(message, props) {
+		Notification.create({
+			message: message,
+			...props
+		})
+	}
 
 function requestFullScreen(element) {
 
@@ -128,12 +140,86 @@ let searchObj = (obj, term) => {
   return keys.length ? keys : [""];
 }
 
-function getImageSrc(field, fallback) {
-    return entriesObject[field].split('?id=')[1] === undefined ? fallback :  IMG + entriesObject[field].split('?id=')[1];
+
+async function getImageSrc(field) {
+        ready=false;
+        if (entriesObject[field] === undefined || entriesObject[field].split('?id=')[1] === undefined) {
+            newName = API + "assets/upload/geco/" + entriesObject["Adresse e-mail"]+'-'+entriesObject["Votre nom"]+'-'+entriesObject["Votre prénom"];
+            newName = newName.toLocaleLowerCase();
+            return fetch(newName)
+                .then(res => {
+                    if (res.ok) {
+                        ready=true;
+                        photoVisible = true;
+                        return newName;
+                    } else {
+                        return './avatar_fallback/img/';
+                    }
+                }).catch(err => console.log('Error:', err));
+        } else {
+            return IMG + entriesObject[field].split('?id=')[1]
+        }
+    ready=true;
+    photoVisible = true;
+    }
+
+const changed = (event)=>{
+
+        files = event.target.files;
+        if (!entriesObject["Adresse e-mail"] || !entriesObject["Votre nom"] || ! entriesObject["Votre prénom"]) {
+            showNotification("Nous avons besoin de l'email, du nom et du prénom pour les relier à la photo", { type: 'is-danger', position: 'is-bottom-right', icon: true })
+            return;
+        }
+        //let filesExt = files[0].name.match(/\.(.*)/)[0] || ".jpg";
+        newName = entriesObject["Adresse e-mail"]+'-'+entriesObject["Votre nom"]+'-'+entriesObject["Votre prénom"]//+filesExt;
+        newName = newName.toLowerCase();
+        let reader = new FileReader();
+        reader.onload = function (e) {
+            document.getElementById("inmageuploaded").src = e.target.result;
+        };
+        reader.readAsDataURL(files[0]);
+
+}
+const sendToServer = () => {
+    if (!files[0]) return;
+    const formData = new FormData()
+    formData.append('file', files[0], newName.toLocaleLowerCase() )
+    formData.append('formName', 'geco');
+
+    fetch(`${API}upload`, {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => response.json())
+    .then(data => {
+        modalActive = false;
+        if (data[0].message === "OK") {
+            showNotification("Image envoyée avec succès", { type: 'is-success', position: 'is-bottom-right', icon: true })
+            ready=false;
+            photoVisible = false;
+            getImageSrc(false)
+        } else {
+            showNotification("Echec de l'envoi. Rééssayez ultérieurement.", { type: 'is-danger', position: 'is-bottom-right', icon: true })
+        }
+    })
+    .catch(error => {
+        console.error(error)
+    })
 }
 
-
 </script>
+
+		<Modal closeText = "Annuler et revenir" title="Envoyer une photo" width="50vw" bind:active={modalActive}>
+
+            <input class="input" id="fileUpload" type="file" accept="image/*" bind:files on:change={changed}>
+            {#if files && files[0]}
+                <img id="inmageuploaded" alt="avatar"/>
+                <div style="text-align:center">
+                    <button class="button is-primary is-large" on:click={sendToServer}>ENVOYER</button>
+                </div>
+            {/if}
+
+		</Modal>
 
 <div id="uniquecontainer-{index}" class="container addon-container">
     
@@ -147,8 +233,14 @@ function getImageSrc(field, fallback) {
                  {#if !photoVisible && index == 0 && entriesObject["Insérer votre photo"].length >= 10}
                     <Loading extraStyle={"left:1.5em;top:1.5em;width:100px;height:100px;filter:invert(1);"} text={''}/>
                 {/if}
-
-                <img on:load={()=>photoVisible = true} src={getImageSrc("Insérer votre photo", "./img/avatar_fallback.png")} alt="Portrait du renseignant">
+                
+                    <div class="image-avatar" on:click={() => modalActive=true}>
+                    {#await getImageSrc("Insérer votre photo") then image}
+                        <img on:load={()=>photoVisible = true} src={image} alt="Portrait du renseignant">
+                    {/await}
+                    </div>
+                
+                
                 <div class="figure-p">
                     <p><strong>{capitalizer(entriesObject[searchObj(entriesObject,/prénom/)[0]],['-'])}&nbsp;{capitalizer(entriesObject[searchObj(entriesObject,/otre\snom/)[0]],['-'])}</strong></p>
                     <p style="font-size:16px; font-weight:300;padding-top: 7px;"><a href=mailto:{entriesObject["Adresse e-mail"]}>{entriesObject["Adresse e-mail"]}</a></p>                    
@@ -359,6 +451,24 @@ function getImageSrc(field, fallback) {
         display:flex;
         flex-direction:column;
         padding-left: 1.5em;
+    }
+    .image-avatar {
+        cursor: pointer;
+    }
+    .image-avatar:hover::before {
+        position: absolute;
+        top: -1rem;
+        left: 4em;
+        content: "+";
+        width: 1em;
+        height: 1em;
+        font-size: xx-large;
+        color: white;
+        border: 1px white solid;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        place-content: center;
     }
     #logo-entete img {
         width:auto ;
