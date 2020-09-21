@@ -17,6 +17,7 @@ let photoVisible;
 let modalActive = false;
 let files;
 let newName;
+let bigNode;
 
 const dispatch = createEventDispatcher();
 
@@ -71,18 +72,20 @@ function screenGrab () {
         return;
     }
     if (!ready) return;
-    buttonGrab.style.display = "none";
-    requestFullScreen(document.body);
-
-    const scale = 2;
     let node = document.body;
     
-    let obj = 
-    {
-        width: window.innerWidth * scale,
-        height: Math.floor(window.innerWidth / 1.777777) * scale,
-        style: {transform: `scale(${scale}) translate(${window.innerWidth / 2 / scale}px, ${(Math.floor(window.innerWidth / 1.777777)) / 2 / scale}px)`},
-        bgcolor : "#fff"
+    buttonGrab.style.display = "none";
+    const scale = 2;
+    let obj = {
+        height: node.scrollHeight * scale,
+        width: node.offsetWidth * scale,
+        style: {
+            transform: "scale(" + scale + ")",
+            transformOrigin: "top left",
+            width: node.offsetWidth + "px",
+            height: node.scrollHeight + "px"
+        },
+        bgcolor: "white"
     }
 
     domtoimage.toPng(node, obj)
@@ -91,7 +94,7 @@ function screenGrab () {
         link.download = `cv-${entriesObject[searchObj(entriesObject,/prénom/)[0]].toLowerCase()}-${entriesObject[searchObj(entriesObject,/otre\snom/)[0]].toLowerCase()}.png`;
         link.href = dataUrl;
         link.click();
-        document.exitFullscreen();
+
         if (laTotale) dispatch('captureOK', {text: 'OK'});
         buttonGrab.style.display = "block";
 
@@ -128,8 +131,16 @@ function saveAs(uri, filename) {
     }
 }
 
+let nbl = 0
 onMount(async () => {	
+ 
+    for (const v of Object.values(entriesObject[searchObj(entriesObject, /univers/)])) {
+        if (v != "Néant")
+            nbl++
+    }
+    //console.log("nblangues : ", nbl);
     ready = true;
+    localStorage.clear();
 });
 
 let searchObj = (obj, term) => {
@@ -142,32 +153,31 @@ let searchObj = (obj, term) => {
 
 
 async function getImageSrc(field) {
-        ready=false;
-        if (entriesObject[field] === undefined || entriesObject[field].split('?id=')[1] === undefined) {
-            newName = API + "assets/upload/geco/" + entriesObject["Adresse e-mail"]+'-'+entriesObject["Votre nom"]+'-'+entriesObject["Votre prénom"];
-            newName = newName.toLocaleLowerCase();
-            return fetch(newName)
-                .then(res => {
-                    if (res.ok) {
-                        ready=true;
-                        photoVisible = true;
-                        return newName;
-                    } else {
-                        return './avatar_fallback/img/';
-                    }
-                }).catch(err => console.log('Error:', err));
-        } else {
-            return IMG + entriesObject[field].split('?id=')[1]
-        }
+    ready=false;
+    newName = API + "assets/upload/geco/" + entriesObject["Adresse e-mail"]+'-'+entriesObject["Votre nom"]+'-'+entriesObject["Votre prénom"];
+    newName = newName.toLocaleLowerCase();
+    return fetch(newName)
+        .then(res => {
+            if (res.ok) {
+                ready=true;
+                photoVisible = true;
+                return newName;
+            } else {
+                //console.log("pouet")
+                return entriesObject[field] === undefined || entriesObject[field].split('?id=')[1] === undefined ? './img/avatar_fallback.png' : IMG + entriesObject[field].split('?id=')[1];
+            }
+        }).catch(err => console.log('Error:', err));
+    
     ready=true;
     photoVisible = true;
-    }
+}
 
 const changed = (event)=>{
 
         files = event.target.files;
         if (!entriesObject["Adresse e-mail"] || !entriesObject["Votre nom"] || ! entriesObject["Votre prénom"]) {
-            showNotification("Nous avons besoin de l'email, du nom et du prénom pour les relier à la photo", { type: 'is-danger', position: 'is-bottom-right', icon: true })
+            showNotification("Nous avons besoin de l'email, du nom et du prénom pour les relier à la photo", 
+            { type: 'is-danger', position: 'is-bottom-right', icon: true })
             return;
         }
         //let filesExt = files[0].name.match(/\.(.*)/)[0] || ".jpg";
@@ -180,10 +190,14 @@ const changed = (event)=>{
         reader.readAsDataURL(files[0]);
 
 }
-const sendToServer = () => {
+async function sendToServer () {
     if (!files[0]) return;
+        
+    let ctxed = await domtoimage.toBlob(document.getElementById('inmageuploaded'))
+    
+
     const formData = new FormData()
-    formData.append('file', files[0], newName.toLocaleLowerCase() )
+    formData.append('file', ctxed, newName.toLocaleLowerCase() )
     formData.append('formName', 'geco');
 
     fetch(`${API}upload`, {
@@ -197,7 +211,7 @@ const sendToServer = () => {
             showNotification("Image envoyée avec succès", { type: 'is-success', position: 'is-bottom-right', icon: true })
             ready=false;
             photoVisible = false;
-            getImageSrc(false)
+            getImageSrc(false);
         } else {
             showNotification("Echec de l'envoi. Rééssayez ultérieurement.", { type: 'is-danger', position: 'is-bottom-right', icon: true })
         }
@@ -206,6 +220,8 @@ const sendToServer = () => {
         console.error(error)
     })
 }
+
+
 
 </script>
 
@@ -221,7 +237,7 @@ const sendToServer = () => {
 
 		</Modal>
 
-<div id="uniquecontainer-{index}" class="container addon-container">
+<div id="uniquecontainer-{index}" bind:this={bigNode} class="container addon-container">
     
     <div class="columns">
 
@@ -229,27 +245,34 @@ const sendToServer = () => {
 
         <div id="colgauche" class="column is-3">
            
-            <div class="image portrait">
+        <div class="columns blocinfos">
+            <div class="column is-one-third">
                  {#if !photoVisible && index == 0 && entriesObject["Insérer votre photo"].length >= 10}
                     <Loading extraStyle={"left:1.5em;top:1.5em;width:100px;height:100px;filter:invert(1);"} text={''}/>
                 {/if}
                 
                     <div class="image-avatar" on:click={() => modalActive=true}>
                     {#await getImageSrc("Insérer votre photo") then image}
-                        <img on:load={()=>photoVisible = true} src={image} alt="Portrait du renseignant">
+                        <img id="photorenseignant" on:load={()=>photoVisible = true} src={image} alt="Portrait du renseignant">
                     {/await}
                     </div>
                 
-                
-                <div class="figure-p">
-                    <p><strong>{capitalizer(entriesObject[searchObj(entriesObject,/prénom/)[0]],['-'])}&nbsp;{capitalizer(entriesObject[searchObj(entriesObject,/otre\snom/)[0]],['-'])}</strong></p>
-                    <p style="font-size:16px; font-weight:300;padding-top: 7px;"><a href=mailto:{entriesObject["Adresse e-mail"]}>{entriesObject["Adresse e-mail"]}</a></p>                    
-              <!--  <p style="font-size:16px; font-weight:300;padding-top: 7px;">{entriesObject["Téléphone"]}</p> -->
-                    <p style="font-size:16px; font-weight:300;padding-top: 7px;">{entriesObject[searchObj(entriesObject,/expérience dans l'assurance/)[0]]} an(s) dans l'assurance</p>
-                    <p style="font-size:16px; font-weight:300;padding-top: 7px;">Chez Geco depuis {entriesObject[searchObj(entriesObject,/au\ssein/)[0]]}</p>
+            </div>
+            <div class="column is-two-thirds">
+
+                <div class="figure-p">                
+                    
+                        <p><strong><span class="bigger">{capitalizer(entriesObject[searchObj(entriesObject,/prénom/)[0]],['-'])}&nbsp;{capitalizer(entriesObject[searchObj(entriesObject,/otre\snom/)[0]],['-'])}</span></strong><br>
+                            <a style="color:white;" href=mailto:{entriesObject["Adresse e-mail"]}>{entriesObject["Adresse e-mail"]}</a><br>
+                            {entriesObject[searchObj(entriesObject,/expérience dans l'assurance/)[0]]} an(s) dans l'assurance<br>
+                            Chez Geco depuis {entriesObject[searchObj(entriesObject,/au\ssein/)[0]]}<br>
+                            <strong>Site : </strong>{entriesObject.Site}
+                        </p>
+                    
                 </div>
 
             </div>
+        </div>
             
             <table id="tabletrans" class="table is-narrow">
             <tr><td colspan="2" style="border:none;"><h3><img src="./img/client.svg" alt="client">Type de client</h3></td></tr>
@@ -274,10 +297,10 @@ const sendToServer = () => {
             {#each Object.entries(entriesObject["Specialites"]) as [spec,val]}
                 {#if val.length && val != "Jamais intervenu"}
                  <tr>
-                    <td width="80%">
+                    <td width="75%">
                         { spec }
                     </td> 
-                    <td width="20%" style="text-align: right;">
+                    <td width="25%" style="text-align: right;">
                         <Dots score={QCM.levelsSpecialites[val]} />
                     </td>
                 </tr>
@@ -285,6 +308,22 @@ const sendToServer = () => {
             {/each}
 
             </table>
+
+            <table id="tablesecteur" class="table is-narrow">
+            <tr>
+                <td colspan="2" style="border:none;padding-top: 3.5vh!important;">
+                    <h3><img src="./img/cv_specialites.svg" alt="Intervention sur le cycle de gestion du dossier">Intervention sur le cycle<br>de gestion du dossier</h3>
+                </td>
+            </tr>
+ 
+            <tr>
+                <td>
+                    {entriesObject[searchObj(entriesObject, /cycle\sde\sgestion/)]}
+                </td>
+            </tr>
+
+            </table>
+
             
         </div>
         
@@ -305,7 +344,7 @@ const sendToServer = () => {
                         <div class="box-interne">
                            <p>
                             {#each entriesObject.diplome as diplome}
-                                {diplome[searchObj(diplome,/obtention/)]} <br>
+                                {diplome[searchObj(diplome,/obtention/)].replace(/-|\s-|-\s|\s-\s/g,' - ')} <br>
                             {/each}                
                             
                             </p>
@@ -314,6 +353,28 @@ const sendToServer = () => {
                 
 
                     <div class="column is-half">
+                      <h3 class="h3droite"><img src="./img/cv_formation.svg" alt="Formation">Langues maîtrisées</h3>
+                        <div class="box-interne">
+                            <table>
+                                {#each Object.entries(entriesObject[searchObj(entriesObject, /univers/)]) as [langue, niveau]}
+                                    {#if niveau.length && niveau != "Néant"}
+                                    <tr>
+                                        <td width="75%" class:noborders={nbl === 1}>
+                                            {langue}
+                                        </td> 
+                                        <td width="25%" style="text-align: right;" class:noborders={nbl===1}>
+                                            <Dots length={2} invert={true} score={QCM.levelsLangues[niveau]} />
+                                        </td>
+                                    </tr>
+                                    {/if}
+                                {/each}
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- BLOCS LANGUES + (CONVENTION  && CYCLE DE GESTION) -->
+
+                    <div class="column is-full">
                     <h3 class="h3droite"><img src="./img/cv_xp.svg" alt="client">Expérience professionnelle</h3>
                         <div class="box-interne">
                         
@@ -324,31 +385,9 @@ const sendToServer = () => {
                             </ul>
                         </div>
                     </div>
-
-                    <!-- BLOCS LANGUES + (CONVENTION  && CYCLE DE GESTION) -->
-
-                    <div class="column is-one-third">
-                    <h3 class="h3droite"><img src="./img/cv_formation.svg" alt="Formation">Langues maîtrisées</h3>
-                        <div class="box-interne">
-                            <table>
-                                {#each Object.entries(entriesObject[searchObj(entriesObject, /univers/)]) as [langue, niveau]}
-                                    {#if niveau.length && niveau != "Néant"}
-                                    <tr>
-                                        <td width="75%">
-                                            {langue}
-                                        </td> 
-                                        <td width="25%" style="text-align: left;">
-                                            <Dots length={2} invert={true} score={QCM.levelsLangues[niveau]} />
-                                        </td>
-                                    </tr>
-                                    {/if}
-                                {/each}
-                            </table>
-                        </div>
-                    </div>
                 
-
-                    <div class="column is-one-third">
+<!-- NOUVEAU BLOC -->
+                    <div class="column is-half">
                     <h3 class="h3droite"><img src="./img/cv_projet.svg" alt="Formation">Conventions</h3>
                         <div class="box-interne">
                             <table>
@@ -358,7 +397,7 @@ const sendToServer = () => {
                                         <td width="75%">
                                             { convention }
                                         </td> 
-                                        <td width="25%" style="text-align: left;">
+                                        <td width="25%" style="text-align: right;">
                                             <Dots invert={true} score={QCM.levelsConventions[niveau]} />
                                         </td>
                                     </tr>
@@ -367,26 +406,10 @@ const sendToServer = () => {
                             </table>
                         </div>
                     </div>
-
-                    <div class="column is-one-third">
-                    <h3 class="h3droite paddplus"><img src="./img/cv_specialites.svg" alt="Formation">Intervention sur le cycle de gestion du dossier</h3>
-                        <div class="box-interne">
-                            <table>
-                                <tr>
-                                    <td>
-                                        {entriesObject[searchObj(entriesObject, /cycle\sde\sgestion/)]}
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-
                                 
-                    <!-- BLOC FORMATION DOSSIERS MARQUANTS -->
-                    <div class="column is-full">
+                    <div class="column is-half">
                         <h3 class="h3rien"><img src="./img/cv_projet.svg" alt="client">Compétence assurantielle</h3>
-                    </div>
-                    <div class="column is-full">
+                    
                         <table id="tablecertif" class="table is-narrow" style="margin-top:1.5em;">
                
                             {#each Object.entries(entriesObject[searchObj(entriesObject,/autres\ssecteurs/)]) as [sect,val]}
@@ -396,7 +419,7 @@ const sendToServer = () => {
                                         { sect }
                                     </td> 
                                     <td width="20%" style="text-align: right;">
-                                        <Dots length={2} score={QCM.levelsAutresSecteurs[val]} />
+                                        <Dots invert={true} length={2} score={QCM.levelsAutresSecteurs[val]} />
                                     </td>
                                 </tr>
                                 {/if}
@@ -422,6 +445,7 @@ const sendToServer = () => {
 
 
 <style>
+
     
 	ul {
   		list-style: none;
@@ -439,12 +463,20 @@ const sendToServer = () => {
         padding-right: 0.5em;
 	}
 
+    .blocinfos {
+        margin-left:1rem;
+        margin-top:2rem!important;
+    }
+
     li strong {
         color:var(--main-color);
     }
 
     .figure-p strong {
         color:white;
+    }
+    .bigger {
+        font-size:1.5em!important;
     }
 
     .entete {
@@ -457,8 +489,8 @@ const sendToServer = () => {
     }
     .image-avatar:hover::before {
         position: absolute;
-        top: -1rem;
-        left: 4em;
+        top: 2rem;
+        left: 1em;
         content: "+";
         width: 1em;
         height: 1em;
@@ -474,6 +506,9 @@ const sendToServer = () => {
         width:auto ;
         max-height:3.4vmax;
     }
+    .noborders {
+        border:none!important;
+    }
     
     #logo-entete {
         position: absolute;
@@ -483,76 +518,39 @@ const sendToServer = () => {
 
     #superh1 {
         font-size: 2.85em;
-        font-weight: 300;
+        font-weight: 700;
         line-height: 58px;
         color: var(--main-color);
         margin-bottom: 1.5vh;
     }
 
-    .portrait {
-        display:flex;
-        white-space: pre-line;
-        width:auto;
-        color: var(--main-color);
-        margin: 0.8vh 0.8vw 2.9vh 0vw;
-        font-size:1.5em;
-        margin: 0 auto;
-        justify-content: center;
-        margin-top:2vh;
-        margin-bottom:1.5vh;
-    }
-
-    .portrait img {
-        height:15vh;
-        width:auto;
-        max-width:15vh;
-        border-radius: 0px;
-    }
-
-    .portrait a {
-        color: white;
-        text-decoration: underline;
-        font-weight:300;
-        font-size:large;
-    }
-
-    .portrait p {
-        color: white;
-    }
-
-
     #colgauche {
         background-color: var(--main-color);
         color:white;
-        height:fit-content;
-        min-height:100vh;
+        height: min-content;
+        padding-bottom: 3em;
     }
 
     #colgauche h3 {
         margin-bottom:0.2em;
+        font-size: 1.5em;
     }
 
     #coldroite {
         padding-top:4vh;
+        height: min-content;
     }
 
     #coldroite h3 {
-            font-size:16px;
+        font-weight: 400;
+        font-size: 1.5em;
     }
 
     .figure-p {
-        padding-left: 1em;
-        align-items: baseline;
-        justify-content: center;
+        padding-left: 0.75rem;
     }
-
-    .figure-p p {
-        line-height:initial;
-    }
-
-    #nom-prenom {
-        font-size: 1vw;
-        color: white;
+    .figure-p a:visited, .figure-p a:active {
+        color:white!important;
     }
 
     .addon-container {
@@ -560,7 +558,7 @@ const sendToServer = () => {
         padding-bottom: 2em;
     }
 
-    #colgauche table:not(#tablecertif) tr td {
+    #colgauche table tr td {
         font-size: 1em;
         color: white;
         border-color:rgba(255,255,255,0.5)!important;
@@ -569,6 +567,11 @@ const sendToServer = () => {
 
     #tablecertif {
         color:var(--main-color)
+    }
+    #coldroite table tr td {
+        border-color:rgba(127,127,127,0.5)!important;
+        border-bottom:1px solid;
+        padding: 0.5em 1em;
     }
 
     td + td { 
@@ -610,18 +613,6 @@ const sendToServer = () => {
         /* height: 100%; */
     }
 
-    .paddplus {
-        margin-bottom: 1em;
-    }
-    
-    .timeline .timeline-item {
-        padding-bottom: 0.5em;
-    }
-
-    .tagmax {
-        color: var(--main-color);
-        font-weight:800;
-    }
 
     .table:not(#tablecertif) {
         /*width: -webkit-fill-available;*/
@@ -637,27 +628,8 @@ const sendToServer = () => {
 
     .container {
         flex-direction: unset;
-        height:unset!important;
+        height:unset;
         max-height:unset!important;
-    }
-
-    .annees {
-        position: relative;
-        left: -3.7em;
-        top: -0.35em;
-    }
-
-    .pingouin {
-        padding: 1.5em;
-        background-color: none; /*var(--bleu-hyperclair);*/
-        color: var(--main-color);
-    }
-
-    .gauche {
-        margin-left: 1.5em;
-        margin-right: -0.75em;
-        border-radius: 8px 0em 0em 8px;
-
     }
 
     .h3droite {
@@ -676,15 +648,7 @@ const sendToServer = () => {
     }
     .columns {
         justify-content: initial;
-        margin-top:unset!important;
-    }
-
-    .premax {
-        color:var(--main-color);
-        font-family:inherit;
-        padding:0;
-        font-size:16px;
-        padding: 1.5em 0;
+        margin-top:unset;
     }
 
     #tablecertif {
@@ -714,10 +678,7 @@ const sendToServer = () => {
     }
 
     @media only screen and (max-width: 768px) {
-        .portrait {
-            width:auto!important;
-            margin-top:1em;
-        }
+      
         .addon-container {
             padding:1vmax;
         }
@@ -746,9 +707,7 @@ const sendToServer = () => {
             width:100%;
             position:unset;
         }
-        .portrait * {
-            font-size:12px!important;
-        }
+
         #logo-entete {
             display:none;
         }
@@ -759,23 +718,6 @@ const sendToServer = () => {
         .butcontainer {
             top: 1.5vh;
             right: 2vw;
-        }
-        .portrait * {
-            font-size:12px!important;
-            width:initial;
-        }
-        .portrait img {
-            display:none;
-        }
-        .table .h3 {
-            font-size:1em;
-        }
-        .table td {
-            font-size:0.65em;
-        }
-        .portrait img {
-            width:10vh;
-            height:10vh;
         }
 
         #coldroite div *:not(#superh1) {
