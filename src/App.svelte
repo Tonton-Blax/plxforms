@@ -44,6 +44,7 @@
 	const sheetAPI = API + 'sheet/'
 	const WPAPI = "https://www.polyexpert.fr/wp-json/contact-form-7/v1/contact-forms/3718/feedback"
 	const PWD = "16bd84b45460199de52067766741e763";
+	const PROXY = "https://doublepromax.herokuapp.com/"
 
 	let entriesObject = [];
 
@@ -132,11 +133,14 @@
 		bodyFormData.append("lienunique", lienunique);
 		bodyFormData.append("destinataire", destinataire);
 		
-		axios.post (WPAPI, bodyFormData)
+		axios.post (API+'reminder', bodyFormData)
 		.then((e) => {
-            e.data.status == 'mail_sent' ? 
-			showNotification( "e-mail envoyé", { type: 'is-success', position: 'is-bottom-right', icon: true })
-			: showNotification("Oups! Une erreur s'est produite", { type: 'is-danger', position: 'is-bottom-right', icon: true });
+			if (e.data.status == 'mail_sent')
+				showNotification( "e-mail envoyé", { type: 'is-success', position: 'is-bottom-right', icon: true })
+			else {
+				console.log(e.data);
+				showNotification("Oups! Une erreur s'est produite", { type: 'is-danger', position: 'is-bottom-right', icon: true });
+			}
         });	
   	}
 
@@ -408,7 +412,7 @@
 					<div class="is-flex downspacer">
 						<p class="control" style="text-align:center;">
 							<button id="boutonvalider" class="button is-primary" class:is-fullwidth={isMobile.matches} style="padding-left:2em;padding-right:2em;" type="submit" 
-							on:click={!states.currentPage.isUser && !states.currentPage.isAdmin ? sendMail('https://www.polyexpert.fr/#' + SparkMD5.hash(destinataire.toLowerCase()), destinataire.toLowerCase()) : handleSubmitEmail}>Valider
+							on:click={!states.currentPage.isUser && !states.currentPage.isAdmin ? sendMail('https://www.polyexpert.fr/formulaires#' + SparkMD5.hash(destinataire.toLowerCase()), destinataire.toLowerCase()) : handleSubmitEmail}>Valider
 							</button>
 				
 					<!-- BOUTON RECHERCHE AVANCEE -->
