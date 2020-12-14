@@ -46,11 +46,11 @@ function capitalizer(str, separators) {
 }
 
 function showNotification(message, props) {
-		Notification.create({
-			message: message,
-			...props
-		})
-	}
+    Notification.create({
+        message: message,
+        ...props
+    })
+}
 
 function requestFullScreen(element) {
 
@@ -182,7 +182,8 @@ const changed = (event)=>{
         }
         //let filesExt = files[0].name.match(/\.(.*)/)[0] || ".jpg";
         newName = entriesObject["Adresse e-mail"]+'-'+entriesObject["Votre nom"]+'-'+entriesObject["Votre prénom"]//+filesExt;
-        newName = newName.toLowerCase();
+        newName = newName.trim().toLowerCase();
+        console.log("new name : ", newName);
         let reader = new FileReader();
         reader.onload = function (e) {
             document.getElementById("inmageuploaded").src = e.target.result;

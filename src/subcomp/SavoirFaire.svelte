@@ -1,5 +1,6 @@
 <script>
 import { onMount, createEventDispatcher  } from 'svelte';
+import { Notification } from 'svelma-pro';
 import Loading from './Loading.svelte'
 import Dots from './Dots.svelte'
 export let entriesObject;
@@ -7,6 +8,8 @@ export let index = 0;
 export let forceScreenGrab = false;
 import domtoimage from 'dom-to-image-more';
 import { API } from '../utils/consts.js'
+import Modal from './Modal.svelte'
+
 
 export let laTotale;
 
@@ -15,6 +18,10 @@ let IMG = API + 'assets/savoirfaire/'
 let ready = false;
 let buttonGrab;
 let photoVisible;
+let modalActive = false;
+let files;
+let newName;
+
 
 let secteurs = [];
        
@@ -131,12 +138,97 @@ let searchObj = (obj, term) => {
       keys.push(key)
   return keys.length ? keys : [""];
 }
+
 function getImageSrc(field, fallback) {
-    return entriesObject[field].split('?id=')[1] === undefined ? fallback :  IMG + entriesObject[field].split('?id=')[1];
+    ready=false;
+    newName = API + "assets/upload/savoirfaire/" + entriesObject["Adresse e-mail"]+'-'+entriesObject["Votre nom"]+'-'+entriesObject["Votre prénom"];
+    newName = newName.toLocaleLowerCase();
+    return fetch(newName)
+        .then(res => {
+            if (res.ok) {
+                ready=true;
+                photoVisible = true;
+                return newName;
+            } else {
+                console.log(entriesObject[field].split('?id=')[1]);
+                return entriesObject[field] === undefined || entriesObject[field].split('?id=')[1] === undefined ? './img/avatar_fallback.png' : IMG + entriesObject[field].split('?id=')[1];
+            }
+        }).catch(err => console.log('Error:', err));
+    
+    ready=true;
+    photoVisible = true;
 }
 
+const changed = (event)=>{
+
+        files = event.target.files;
+        if (!entriesObject["Adresse e-mail"] || !entriesObject["Votre nom"] || ! entriesObject["Votre prénom"]) {
+            showNotification("Nous avons besoin de l'email, du nom et du prénom pour les relier à la photo", 
+            { type: 'is-danger', position: 'is-bottom-right', icon: true })
+            return;
+        }
+        //let filesExt = files[0].name.match(/\.(.*)/)[0] || ".jpg";
+        newName = entriesObject["Adresse e-mail"]+'-'+entriesObject["Votre nom"]+'-'+entriesObject["Votre prénom"]//+filesExt;
+        newName = newName.trim().toLowerCase();
+        let reader = new FileReader();
+        reader.onload = function (e) {
+            document.getElementById("inmageuploaded").src = e.target.result;
+        };
+        reader.readAsDataURL(files[0]);
+
+}
+
+async function sendToServer () {
+    if (!files[0]) return;
+        
+    let ctxed = await domtoimage.toBlob(document.getElementById('inmageuploaded'))
+    
+
+    const formData = new FormData()
+    formData.append('file', ctxed, newName.toLocaleLowerCase() )
+    formData.append('formName', 'savoirfaire');
+
+    fetch(`${API}upload`, {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => response.json())
+    .then(data => {
+        modalActive = false;
+        if (data[0].message === "OK") {
+            showNotification("Image envoyée avec succès", { type: 'is-success', position: 'is-bottom-right', icon: true })
+            ready=false;
+            photoVisible = false;
+            getImageSrc(false);
+        } else {
+            showNotification("Echec de l'envoi. Rééssayez ultérieurement.", { type: 'is-danger', position: 'is-bottom-right', icon: true })
+        }
+    })
+    .catch(error => {
+        console.error(error)
+    })
+}
+
+function showNotification(message, props) {
+    Notification.create({
+        message: message,
+        ...props
+    })
+}
 
 </script>
+
+		<Modal closeText = "Annuler et revenir" title="Envoyer une photo" width="50vw" bind:active={modalActive}>
+
+            <input class="input" id="fileUpload" type="file" accept="image/*" bind:files on:change={changed}>
+            {#if files && files[0]}
+                <img id="inmageuploaded" alt="avatar"/>
+                <div style="text-align:center">
+                    <button class="button is-primary is-large" on:click={sendToServer}>ENVOYER</button>
+                </div>
+            {/if}
+
+		</Modal>
 
 <div id="uniquecontainer-{index}" class="container addon-container">
     
@@ -145,21 +237,36 @@ function getImageSrc(field, fallback) {
         <!-- COLONNE GAUCHE AVEC TABLE -->
 
         <div id="colgauche" class="column is-3">
-           
-            <div class="image portrait">
+
+        <div class="columns blocinfos">
+            <div class="column is-one-third">
                  {#if !photoVisible && index == 0 && entriesObject["Insérer votre photo"].length >= 10}
                     <Loading extraStyle={"left:1.5em;top:1.5em;width:100px;height:100px;filter:invert(1);"} text={''}/>
                 {/if}
+                
+                    <div class="image-avatar" on:click={() => modalActive=true}>
+                    {#await getImageSrc("Insérer votre photo") then image}
+                        <img id="photorenseignant" 
+                        on:load={()=>photoVisible = true} src={image} alt="Portrait du renseignant">
+                    {/await}
+                    </div>
+                
+            </div>
+            <div class="column is-two-thirds">
 
-                <img on:load={()=>photoVisible = true} class="is-rounded" crossorigin="anonymous" src={getImageSrc("Insérer votre photo", "./img/avatar_fallback.png")} alt="Portrait du renseignant">
-                <div class="figure-p">
-                    <p><strong>{capitalizer(entriesObject[searchObj(entriesObject,/prénom/)[0]],['-'])}{capitalizer(entriesObject[searchObj(entriesObject,/otre\snom/)[0]],['-'])}</strong></p>
-                    <p style="font-size:16px; font-weight:300;padding-top: 7px;">✉ : <a     href=mailto:{entriesObject["Adresse e-mail"]}>{entriesObject["Adresse e-mail"]}</a></p>                    
-                    <p style="font-size:16px; font-weight:300;padding-top: 7px;">☎ : {entriesObject["Téléphone"]}</p>
-                    <p style="font-size:16px; font-weight:300;padding-top: 7px;">Chez&nbsp;{entriesObject["Entité"]}&nbsp; depuis &nbsp;{entriesObject[searchObj(entriesObject,/au\ssein/)[0]]}</p>
+                <div class="figure-p">                
+                    
+                        <p><strong><span class="bigger">{capitalizer(entriesObject[searchObj(entriesObject,/prénom/)[0]],['-'])}&nbsp;
+                        {capitalizer(entriesObject[searchObj(entriesObject,/otre\snom/)[0]],['-'])}</span></strong><br>
+                            <a style="color:white;" href=mailto:{entriesObject["Adresse e-mail"]}>{entriesObject["Adresse e-mail"]}</a><br>                            
+                            Tel : {entriesObject["Téléphone"]}<br>
+                            Chez&nbsp;{entriesObject["Entité"]}&nbsp; depuis &nbsp;{entriesObject[searchObj(entriesObject,/au\ssein/)[0]]}<br>
+                        </p>
+                    
                 </div>
 
             </div>
+        </div>
             
             <table id="tabletrans" class="table is-narrow specialites">
             <tr><td colspan="2" style="border:none;"><h3><img src="./img/cv_specialites.svg" alt="client">Compétences transverses</h3></td></tr>
@@ -321,6 +428,32 @@ function getImageSrc(field, fallback) {
         width: -moz-available;          /* WebKit-based browsers will ignore this. */
         width: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
         width: fill-available;
+    }
+
+    .blocinfos {
+        margin-left:1rem;
+        margin-top:2rem!important;
+    }
+    .bigger {
+        font-size:1.5em!important;
+    }
+    .image-avatar {
+        cursor: pointer;
+    }
+    .image-avatar:hover::before {
+        position: absolute;
+        top: 2rem;
+        left: 1em;
+        content: "+";
+        width: 1em;
+        height: 1em;
+        font-size: xx-large;
+        color: white;
+        border: 1px white solid;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        place-content: center;
     }
 
     h3 img {

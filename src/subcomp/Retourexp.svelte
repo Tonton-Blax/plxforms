@@ -3,6 +3,9 @@ import { onMount, createEventDispatcher  } from 'svelte';
 import Loading from './Loading.svelte'
 import domtoimage from 'dom-to-image-more';
 import { API } from '../utils/consts.js'
+import Modal from './Modal.svelte'
+import { Notification } from 'svelma-pro';
+
 
 
 export let entriesObject;
@@ -10,9 +13,12 @@ export let index = 0;
 export let forceScreenGrab = false;
 export let laTotale;
 export let isInterne;
+let files;
+let newName;
 
 let buttonGrab; 
 let ready = false;
+let modalActive = false;
 let photoVisible;
 
 const dispatch = createEventDispatcher();
@@ -24,7 +30,7 @@ let bignode;
 let entite = "Polyexpert";
 let detailSecteur = []; let detailSecteurValues = [];
 let IMG = API + "assets/retex/";
-
+let photokey;
 let secteurs = [];
       
 onMount(async () => { 
@@ -38,11 +44,28 @@ onMount(async () => {
 
     detailSecteurValues = detailSecteurValues.flat().filter(entry => entry != '');
     
-    let photokey=searchObj(entriesObject, /photo/)
+    photokey=searchObj(entriesObject, /photo/)
     photos = (entriesObject[photokey]).split(',');
     ready = true;
 });
 
+const changed = (event, index)=>{
+
+        files = event.target.files;
+        if (!entriesObject["Adresse e-mail"]) {
+            showNotification("Nous avons besoin de l'email, du nom et du prénom pour les relier à la photo", 
+            { type: 'is-danger', position: 'is-bottom-right', icon: true })
+            return;
+        }
+        //let filesExt = files[0].name.match(/\.(.*)/)[0] || ".jpg";
+        newName = entriesObject["Adresse e-mail"];
+        newName = newName.trim().toLowerCase();
+        let reader = new FileReader();
+        reader.onload = function (e) {
+            document.getElementById("inmageuploaded").src = e.target.result;
+        };
+        reader.readAsDataURL(files[0]);
+}
 
 function capitalizer(str, separators) {
   separators = separators || [ ' ' ];
@@ -127,32 +150,105 @@ let searchObj = (obj, term) => {
   return keys.length ? keys : [""];
 }
 
+async function sendToServer () {
+    if (!files[0]) return;
+        
+    let ctxed = await domtoimage.toBlob(document.getElementById('inmageuploaded'))
+    
+
+    const formData = new FormData()
+    formData.append('file', ctxed, newName.toLocaleLowerCase() )
+    formData.append('formName', 'retex');
+
+    fetch(`${API}upload`, {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => response.json())
+    .then(data => {
+        modalActive = false;
+        if (data[0].message === "OK") {
+            showNotification("Image envoyée avec succès", { type: 'is-success', position: 'is-bottom-right', icon: true })
+            ready=false;
+            photoVisible = false;
+            getImageSrc(false);
+        } else {
+            showNotification("Echec de l'envoi. Rééssayez ultérieurement.", { type: 'is-danger', position: 'is-bottom-right', icon: true })
+        }
+    })
+    .catch(error => {
+        console.error(error)
+    })
+}
+
+async function getImageSrc(field, fallback) {
+    ready=false;
+    newName = API + "assets/upload/retex/" + entriesObject["Adresse e-mail"];
+    newName = newName.toLocaleLowerCase();
+    return fetch(newName)
+        .then(res => {
+            if (res.ok) {
+                ready=true;
+                photoVisible = true;
+                return newName;
+            } else {
+                return !photos[0] || (photos[0] && !photos[0].length) ? './img/avatar_fallback_blue.png' : IMG + photos[0].split('?id=')[1];
+            }
+        }).catch(err => console.log('Error:', err));
+    
+    ready=true;
+    photoVisible = true;
+}
+
+function showNotification(message, props) {
+    Notification.create({
+        message: message,
+        ...props
+    })
+}
+
 </script>
+
+		<Modal closeText = "Annuler et revenir" title="Envoyer une photo" width="50vw" bind:active={modalActive}>
+
+            <input class="input" id="fileUpload" type="file" accept="image/*" bind:files on:change={changed}>
+            {#if files && files[0]}
+                <img id="inmageuploaded" alt="avatar"/>
+                <div style="text-align:center">
+                    <button class="button is-primary is-large" on:click={sendToServer}>ENVOYER</button>
+                </div>
+            {/if}
+
+		</Modal>
 
 <div id="uniquecontainer-{index}" class="container addon-container" bind:this={bignode}>
     
     <div class="grid-container">
         <div class="entete">
-        <div id="superh1">{entriesObject["Client"]} : {entriesObject[searchObj(entriesObject,/type\sde\sretour/)[0]]}</div>
+        <div id="superh1">{entriesObject[searchObj(entriesObject,/Quel\stype/)[0]]} - {detailSecteurValues.toString().replace(/,/g, ", ")}</div>
             {#if isInterne}
                 <div id="nom-prenom">
-                    {capitalizer(entriesObject[searchObj(entriesObject,/prénom/)[0]],['-'])} 
+                {#if entriesObject[searchObj(entriesObject,/prénom/)[0]].length || entriesObject[searchObj(entriesObject,/famille/)[0]].length}
+                    {capitalizer(entriesObject[searchObj(entriesObject,/prénom/)[0]],['-'])}                 
                     {capitalizer(entriesObject[searchObj(entriesObject,/famille/)[0]],['-']).toUpperCase()} <br>
-                    Référence : <strong>{entriesObject[searchObj(entriesObject,/éférence /)[0]]}</strong>,&nbsp;
+                {/if}
+                {#if entriesObject[searchObj(entriesObject,/éférence /)[0]].length}
+                    Référence : <strong>{entriesObject[searchObj(entriesObject,/éférence /)[0]]}</strong>,&nbsp;<br>
+                {/if}
+                {#if entriesObject[searchObj(entriesObject,/du\sclient/)[0]].length}
                     Client : <strong>{entriesObject[searchObj(entriesObject,/du\sclient/)[0]]}</strong>
+                {/if}
                 </div>
             {/if}
         </div>
 
-        
-
         <div class="resultat-obtenu">
             <h2><img src="./img/resultat-obtenu.svg" alt="client">Résultat obtenu</h2>
-            <div>{entriesObject["Le résultat obtenu"]}</div>
+            <div>{@html entriesObject["Le résultat obtenu"].replace(/\n/g, '<br>')}</div>
         </div>
         <div class="enjeu">
             <h2><img src="./img/enjeu-dossier.svg" alt="client">Enjeu dossier</h2>
-            <div>{entriesObject[searchObj(entriesObject,/enjeu/)[0]]}</div>
+            <div>{@html entriesObject[searchObj(entriesObject,/enjeu/)[0]].replace(/\n/g, '<br>')}</div>
         </div>
         <div class="secteur-activite">
             <h2><img src="./img/secteur-activite.svg" alt="loupe">Secteur d'activité</h2>
@@ -166,28 +262,26 @@ let searchObj = (obj, term) => {
         </div>
         <div class="client">
             <h2><img src="./img/client.svg" alt="client">Client</h2>
-            <div>{entriesObject[searchObj(entriesObject,/du\sclient/)[0]]}</div>
+            <div>{@html entriesObject["Client"].replace(/\n/g, '<br>')}</div>
         </div>
         <div class="contexte">
             <h2><img src="./img/loupe.svg" alt="loupe">Contexte</h2>
-            <div>{entriesObject[searchObj(entriesObject,/contexte/)[0]]}</div>
+            <div>{@html entriesObject[searchObj(entriesObject,/contexte/)[0]].replace(/\n/g, '<br>')}</div>
         </div>
         <div class="demarche">
             <h2><img src="./img/demarche.svg" alt="client">Démarche / Méthode</h2>
-            <div>{entriesObject[searchObj(entriesObject,/démarche/)[0]]}</div>
+            <div>{@html entriesObject[searchObj(entriesObject,/démarche/)[0]].replace(/\n/g, '<br>')}</div>
         </div>
         <div class="photo">
-            <!-- <h2 class="hide">&nbsp;</h2> -->
-            {#if photos[0]}
-            {#each photos as photo, index}
-                <figure class="photo-dossier">
-                    {#if !photoVisible && index == 0}
-                    <Loading extraStyle={"right:11em;"} text={''}/>
-                    {/if}
-                    <img on:load={()=>photoVisible = true} crossorigin="anonymous" src={IMG+photo.split('?id=')[1]} alt="Représentation du dossier">
-                </figure>
-            {/each}
-            {/if}
+        <!-- <h2 class="hide">&nbsp;</h2> -->
+            <figure class="photo-dossier" on:click={() => modalActive = true}>
+                {#if !photoVisible && index == 0}
+                <Loading extraStyle={"right:11em;"} text={''}/>
+                {/if}
+                {#await getImageSrc("Une photo représentative du dossier?") then image}                                  
+                    <img on:load={()=>photoVisible = true} crossorigin="anonymous" src={image} alt="Représentation du dossier">
+                {/await}
+            </figure>
         </div>
     </div>
     <div class="butcontainer" bind:this={buttonGrab}>
@@ -282,7 +376,7 @@ let searchObj = (obj, term) => {
 
     .demarche { grid-area: demarche; display: flex; flex-direction:column; }
 
-    .photo { grid-area: photo; display: flex; flex-direction:column; }
+    .photo { grid-area: photo; display: flex; flex-direction:column; cursor:pointer }
 
     .entete { grid-area: entete; display: flex; flex-direction:column;}
 
@@ -294,6 +388,22 @@ let searchObj = (obj, term) => {
         width: max-content;
         object-fit: initial;
         width:100%;
+    }
+
+    .photo:hover::before {
+        position: absolute;
+        top: 9rem;
+        right: 4.5rem;
+        content: "+";
+        width: 1em;
+        height: 1em;
+        font-size: xx-large;
+        color: white;
+        border: 1px white solid;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        place-content: center;
     }
 
     .photo > figure:first-of-type {
