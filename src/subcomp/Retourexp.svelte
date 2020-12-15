@@ -5,8 +5,7 @@ import domtoimage from 'dom-to-image-more';
 import { API } from '../utils/consts.js'
 import Modal from './Modal.svelte'
 import { Notification } from 'svelma-pro';
-
-
+import {capitalizer, requestFullScreen, blobToDataURL, saveAs, searchObj} from './utils.js'
 
 export let entriesObject;
 export let index = 0;
@@ -67,25 +66,6 @@ const changed = (event, index)=>{
         reader.readAsDataURL(files[0]);
 }
 
-function capitalizer(str, separators) {
-  separators = separators || [ ' ' ];
-  var regex = new RegExp('(^|[' + separators.join('') + '])(\\w)', 'g');
-  return str.toLowerCase().replace(regex, function(x) { return x.toUpperCase(); });
-}
-
-function requestFullScreen(element) {
-
-    let requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
-
-    if (requestMethod) { // Native full screen.
-        requestMethod.call(element);
-    } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
-        var wscript = new ActiveXObject("WScript.Shell");
-        if (wscript !== null) {
-            wscript.SendKeys("{F11}");
-        }
-    }
-}
 
 function screenGrab () {
         if (laTotale) {
@@ -122,33 +102,6 @@ function screenGrab () {
         });
         
 	}
-
-function saveAs(uri, filename) {
-
-    let link = document.createElement('a');
-
-    if (typeof link.download === 'string') {
-
-        link.href = uri;
-        link.download = filename;
-
-        document.body.appendChild(link);
-        link.click();
-        document.bsequiody.removeChild(link);
-
-    } else {
-        window.open(uri);
-    }
-}
-
-
-let searchObj = (obj, term) => {
-  let key, keys = []
-  for (key in obj)
-    if (obj.hasOwnProperty(key) && term.test(key))
-      keys.push(key)
-  return keys.length ? keys : [""];
-}
 
 async function sendToServer () {
     if (!files[0]) return;

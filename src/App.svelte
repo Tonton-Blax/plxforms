@@ -169,7 +169,7 @@
 		states.inputError = false;
 		if (e.keyCode === 13) {
 			if (!states.currentPage.isUser && !states.currentPage.isAdmin)
-				sendMail('https://www.polyexpert.fr/formulaires/#' + SparkMD5.hash(destinataire.toLowerCase()), destinataire.toLowerCase());
+				sendMail('http://www.polyexpert.fr/formulaires/#' + SparkMD5.hash(destinataire.toLowerCase()), destinataire.toLowerCase());
 			else handleSubmitEmail();
 		}
 	}

@@ -6,6 +6,7 @@ export let entriesObject;
 export let index = 0;
 export let forceScreenGrab = false;
 import domtoimage from 'dom-to-image-more';
+import {capitalizer, requestFullScreen, blobToDataURL, saveAs, searchObj} from './utils.js'
 
 export let laTotale;
 
@@ -22,45 +23,28 @@ let bignode;
 
 //let PROXY = 'https://doublepromax.herokuapp.com/';
 
-let infospersos = {}
+let coordonnees = {};
+let parcours = {}
 
 onMount(async () => {
-    infospersos = {
+    coordonnees = {
         "Ligne directe" : entriesObject["Téléphone fixe"] || "",
         "Mobile" : entriesObject["Téléphone portable"] || "",
-        "Année de naissance" : entriesObject["Année de naissance"] || "",
-        "Diplôme(s)" : entriesObject["Diplôme(s)"] || "",
-        "Début dans l'expertise" : entriesObject["Début dans l'expertise"] || "",
-        "Chez Polyexpert depuis" : entriesObject["Chez Polyexpert depuis"] || entriesObject["Chez POLYEXPERT depuis"] || "",
+        "Année de naissance" : entriesObject["Année de naissance"] || "",       
         "Région" : entriesObject["Région"] || "",
         "Bureau" : entriesObject["Bureau"] || "",
-        "Département d'intervention" : entriesObject["Département d'intervention"] || "",
         "Code EDI DARVA" : entriesObject["Code EDI DARVA"] || entriesObject["CODE EDI DARVA"] || "",
         "Code GECOR" : entriesObject["Code GECOR"] || entriesObject["CODE GECOR"] || ""
     }
+    parcours =
+    {
+        "Diplôme(s)" : entriesObject["Diplôme(s)"] || "",
+        "Début dans l'expertise" : entriesObject["Début dans l'expertise"] || "",
+        "Chez Polyexpert depuis" : entriesObject["Chez Polyexpert depuis"] || entriesObject["Chez POLYEXPERT depuis"] || "",
+    };
     
     ready = true;
 });
-
-function capitalizer(str, separators) {
-  separators = separators || [ ' ' ];
-  var regex = new RegExp('(^|[' + separators.join('') + '])(\\w)', 'g');
-  return str.toLowerCase().replace(regex, function(x) { return x.toUpperCase(); });
-}
-
-function requestFullScreen(element) {
-
-    let requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
-
-    if (requestMethod) { // Native full screen.
-        requestMethod.call(element);
-    } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
-        var wscript = new ActiveXObject("WScript.Shell");
-        if (wscript !== null) {
-            wscript.SendKeys("{F11}");
-        }
-    }
-}
 
 function screenGrab () {
     if (laTotale) {
@@ -98,37 +82,7 @@ function screenGrab () {
     });
 }
 
-function blobToDataURL(blob) {
-    return new Promise((fulfill, reject) => {
-        let reader = new FileReader();
-        reader.onerror = reject;
-        reader.onload = (e) => fulfill(reader.result);
-        reader.readAsDataURL(blob);
-    })
-}
 
-function saveAs(uri, filename) {
-
-    let link = document.createElement('a');
-
-    if (typeof link.download === 'string') {
-        link.href = uri;
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        document.bsequiody.removeChild(link);
-    } else {
-        window.open(uri);
-    }
-}
-
-let searchObj = (obj, term) => {
-  let key, keys = []
-  for (key in obj)
-    if (obj.hasOwnProperty(key) && term.test(key))
-      keys.push(key)
-  return keys.length ? keys : [""];
-}
 
 </script>
 
@@ -152,18 +106,37 @@ let searchObj = (obj, term) => {
 
         <table class="table is-narrow infospersos">
             <tr>
-                <td colspan="2" style="border:none;"><h3><img src="./img/cv_specialites.svg" alt="client">Agence & contact</h3></td>
+                <td colspan="2" style="border:none;"><h3><img src="./img/cv_specialites.svg" alt="client">Coordonnées</h3></td>
             </tr>
             
-            {#each Object.keys(infospersos) as champ}
+            {#each Object.keys(coordonnees) as champ}
     
                  <tr>
                     <td width="40%">
                         {champ}
                     </td> 
                     <td width="60%">
-                        {#if infospersos[champ]}
-                        {infospersos[champ]}
+                        {#if coordonnees[champ]}
+                        {coordonnees[champ]}
+                        {/if}
+                    </td>
+                </tr>
+
+            {/each}
+
+            <tr>
+                <td colspan="2" style="border:none;"><h3><img src="./img/cv_specialites.svg" alt="client">Parcours et expertise</h3></td>
+            </tr>
+            
+            {#each Object.keys(parcours) as champ}
+    
+                 <tr>
+                    <td width="40%">
+                        {champ}
+                    </td> 
+                    <td width="60%">
+                        {#if parcours[champ]}
+                        {parcours[champ]}
                         {/if}
                     </td>
                 </tr>
@@ -181,6 +154,22 @@ let searchObj = (obj, term) => {
         <div class="column is-3 space4vh">
 
             <table class="table is-narrow centermobile">
+            
+            {#if entriesObject["Département d'intervention"]}
+
+            <tr>
+                <td colspan="2" style="border:none;"><h3><img src="./img/cv_specialites.svg" alt="client">Département d'intervention</h3></td>
+            </tr>
+            
+    
+                <tr>
+                    <td>
+                        {entriesObject["Département d'intervention"]}
+                    </td> 
+                </tr>
+            
+            {/if}
+
             {#if entriesObject["Champs d'expertises"]}
 
             <tr>
@@ -451,11 +440,6 @@ let searchObj = (obj, term) => {
         justify-content: center;
     }
 
-    .portrait img {
-        height:15vh;
-        width:15vh!important;
-    }
-
     .portrait a {
         color: white;
         text-decoration: underline;
@@ -581,7 +565,7 @@ let searchObj = (obj, term) => {
         }
 
         .table h3 {
-            line-height:3em;
+            line-height:1.2em;
             padding-top:0.6em;
         }
 
