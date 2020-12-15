@@ -12,6 +12,7 @@ export let index = 0;
 export let forceScreenGrab = false;
 export let laTotale;
 export let isInterne;
+
 let files;
 let newName;
 

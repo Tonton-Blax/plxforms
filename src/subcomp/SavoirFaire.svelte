@@ -23,8 +23,8 @@ let modalActive = false;
 let files;
 let newName;
 let secteurs = [];
-       
 
+       
 const dispatch = createEventDispatcher();
 
 $: if (forceScreenGrab) screenGrab();
@@ -95,7 +95,6 @@ function getImageSrc(field, fallback) {
                 photoVisible = true;
                 return newName;
             } else {
-                console.log(entriesObject[field].split('?id=')[1]);
                 return entriesObject[field] === undefined || entriesObject[field].split('?id=')[1] === undefined ? './img/avatar_fallback.png' : IMG + entriesObject[field].split('?id=')[1];
             }
         }).catch(err => console.log('Error:', err));
@@ -204,7 +203,7 @@ function showNotification(message, props) {
                         {capitalizer(entriesObject[searchObj(entriesObject,/otre\snom/)[0]],['-'])}</span></strong><br>
                             <a style="color:white;" href=mailto:{entriesObject["Adresse e-mail"]}>{entriesObject["Adresse e-mail"]}</a><br>                            
                             Tel : {entriesObject["Téléphone"]}<br>
-                            Chez&nbsp;{entriesObject["Entité"]}&nbsp; depuis &nbsp;{entriesObject[searchObj(entriesObject,/au\ssein/)[0]]}<br>
+                            Chez&nbsp;{entriesObject["Entité"]}<br>depuis &nbsp;{entriesObject[searchObj(entriesObject,/au\ssein/)[0]]}<br>
                         </p>
                     
                 </div>
@@ -283,7 +282,7 @@ function showNotification(message, props) {
         
         <!-- BIG BLOC 2 COLONNES A DROITE -->
 
-        <div id="coldroite" class="column" style="align-self:center;">
+        <div id="coldroite" class="column">
             <div class="entete">
                 <div id="logo-entete"><img src={'./img/' + entriesObject["Entité"].toLowerCase().replace(/\s/,'-') + ".png"} alt="Logo de l'entité"></div>                                            
                 <div id="superh1">{entriesObject["Intitulé de poste"]}</div>
@@ -495,6 +494,7 @@ function showNotification(message, props) {
 
     #coldroite {
         padding-top:4vh;
+        align-self: flex-start;
     }
 
     #coldroite h3 {

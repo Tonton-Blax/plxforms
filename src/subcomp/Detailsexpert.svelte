@@ -25,6 +25,7 @@ let bignode;
 
 let coordonnees = {};
 let parcours = {}
+let age;
 
 onMount(async () => {
     coordonnees = {
@@ -42,7 +43,15 @@ onMount(async () => {
         "Début dans l'expertise" : entriesObject["Début dans l'expertise"] || "",
         "Chez Polyexpert depuis" : entriesObject["Chez Polyexpert depuis"] || entriesObject["Chez POLYEXPERT depuis"] || "",
     };
-    
+
+    if ( entriesObject[searchObj(entriesObject, /naissance/)].length > 1) {
+        const birthdate = new Date(entriesObject[searchObj(entriesObject, /naissance/)]);
+        const cur = new Date();
+        const diff = cur-birthdate; // This is the difference in milliseconds
+        age = Math.floor(diff/31557600000); // Divide by 1000*60*60*24*365.25
+        if (age < 18) 
+            age = undefined
+    }
     ready = true;
 });
 
@@ -100,7 +109,10 @@ function screenGrab () {
             <div class="image portrait">
                 <div class="figure-p">
                     <p><strong>{capitalizer(entriesObject[searchObj(entriesObject,/Prénom/)[0]],['-'])} {capitalizer(entriesObject[searchObj(entriesObject,/Nom/)[0]],['-'])}</strong></p>
-                    <p><a href=mailto:{entriesObject["Adresse e-mail"]} style="text-decoration:none;">{entriesObject["Adresse e-mail"]}</a></p>                    
+                    <p><a href=mailto:{entriesObject["Adresse e-mail"]} style="text-decoration:none;">{entriesObject["Adresse e-mail"]}</a></p>
+                    {#if age}
+                    <p style="font-size:20px;">{age} ans</p>
+                    {/if}
                 </div>
             </div>
 
@@ -155,7 +167,7 @@ function screenGrab () {
 
             <table class="table is-narrow centermobile">
             
-            {#if entriesObject["Département d'intervention"]}
+            {#if entriesObject["Département d'intervention"].length === 2 || entriesObject["Département d'intervention"].includes(',')}
 
             <tr>
                 <td colspan="2" style="border:none;"><h3><img src="./img/cv_specialites.svg" alt="client">Département d'intervention</h3></td>
