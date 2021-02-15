@@ -393,8 +393,10 @@
 								<label for="retourxpinterne">Retex (affichage nom et e-mail)</label>			
 								<input class="is-checkradio" type="radio" name="savoirfaire" id="savoirfaire" bind:group={states.currentForm} value={"savoirfaire"}>
 								<label for="savoirfaire">Savoir-faire</label>
+								{#if states.currentPage.isAdmin}
 								<input class="is-checkradio" type="radio" name="detailsexpert" id="detailsexpert" bind:group={states.currentForm} value={"detailsexpert"}>
 								<label for="detailsexpert">Compétences</label>
+								{/if}
 								<input class="is-checkradio" type="radio" name="geco" id="geco" bind:group={states.currentForm} value={"geco"}>
 								<label for="geco">Formulaire Geco</label>
 							</div>
